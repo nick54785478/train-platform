@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+	<!-- <fontFamily name="標楷體">
+		<normal>fonts/kaiu_eudc.ttf</normal>
+		<bold>fonts/kaiu_eudc.ttf</bold>
+		<italic>fonts/kaiu_eudc.ttf</italic>
+		<boldItalic>fonts/kaiu_eudc.ttf</boldItalic>
+		<pdfEncoding>Identity-H</pdfEncoding>
+		<pdfEmbedded>true</pdfEmbedded>
+		<exportFonts>
+			<export key="net.sf.jasperreports.html">'kaiu_eudc', Arial,
+				Helvetica, sans-serif</export>
+			<export key="net.sf.jasperreports.xhtml">'kaiu_eudc', Arial,
+				Helvetica, sans-serif</export>
+		</exportFonts>
+	</fontFamily>-->
+	
+	<fontFamily name="微軟正黑體">
+		<normal>fonts/Microsoft-JhengHei.ttf</normal>
+		<bold>fonts/Microsoft-JhengHei.ttf</bold>
+		<italic>fonts/Microsoft-JhengHei.ttf</italic>
+		<boldItalic>fonts/Microsoft-JhengHei.ttf</boldItalic>
+		<pdfEncoding>Identity-H</pdfEncoding>
+		<pdfEmbedded>true</pdfEmbedded>
+		<exportFonts>
+			<export key="net.sf.jasperreports.html">'Microsoft-JhengHei', Arial,
+				Helvetica, sans-serif</export>
+			<export key="net.sf.jasperreports.xhtml">'Microsoft-JhengHei', Arial,
+				Helvetica, sans-serif</export>
+		</exportFonts>
+	</fontFamily>
+</fontFamilies>

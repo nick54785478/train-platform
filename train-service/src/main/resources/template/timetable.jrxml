@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49786e60-e18f-4164-bb21-f29a87e0f397">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="trainNo" class="java.lang.String"/>
+	<parameter name="kind" class="java.lang.String"/>
+	<parameter name="fromStop" class="java.lang.String"/>
+	<parameter name="fromStopTime" class="java.lang.String"/>
+	<parameter name="toStop" class="java.lang.String"/>
+	<parameter name="toStopTime" class="java.lang.String"/>
+	<parameter name="detailSize" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="trainNo" class="java.lang.String"/>
+	<field name="kind" class="java.lang.String"/>
+	<field name="fromStop" class="java.lang.String"/>
+	<field name="fromStopTime" class="java.lang.String"/>
+	<field name="toStop" class="java.math.BigDecimal"/>
+	<field name="toStopTime" class="java.util.Date"/>
+	<variable name="maxValue" class="java.math.BigDecimal" calculation="Highest">
+		<variableExpression><![CDATA[$F{toStop}]]></variableExpression>
+	</variable>
+	<variable name="avg" class="java.math.BigDecimal" calculation="Average">
+		<variableExpression><![CDATA[$F{toStop}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{toStop}]]></variableExpression>
+	</variable>
+	<group name="Group1">
+		<groupHeader>
+			<band height="21"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="221"/>
+		</groupFooter>
+	</group>
+	<group name="Group2" isReprintHeaderOnEachPage="true">
+		<groupHeader>
+			<band height="21">
+				<printWhenExpression><![CDATA[new Boolean ($V{REPORT_COUNT}!=$P{detailSize})]]></printWhenExpression>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement stretchType="ContainerHeight" x="40" y="0" width="70" height="20" uuid="fc255d30-1f1a-494e-b081-070a25f76ffc">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font fontName="標楷體" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{trainNo}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement stretchType="ContainerHeight" x="110" y="0" width="70" height="20" uuid="a2a4d939-e708-4f66-b34e-73faf77f5667">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font fontName="標楷體" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{kind}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement stretchType="ContainerHeight" x="180" y="0" width="70" height="20" uuid="e951cf16-9934-4521-aad2-8955c733dfe5">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font fontName="標楷體" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fromStop}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement stretchType="ContainerHeight" x="250" y="0" width="100" height="20" uuid="1dd7dee5-c368-4d01-9010-c2bfe3511c27">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font fontName="標楷體" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{fromStopTime}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement stretchType="ContainerHeight" x="350" y="0" width="70" height="20" uuid="e01239f3-050a-4a85-99e0-46b0b4b64fd1">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font fontName="標楷體" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{toStop}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+					<reportElement stretchType="ContainerHeight" x="420" y="0" width="100" height="20" uuid="1e13ab22-13ef-4915-8713-3b6a54fad4c6">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center">
+						<font fontName="標楷體" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{toStopTime}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="147"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<textField textAdjust="ScaleFont">
+				<reportElement stretchType="RelativeToTallestObject" x="80" y="15" width="402" height="30" uuid="5070d239-77f3-4b01-8056-caf2779aedc8"/>
+				<textElement textAlignment="Center">
+					<font fontName="標楷體" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["火車時刻表"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="37" splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="40" y="0" width="70" height="20" uuid="7ffc61f4-e5f5-4d97-93cc-8e835c992cef">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="標楷體" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trainNo}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="110" y="0" width="70" height="20" uuid="d0141098-ec8b-4496-be53-c19790e426a9">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="標楷體" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kind}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="180" y="0" width="70" height="20" uuid="0b0553e8-c85a-4ade-a3b0-38c706d20630">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="標楷體" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fromStop}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="250" y="0" width="100" height="20" uuid="95b2f937-da57-4726-af5b-635d0aa27963">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="標楷體" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fromStopTime}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="350" y="1" width="70" height="20" uuid="046b0251-b8fe-4708-be7e-6e171b013b9b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="標楷體" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{toStop}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement stretchType="ContainerHeight" x="420" y="1" width="100" height="20" uuid="6e0f32df-bb00-42be-b00f-7a92a68046b9">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="標楷體" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{toStopTime}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="25">
+			<rectangle>
+				<reportElement x="0" y="0" width="553" height="1" forecolor="#000000" backcolor="#050505" uuid="a1fd7394-ac14-4a6f-a449-d1343ad731ad">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="511" y="1" width="12" height="18" uuid="f765b664-55db-4609-ae7d-9c813643ac75">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="標楷體"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="538" y="1" width="16" height="18" uuid="ac67acbc-5ffb-4672-836c-1080231a9a62">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="標楷體"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="524" y="1" width="14" height="18" forecolor="#000000" backcolor="#050505" uuid="3fe80a3e-457c-4999-a74f-f022672fa5bf">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="標楷體" size="12"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="1" width="60" height="18" uuid="03829057-51ab-4d7a-84b5-e2c3098ec20c">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="標楷體"/>
+				</textElement>
+				<text><![CDATA[Page ]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="143" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout"/>
+		</band>
+	</summary>
+</jasperReport>
