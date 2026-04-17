@@ -1,0 +1,81 @@
+[
+  {
+    "id": "",
+    "label": "首頁",
+    "icon": "",
+    "routerLink": "/",
+    "visible": true
+  },
+  {
+    "id": "",
+    "label": "註冊儲值帳戶",
+    "icon": "",
+    "url": "/register",
+    "routerLink": "/register",
+    "visible": true
+  },
+  {
+    "id": "",
+    "label": "新增車次資訊",
+    "icon": "",
+    "url": "/train/create",
+    "routerLink": "/train/create",
+    "visible": true
+  },
+  {
+    "id": "",
+    "label": "車次停靠站維護",
+    "icon": "",
+    "url": "/train/maintenance",
+    "routerLink": "/train/maintenance",
+    "visible": true
+  }, 
+  {
+    "id": "",
+    "label": "Excel 上傳車次資料",
+    "icon": "",
+    "url": "/train/upload",
+    "routerLink": "/train/upload",
+    "visible": true
+  },
+  {
+    "id": "",
+    "label": "車票資訊維護",
+    "icon": "",
+    "url": "/ticket/maintenance",
+    "routerLink": "/ticket/maintenance",
+    "visible": true
+  }, 
+  {
+    "id": "",
+    "label": "查詢車次資訊",
+    "icon": "",
+    "url": "/train",
+    "routerLink": "/train",
+    "visible": true
+  },
+  {
+    "id": "",
+    "label": "車票預定",
+    "icon": "",
+    "url": "/ticket",
+    "routerLink": "/ticket",
+    "visible": true
+  },
+  {
+    "id": "",
+    "label": "範本維護",
+    "icon": "",
+    "url": "/upload",
+    "routerLink": "/upload",
+    "visible": true
+  },
+  {
+    "id": "",
+    "label": "自定義設定",
+    "icon": "",
+    "url": "/setting",
+    "routerLink": "/setting",
+    "visible": true
+  }
+]

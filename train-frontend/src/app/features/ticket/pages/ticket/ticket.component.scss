@@ -1,0 +1,17 @@
+.stepper-container {
+    overflow-x: auto;
+    /* 啟用橫向滾動 */
+    white-space: nowrap;
+    /* 防止折行 */
+    display: block;
+    padding-bottom: 10px;
+    /* 避免滾動條與內容重疊 */
+}
+
+@media (max-width: 768px) {
+
+    /* 手機適用 */
+    .stepper-container {
+        max-width: 40rem;
+    }
+}

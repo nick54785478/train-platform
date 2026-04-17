@@ -1,0 +1,15 @@
+/* 桌機樣式 */
+@media (min-width: 768px) {
+    .spreadsheet-container {
+        max-width: 1000px;
+        margin: auto;
+    }
+}
+
+/* 手機樣式 */
+@media (max-width: 767px) {
+    .spreadsheet-container {
+        max-width: 600px;
+        padding: 0.5rem;
+    }
+}

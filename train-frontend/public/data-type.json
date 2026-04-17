@@ -1,0 +1,146 @@
+[
+  {
+    "id": "",
+    "label": "火車種類",
+    "value": "TRAIN_KIND",
+    "labelTw": "火車種類",
+    "labelCn": "火車種類",
+    "labelUs": "Train Kind"
+  },
+  {
+    "id": "",
+    "label": "車站配置",
+    "value": "STOP_KIND",
+    "labelTw": "車站配置",
+    "labelCn": "車站配置",
+    "labelUs": "Stop Kind"
+  },
+  {
+    "id": "",
+    "label": "功能",
+    "value": "FUNCTION",
+    "labelTw": "功能",
+    "labelCn": "功能",
+    "labelUs": "Function"
+  },
+  {
+    "id": "",
+    "label": "群組",
+    "value": "GROUP",
+    "labelTw": "群組",
+    "labelCn": "群组",
+    "labelUs": "Group"
+  },
+  {
+    "id": "",
+    "label": "功能動作類別",
+    "value": "ACTION_TYPE",
+    "labelTw": "動作類別",
+    "labelCn": "动作类别",
+    "labelUs": "Action Type"
+  },
+  {
+    "id": "",
+    "label": "語系",
+    "value": "LANGUAGE",
+    "labelTw": "語系",
+    "labelCn": "语系",
+    "labelUs": "Language"
+  },
+  {
+    "id": "",
+    "label": "配置",
+    "value": "CONFIGURATION",
+    "labelTw": "配置",
+    "labelCn": "配置",
+    "labelUs": "Configuration"
+  },
+  {
+    "id": "",
+    "label": "YES_NO",
+    "value": "YES_NO",
+    "labelTw": "YES_NO",
+    "labelCn": "YES_NO",
+    "labelUs": "YES_NO"
+  },
+  {
+    "id": "",
+    "label": "座位清單",
+    "value": "SEAT_NO_LIST",
+    "labelTw": "座位清單",
+    "labelCn": "座位清单",
+    "labelUs": "Seat List"
+  },
+  {
+    "id": "",
+    "label": "車廂編號清單",
+    "value": "CAR_NO_LIST",
+    "labelTw": "車廂編號清單",
+    "labelCn": "车厢编号清单",
+    "labelUs": "Car No List"
+  },
+  {
+    "id": "",
+    "label": "付款方式",
+    "value": "PAY_METHOD",
+    "labelTw": "付款方式",
+    "labelCn": "付款方式",
+    "labelUs": "Pay Method"
+  },
+  {
+    "id": "",
+    "label": "車票種類",
+    "value": "TICKET_TYPE",
+    "labelTw": "車票種類",
+    "labelCn": "车票种类",
+    "labelUs": "Ticket Type"
+  },
+  {
+    "id": "",
+    "label": "票價比率",
+    "value": "TICKET_PRICE_RATE",
+    "labelTw": "票價比率",
+    "labelCn": "票价比率",
+    "labelUs": "Ticket Price Rate"
+  },
+  {
+    "id": "",
+    "label": "DATA MAPPING",
+    "value": "DATA_MAPPING",
+    "labelTw": "DATA MAPPING",
+    "labelCn": "DATA MAPPING",
+    "labelUs": "DATA MAPPING"
+  },
+  {
+    "id": "",
+    "label": "SHEET NAME",
+    "value": "SHEET_NAME",
+    "labelTw": "SHEET NAME",
+    "labelCn": "SHEET NAME",
+    "labelUs": "SHEET NAME"
+  },
+  {
+    "id": "",
+    "label": "範本設定",
+    "value": "TEMPLATE",
+    "labelTw": "TEMPLATE",
+    "labelCn": "SHEET NAME",
+    "labelUs": "范本"
+  },
+  {
+    "id": "",
+    "label": "JASPER PARAMETER 設定",
+    "value": "JASPER_PARAMETER",
+    "labelTw": "JASPER PARAMETER",
+    "labelCn": "JASPER PARAMETER",
+    "labelUs": "JASPER PARAMETER"
+  },
+  {
+    "id": "",
+    "label": "個人化配置",
+    "value": "CUSTOMISATION",
+    "labelTw": "個人化配置",
+    "labelCn": "个人化配置",
+    "labelUs": "CUSTOMISATION"
+  }
+]

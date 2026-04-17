@@ -1,0 +1,117 @@
+<form [formGroup]="formGroup">
+  <p-panel header="車次資料">
+    <div class="card" #contentElement>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>車次</label>
+          <input
+            type="text"
+            pInputText
+            [readOnly]="true"
+            formControlName="trainNo"
+          />
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>車種</label>
+          <input
+            [readOnly]="true"
+            type="text"
+            pInputText
+            formControlName="kind"
+          />
+        </div>
+      </div>
+
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>起始站</label>
+          <input
+            [readOnly]="true"
+            type="text"
+            pInputText
+            formControlName="fromStop"
+          />
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>起站發車時間</label>
+          <input
+            [readOnly]="true"
+            type="text"
+            pInputText
+            formControlName="fromStopTime"
+          />
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>終點站</label>
+          <input
+            [readOnly]="true"
+            type="text"
+            pInputText
+            formControlName="toStop"
+          />
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>終點站到站時間</label>
+          <input
+            [readOnly]="true"
+            type="text"
+            pInputText
+            formControlName="toStopTime"
+          />
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</form>
+
+<div class="card">
+  <p-table
+    #dt
+    responsiveLayout="stack"
+    [rowsPerPageOptions]="[2, 5, 10]"
+    styleClass="p-datatable-gridlines p-datatable-sm p-datatable-striped"
+    selectionMode="single"
+    [resizableColumns]="true"
+    [value]="tableData"
+    [columns]="cols"
+    [scrollable]="true"
+    scrollDirection="both"
+    scrollHeight="200px"
+    [paginator]="true"
+    [rows]="10"
+  >
+    <!-- 標題 -->
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{ col.header }} <p-sortIcon [field]="col.field" />
+        </th>
+        <!-- <th
+          alignFrozen="right"
+          pFrozenColumn
+          style="
+            min-width: 70px !important;
+            max-width: 70px !important;
+            width: 70px !important;
+          "
+        >
+          Actions
+        </th> -->
+      </tr>
+    </ng-template>
+    <!-- 內容 -->
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td
+          *ngFor="let col of columns"
+          [ngStyle]="{ 'word-break': 'break-all' }"
+        >
+          <ng-container>
+            {{ rowData[col.field] }}
+          </ng-container>
+        </td>
+      </tr>
+      <!-- <button type="button" (click)="show('test')" pButton icon="pi pi-info-circle" label="Show"></button> -->
+    </ng-template>
+  </p-table>
+</div>

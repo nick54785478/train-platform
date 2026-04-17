@@ -1,0 +1,144 @@
+<div class="mb-4 p-4 md:mb-6">
+  <form [formGroup]="formGroup">
+    <p-panel header="範本維護">
+      <div class="card" #contentElement pBPaaSFocusTrap>
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-3 lg:col-3">
+            <label class="required">範本</label>
+            <p-dropdown
+              [options]="templates"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="請選擇"
+              [showClear]="true"
+              appendTo="body"
+              formControlName="templateType"
+            >
+            </p-dropdown>
+            <div *ngIf="formControlInvalid('templateType')">
+              <small class="p-error"> 該資料不能為空 </small>
+            </div>
+          </div>
+
+          <!-- </div> -->
+        </div>
+        <div class="grid p-fluid justify-content-end">
+          <div class="col-12 md:col-2 lg:col-2">
+            <button
+              type="button"
+              class="p-button-primary"
+              pButton
+              label="查詢"
+              (click)="query()"
+            ></button>
+          </div>
+          <div class="col-12 md:col-2 lg:col-2">
+            <button
+              type="button"
+              class="p-button-outlined p-button-secondary"
+              pButton
+              label="清除"
+              (click)="clear()"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+  </form>
+</div>
+<div class="mb-4 p-4 md:mb-6" *ngIf="showResult">
+  <p-card>
+    <form [formGroup]="templateForm">
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>Code</label>
+          <input
+            type="text"
+            pInputText
+            formControlName="name"
+            [readonly]="true"
+          />
+          <div *ngIf="templateFormControlInvalid('name')">
+            <small
+              class="p-error"
+              *ngIf="templateFormControl('name').errors?.['required']"
+            >
+              此資料不能為空
+            </small>
+          </div>
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>Label</label>
+          <input
+            type="text"
+            pInputText
+            formControlName="templateType"
+            [readonly]="true"
+          />
+        </div>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-5 lg:col-5">
+          <label>檔案位置(格式: filePath + '/'+ fileNmae)</label>
+          <input type="text" pInputText formControlName="filePath" />
+          <div *ngIf="templateFormControlInvalid('filePath')">
+            <small
+              class="p-error"
+              *ngIf="templateFormControl('filePath').errors?.['required']"
+            >
+              此資料不能為空
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-3 lg:col-3">
+          <label class="required">最大允許檔案大小 10 MB</label>
+          <!-- <div class="p-inputgroup"> -->
+          <input type="text" pInputText formControlName="fileName" />
+          <div *ngIf="templateFormControlInvalid('fileName')">
+            <small
+              class="p-error"
+              *ngIf="templateFormControl('fileName').errors?.['required']"
+            >
+              此資料不能為空
+            </small>
+            <small
+              class="p-error"
+              *ngIf="templateFormControl('fileName').errors?.['invalidFileSize']"
+            >
+              此欄位必須小於 10 MB
+            </small>
+          </div>
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <p-fileUpload
+            class="mt-auto col-4 md:col-5 lg:col-4"
+            #fileUploadComponent
+            mode="basic"
+            name="demo[]"
+            accept=".csv,.xls,.xlsx,.jasper"
+            [customUpload]="true"
+            [auto]="true"
+            chooseLabel="Choose"
+            maxFileSize="1000000"
+            (uploadHandler)="fileUploadHandler($event, 'fileName')"
+          >
+            >
+          </p-fileUpload>
+        </div>
+      </div>
+      <div class="grid p-fluid justify-content-end">
+        <div class="col-12 md:col-2 lg:col-2">
+          <button
+            type="button"
+            class="p-button-primary"
+            pButton
+            label="上傳"
+            (click)="upload()"
+          ></button>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>

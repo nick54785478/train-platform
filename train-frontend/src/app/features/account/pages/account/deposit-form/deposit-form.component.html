@@ -1,0 +1,29 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <p-panel [showHeader]="false">
+    <div class="card" #contentElement></div>
+    <div class="grid p-fluid">
+      <div class="col-12 md:col-3 lg:col-3">
+        <label class="required">儲值金額</label>
+        <p-inputNumber formControlName="money" [min]="0" [max]="1000" />
+      </div>
+      <div *ngIf="formControlInvalid('value')">
+        <small
+          class="p-error"
+          *ngIf="formControl('value').errors?.['required']"
+        >
+          資料不能為空
+        </small>
+      </div>
+    </div>
+    <div class="flex mb-2 gap-2 justify-content-end">
+      <button type="button" pButton label="提交" (click)="onSubmit()"></button>
+      <button
+        type="button"
+        class="p-button-secondary p-button-outlined"
+        pButton
+        label="取消"
+        (click)="onCloseForm()"
+      ></button>
+    </div>
+  </p-panel>
+</form>

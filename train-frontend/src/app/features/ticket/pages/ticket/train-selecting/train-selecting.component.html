@@ -1,0 +1,167 @@
+<div class="card">
+  <p-table
+    #dt
+    responsiveLayout="stack"
+    [rowsPerPageOptions]="[2, 5, 10]"
+    styleClass="p-datatable-gridlines p-datatable-sm p-datatable-striped"
+    selectionMode="single"
+    [tableStyle]="{
+      'min-width': '10rem',
+      'word-wrap': 'break-word'
+    }"
+    [resizableColumns]="true"
+    [value]="tableData"
+    [columns]="cols"
+    [(selection)]="selectedData"
+    [scrollable]="true"
+    scrollDirection="both"
+    scrollHeight="200px"
+    [paginator]="true"
+    [rows]="10"
+  >
+    <!-- 標題 -->
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          <div
+            [style]="{
+              'word-break': 'break-all',
+              'max-width': '100%',
+              'min-width': '1rem'
+            }"
+          >
+            {{ col.header }} <p-sortIcon [field]="col.field" />
+          </div>
+        </th>
+        <th
+          alignFrozen="right"
+          pFrozenColumn
+          style="
+            min-width: 1rem !important;
+            max-width: 70px !important;
+            width: 70px !important;
+          "
+        >
+          Select
+        </th>
+      </tr>
+    </ng-template>
+    <!-- 內容 -->
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td *ngFor="let col of columns">
+          <ng-container>
+            <div
+              [style]="{
+                'word-break': 'break-all',
+                'max-width': '100%',
+                'min-width': '2rem'
+              }"
+            >
+              {{ rowData[col.field] }}
+            </div>
+          </ng-container>
+        </td>
+        <td alignFrozen="right" pFrozenColumn>
+          <div>
+            <p-checkbox
+              [binary]="true"
+              [ngModel]="isChecked(rowData)"
+              (onChange)="clickRowActionMenu(rowData)"
+            ></p-checkbox>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<div *ngIf="detailVisible">
+  <form [formGroup]="formGroup">
+    <p-panel header="明細">
+      <div class="card" #contentElement>
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-3 lg:col-3">
+            <label>車次</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="trainNo"
+              [readOnly]="true"
+            />
+          </div>
+          <div class="col-12 md:col-3 lg:col-3">
+            <label>車種</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="trainKind"
+              [readOnly]="true"
+            />
+          </div>
+          <div class="col-12 md:col-3 lg:col-3">
+            <label>票價</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="price"
+              [readOnly]="true"
+            />
+          </div>
+        </div>
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-3 lg:col-3">
+            <label>搭乘日期</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="takeDate"
+              [readOnly]="true"
+            />
+          </div>
+          <div class="col-12 md:col-3 lg:col-3">
+            <label>發車時間</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="fromStopTime"
+              [readOnly]="true"
+            />
+          </div>
+          <div class="col-12 md:col-3 lg:col-3">
+            <label>起站</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="fromStop"
+              [readOnly]="true"
+            />
+          </div>
+          <div class="col-12 md:col-3 lg:col-3">
+            <label>迄站</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="toStop"
+              [readOnly]="true"
+            />
+          </div>
+        </div>
+        <div class="flex mb-2 gap-2 justify-content-end">
+          <button
+            type="button"
+            pButton
+            label="送出"
+            (click)="submit()"
+          ></button>
+          <button
+            type="button"
+            class="p-button-secondary p-button-outlined"
+            pButton
+            label="取消"
+            (click)="cancel()"
+          ></button>
+        </div>
+      </div>
+    </p-panel>
+  </form>
+</div>

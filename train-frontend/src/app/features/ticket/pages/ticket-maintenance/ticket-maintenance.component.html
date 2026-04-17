@@ -1,0 +1,258 @@
+<form [formGroup]="formGroup">
+  <p-panel header="車票資訊維護">
+    <div class="card" #contentElement>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-3 lg:col-3">
+          <label class="required">車次</label>
+          <p-dropdown
+            [options]="trainNos"
+            optionValue="value"
+            placeholder="請選擇"
+            [filter]="true"
+            filterBy="value"
+            [showClear]="true"
+            appendTo="body"
+            formControlName="trainNo"
+          >
+          </p-dropdown>
+          <div *ngIf="formControlInvalid('trainNo')">
+            <small class="p-error"> 該資料不能為空 </small>
+          </div>
+        </div>
+      </div>
+
+      &nbsp;
+      <div class="grid p-fluid justify-content-end">
+        <div class="col-12 md:col-3 lg:col-2">
+          <button type="button" pButton label="查詢" (click)="query()"></button>
+        </div>
+        <div class="col-12 md:col-3 lg:col-2">
+          <button
+            type="button"
+            class="p-button-secondary p-button-outlined"
+            pButton
+            label="清除"
+            (click)="clear()"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</form>
+
+<!-- 火車車次 -->
+<p-panel [showHeader]="false">
+  <!-- 表格 -->
+  <p-tabMenu
+    #detailTabMenuComponent
+    [model]="detailTabs"
+    styleClass="table-tabmenu"
+  >
+  </p-tabMenu>
+  <div class="card">
+    <p-table
+      #dt
+      [rowsPerPageOptions]="[2, 5, 10]"
+      [tableStyle]="{
+        'min-width': '10rem',
+        'word-wrap': 'break-word'
+      }"
+      styleClass="p-datatable-gridlines p-datatable-sm p-datatable-striped"
+      selectionMode="single"
+      [(selection)]="selectedData"
+      [value]="tableData"
+      [columns]="cols"
+      [scrollable]="true"
+      scrollHeight="500px"
+      [paginator]="true"
+      [rows]="10"
+      scrollDirection="both"
+      [resizableColumns]="true"
+    >
+      <!-- scrollDirection="both"  [resizableColumns]="true"-->
+
+      <!-- 標題 -->
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            *ngFor="let col of columns"
+            [pSortableColumn]="col.field"
+            style="
+              min-width: 100% !important;
+              max-width: 100% !important;
+              width: 300px !important;
+            "
+          >
+            <ng-container
+              >{{ col.header }} <p-sortIcon [field]="col.field"
+            /></ng-container>
+          </th>
+          <th
+            alignFrozen="right"
+            pFrozenColumn
+            style="
+              min-width: 100% !important;
+              max-width: 100% !important;
+              width: 300px !important;
+            "
+          >
+            Actions
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-columns="columns"
+        let-rowIndex="rowIndex"
+      >
+        <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+          <td *ngFor="let col of columns">
+            <!-- 編輯模式 -->
+            <!-- else viewMode -->
+            <ng-container
+              *ngIf="
+                isEditing(rowData.givenIndex) || isAdding(rowData);
+                else viewMode
+              "
+            >
+              <!-- 根據 type 生成 -->
+              <ng-container *ngIf="col.type === 'dropdown'">
+                <p-dropdown
+                  placeholder="請選擇"
+                  [filter]="true"
+                  filterBy="value"
+                  [(ngModel)]="rowData[col.field]"
+                  [options]="loadDropdownData(col)"
+                  [style]="{
+                    'word-wrap': 'break-word',
+                    'max-width': '100%',
+                    'min-width': '100%'
+                  }"
+                  optionLabel="label"
+                  optionValue="value"
+                  appendTo="body"
+                ></p-dropdown>
+              </ng-container>
+              <ng-container *ngIf="col.type === 'textArea'">
+                <textarea
+                  [(ngModel)]="rowData[col.field]"
+                  appAutofocus
+                  rows="5"
+                  cols="100"
+                  [style]="{
+                    'word-wrap': 'break-word',
+                    'max-width': '100%',
+                    'min-width': '100%'
+                  }"
+                  pInputTextarea
+                  [autoResize]="true"
+                >
+                </textarea>
+              </ng-container>
+              <ng-container *ngIf="col.type === 'inputText'">
+                <input
+                  [(ngModel)]="rowData[col.field]"
+                  type="text"
+                  appAutofocus
+                  [style]="{
+                    'word-wrap': 'break-word',
+                    'max-width': '100%',
+                    'min-width': '100%'
+                  }"
+                  class="p-inputtext"
+                  pInputText
+                />
+              </ng-container>
+              <ng-container *ngIf="col.type === 'inputNumber'">
+                <input
+                  [(ngModel)]="rowData[col.field]"
+                  type="number"
+                  appAutofocus
+                  [style]="{
+                    'word-wrap': 'break-word',
+                    'max-width': '100%',
+                    'min-width': '100%'
+                  }"
+                  class="p-inputtext"
+                  pInputText
+                />
+              </ng-container>
+              <ng-container *ngIf="col.type === 'inputTime'">
+                <input
+                  [(ngModel)]="rowData[col.field]"
+                  type="time"
+                  appAutofocus
+                  [style]="{
+                    'word-wrap': 'break-word',
+                    'max-width': '100%',
+                    'min-width': '100%'
+                  }"
+                  class="p-inputtext"
+                  pInputText
+                />
+              </ng-container>
+              <div *ngIf="!rowData[col.field]">
+                <small class="p-error"> 資料不能為空 </small>
+              </div>
+            </ng-container>
+
+            <!-- 檢視模式 -->
+            <ng-template #viewMode>
+              <div (dblclick)="onEdit(rowData.givenIndex)" class="cell-content">
+                {{ rowData[col.field] }}
+              </div>
+            </ng-template>
+          </td>
+
+          <td pFrozenColumn>
+            <button
+              *ngIf="mode === ''"
+              pButton
+              [rounded]="true"
+              [text]="true"
+              type="button"
+              style="color: #2196f3"
+              class="p-button-outlined p-button-secondary"
+              icon="pi pi-pencil"
+              (click)="clickRowActionMenu(rowData); onEdit(rowData.givenIndex)"
+            ></button>
+            <button
+              *ngIf="mode === ''"
+              pButton
+              [rounded]="true"
+              [text]="true"
+              type="button"
+              style="color: #f70202"
+              class="p-button-outlined p-button-secondary"
+              icon="pi pi-trash"
+              (click)="
+                clickRowActionMenu(rowData); onDelete(rowData.givenIndex)
+              "
+            ></button>
+            <div class="flex mb-2 gap-2 justify-content-start">
+              <ng-container
+                *ngIf="isEditing(rowData.givenIndex) || isAdding(rowData)"
+              >
+                <i
+                  class="pi pi-check"
+                  style="color: green"
+                  (click)="confirm(rowData.givenIndex)"
+                ></i>
+
+                <i
+                  class="pi pi-times"
+                  style="color: red"
+                  (click)="cancel(rowData.givenIndex)"
+                ></i>
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- <p-toast position="bottom-right" key="msg" /> -->
+</p-panel>

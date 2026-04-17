@@ -1,0 +1,55 @@
+.hidden {
+  display: none;
+}
+
+.progress-spinner {
+  position: fixed;
+  z-index: 999999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+.progress-spinner:before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.custom-spinner .p-progress-spinner-circle {
+  animation:
+    p-progress-spinner-dash 1.5s ease-in-out infinite,
+    custom-progress-spinner-color 6s ease-in-out infinite;
+}
+
+/* app.component.scss */
+.initial-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff; /* 或者你系統的主色調 */
+  z-index: 1000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // 可以放一個簡單的 CSS Spinner 確保使用者知道在載入
+  &::after {
+    content: "Loading...";
+    font-size: 1.2rem;
+    color: #666;
+  }
+}

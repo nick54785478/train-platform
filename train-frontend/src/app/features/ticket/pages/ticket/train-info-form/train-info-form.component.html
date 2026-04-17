@@ -1,0 +1,128 @@
+<form [formGroup]="formGroup">
+  <p-panel header="查詢車次資料">
+    <div class="card" #contentElement>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>車次</label>
+          <p-dropdown
+            [options]="trainNoList"
+            optionValue="value"
+            placeholder="請選擇"
+            [filter]="true"
+            filterBy="value"
+            [showClear]="true"
+            appendTo="body"
+            formControlName="trainNo"
+          >
+          </p-dropdown>
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label>車種</label>
+          <p-dropdown
+            [options]="kinds"
+            optionValue="value"
+            optionLabel="value"
+            [filter]="true"
+            filterBy="value"
+            placeholder="請選擇"
+            [showClear]="true"
+            appendTo="body"
+            formControlName="trainKind"
+          >
+          </p-dropdown>
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label class="required">車票種類</label>
+          <p-dropdown
+            [options]="ticketTypes"
+            optionValue="value"
+            optionLabel="value"
+            placeholder="請選擇"
+            [filter]="true"
+            filterBy="value"
+            [showClear]="true"
+            appendTo="body"
+            formControlName="ticketType"
+          >
+          </p-dropdown>
+          <div *ngIf="formControlInvalid('ticketType')">
+            <small class="p-error"> 該欄位不能為空 </small>
+          </div>
+        </div>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-3 lg:col-3">
+          <label class="required">搭乘日期</label>
+          <p-calendar
+            [showIcon]="true"
+            appendTo="body"
+            formControlName="takeDate"
+            dateFormat="yy-mm-dd"
+            dataType="string"
+            placeholder="yyyy-MM-dd"
+          >
+          </p-calendar>
+          <div *ngIf="formControlInvalid('takeDate')">
+            <small class="p-error"> 該欄位不能為空 </small>
+          </div>
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label class="required">搭乘時間</label>
+          <input type="time" pInputText formControlName="takeTime" />
+          <div *ngIf="formControlInvalid('takeTime')">
+            <small class="p-error"> 該欄位不能為空 </small>
+          </div>
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label class="required">起站</label>
+          <p-dropdown
+            [options]="stops"
+            optionValue="value"
+            placeholder="請選擇"
+            [filter]="true"
+            filterBy="value"
+            [showClear]="true"
+            appendTo="body"
+            formControlName="fromStop"
+          >
+          </p-dropdown>
+          <div *ngIf="formControlInvalid('fromStop')">
+            <small class="p-error"> 該欄位不能為空 </small>
+          </div>
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <label class="required">迄站</label>
+          <p-dropdown
+            [options]="stops"
+            optionValue="value"
+            placeholder="請選擇"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="value"
+            appendTo="body"
+            formControlName="toStop"
+          >
+          </p-dropdown>
+          <div *ngIf="formControlInvalid('toStop')">
+            <small class="p-error"> 該欄位不能為空 </small>
+          </div>
+        </div>
+      </div>
+      &nbsp;
+      <div class="grid p-fluid justify-content-end">
+        <div class="col-12 md:col-3 lg:col-2">
+          <button type="button" pButton label="查詢" (click)="query()"></button>
+        </div>
+        <div class="col-12 md:col-3 lg:col-2">
+          <button
+            type="button"
+            class="p-button-secondary p-button-outlined"
+            pButton
+            label="清除"
+            (click)="clear()"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</form>

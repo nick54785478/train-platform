@@ -1,0 +1,110 @@
+<!-- Excel 上傳 -->
+<form [formGroup]="formGroup">
+  <p-panel header="車次資料上傳">
+    <div class="card" #contentElement pBPaaSFocusTrap>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-3 lg:col-3">
+          <label class="required">最大允許檔案大小 10 MB</label>
+          <!-- <div class="p-inputgroup"> -->
+          <input
+            type="text"
+            pInputText
+            formControlName="fileName"
+            readonly="true"
+          />
+          <div *ngIf="formControlInvalid('fileName')">
+            <small
+              class="p-error"
+              *ngIf="formControl('fileName').errors?.['required']"
+            >
+              此資料不能為空
+            </small>
+            <small
+              class="p-error"
+              *ngIf="formControl('fileName').errors?.['invalidFileSize']"
+            >
+              此欄位必須小於 10 MB
+            </small>
+          </div>
+        </div>
+        <div class="col-12 md:col-3 lg:col-3">
+          <p-fileUpload
+            class="mt-auto col-4 md:col-5 lg:col-4"
+            #fileUploadComponent
+            mode="basic"
+            name="demo[]"
+            accept=".csv,.xls,.xlsx"
+            [customUpload]="true"
+            [auto]="true"
+            chooseLabel="Choose"
+            maxFileSize="1000000"
+            (uploadHandler)="fileUploadHandler($event, 'fileName')"
+          >
+            >
+          </p-fileUpload>
+        </div>
+        <div class="col-12 md:col-4 lg:col-4">
+          <label class="required"> 工作表 </label>
+          <p-dropdown
+            [options]="sheetNameOptions"
+            optionValue="value"
+            placeholder="請選擇"
+            [showClear]="true"
+            appendTo="body"
+            optionLabel="value"
+            formControlName="sheetName"
+          ></p-dropdown>
+        </div>
+
+        <!-- </div> -->
+      </div>
+    </div>
+    <div class="grid p-fluid justify-content-front">
+      <div class="col-12 md:col-2 lg:col-2">
+        <!-- <button
+          class="p-button-secondary p-button-outlined"
+          type="button"
+          pButton
+          label="下載範本"
+          (click)="downloadTemplate()"
+        ></button> -->
+        <!-- <button (click)="downloadTemplate()">下載範本</button> -->
+        <a href="#" (click)="downloadTemplate($event)">下載範例</a>
+      </div>
+    </div>
+
+    <div class="grid p-fluid justify-content-end">
+      <div class="col-12 md:col-2 lg:col-2">
+        <button
+          class="p-button-secondary p-button-outlined"
+          type="button"
+          pButton
+          label="預覽"
+          (click)="preview('sheetName')"
+        ></button>
+      </div>
+      <div class="col-12 md:col-2 lg:col-2">
+        <button
+          type="button"
+          class="p-button-primary"
+          pButton
+          label="上傳"
+          (click)="upload()"
+        ></button>
+      </div>
+    </div>
+  </p-panel>
+</form>
+
+<ng-container *ngIf="showPreview">
+  <p-panel header="內容預覽">
+    <div class="grid p-fluid">
+      <div class="col-12 md:col-12 lg:col-12">
+        預覽內容僅顯示選定工作表的前 {{ maxRow }} 筆資料
+      </div>
+      <div class="col-12 md:col-12 lg:col-12">
+        <div #spreadsheet class="spreadsheet-container"></div>
+      </div>
+    </div>
+  </p-panel>
+</ng-container>

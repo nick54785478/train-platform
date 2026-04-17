@@ -1,0 +1,25 @@
+.not-found {
+  background-color: var(--blue-600);
+  color: var(--surface-a);
+}
+
+.exception-title {
+  font-size: 8rem;
+  font-weight: 600;
+}
+
+.exception-detail {
+  font-size: 2rem;
+}
+
+::ng-deep .p-button {
+  color: var(--surface-a);
+  background: var(--blue-500);
+  border: 1px solid var(--blue-500);
+
+  &:enabled:hover {
+    color: var(--surface-a);
+    background: var(--blue-700);
+    border: 1px solid var(--blue-700);
+  }
+}

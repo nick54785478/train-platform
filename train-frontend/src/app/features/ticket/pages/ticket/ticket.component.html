@@ -1,0 +1,56 @@
+<p-panel header="火車訂票流程">
+  <div
+    class="card grid p-fluid flex justify-content-center stepper-container"
+    #contentElement
+  >
+    <p-stepper
+      [linear]="true"
+      [style]="{ 'max-width': '100%',
+      'min-width': '40rem',
+       }"
+      [(activeStep)]="activeStepIndex"
+      (activeStepChange)="onStepChange($event)"
+    >
+      <!-- -->
+      <p-stepperPanel header="查詢車次及起迄站選擇">
+        <!-- <ng-template
+            pTemplate="content"
+            let-nextCallback="nextCallback"
+            let-index="index"
+          >
+          </ng-template> -->
+      </p-stepperPanel>
+      <p-stepperPanel header="車次選擇">
+        <!-- <ng-template
+            pTemplate="content"
+            let-prevCallback="prevCallback"
+            let-nextCallback="nextCallback"
+            let-index="index"
+          >
+          
+          </ng-template> -->
+      </p-stepperPanel>
+      <p-stepperPanel header="車票確認及付款">
+        <!-- <ng-template
+            pTemplate="content"
+            let-prevCallback="prevCallback"
+            let-nextCallback="nextCallback"
+            let-index="index"
+          >
+          </ng-template> -->
+      </p-stepperPanel>
+      <p-stepperPanel header="訂票成功">
+        <!-- <ng-template
+            pTemplate="content"
+            let-prevCallback="prevCallback"
+            let-index="index"
+          >
+           
+          </ng-template> -->
+      </p-stepperPanel>
+    </p-stepper>
+    <!-- </div> -->
+  </div>
+</p-panel>
+
+<router-outlet></router-outlet>
