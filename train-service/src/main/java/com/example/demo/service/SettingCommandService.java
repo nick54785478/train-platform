@@ -10,7 +10,10 @@ import com.example.demo.domain.service.SettingService;
 import com.example.demo.domain.setting.command.CreateSettingCommand;
 import com.example.demo.domain.setting.command.UpdateSettingCommand;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
 public class SettingCommandService extends BaseApplicationService {
 
