@@ -1,6 +1,5 @@
 package com.example.demo.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,9 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 public class AuthFeignConfiguration {
-
-	@Value("${auth.endpoint.service.jwt.token}")
-	private String token;
 
 	/**
 	 * 定義一個 Feign 的請求攔截器，用於在每次發送請求時增加 Header 資料。
