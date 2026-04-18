@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "UserLoginResource", description = "登入資訊")
-public class UserLoginResource {
+@Schema(name = "GetJwtTokenResource", description = "登入資訊")
+public class GetJwtTokenResource {
 
 	@Schema(description = "帳號")
 	private String username;

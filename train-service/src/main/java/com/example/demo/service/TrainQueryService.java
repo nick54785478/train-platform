@@ -1,16 +1,22 @@
 package com.example.demo.service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.application.shared.dto.TrainQueriedData;
+import com.example.demo.application.shared.dto.TrainQueriedData.StopQueriedData;
 import com.example.demo.base.application.service.BaseApplicationService;
+import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.service.TrainService;
-import com.example.demo.domain.share.TrainDetailQueriedData;
-import com.example.demo.domain.share.TrainQueriedData;
-import com.example.demo.domain.share.TrainSummaryQueriedData;
+import com.example.demo.domain.share.dto.TrainDetailQueriedView;
+import com.example.demo.domain.share.dto.TrainSummaryQueriedView;
+import com.example.demo.domain.train.aggregate.Train;
 import com.example.demo.domain.train.command.QueryTrainCommand;
-import com.example.demo.domain.train.command.QueryTrainSummaryCommand;
+import com.example.demo.domain.train.query.SummaryTrainQuery;
+import com.example.demo.infra.repository.TrainRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -19,6 +25,7 @@ import lombok.AllArgsConstructor;
 public class TrainQueryService extends BaseApplicationService {
 
 	private TrainService trainService;
+	private TrainRepository trainRepository;
 
 	/**
 	 * 查詢火車資訊
@@ -27,7 +34,13 @@ public class TrainQueryService extends BaseApplicationService {
 	 * @return 火車資訊
 	 */
 	public TrainQueriedData queryTrainData(Integer trainNo) {
-		return trainService.query(trainNo);
+		Train train = trainRepository.findByNumber(trainNo);
+		if (Objects.isNull(train)) {
+			throw new ValidationException("VALIDATE_FAILED", "查無此車次 " + trainNo);
+		}
+		TrainQueriedData queriedData = this.transformData(train, TrainQueriedData.class);
+		queriedData.getStops().sort(Comparator.comparingInt(StopQueriedData::getSeq));
+		return queriedData;
 	}
 
 	/**
@@ -36,8 +49,8 @@ public class TrainQueryService extends BaseApplicationService {
 	 * @param command
 	 * @return 火車資訊
 	 */
-	public List<TrainSummaryQueriedData> queryTrainSummary(QueryTrainSummaryCommand command) {
-		return trainService.queryTrainSummary(command);
+	public List<TrainSummaryQueriedView> summary(SummaryTrainQuery query) {
+		return trainService.summary(query);
 	}
 	
 	/**
@@ -46,7 +59,7 @@ public class TrainQueryService extends BaseApplicationService {
 	 * @param command
 	 * @return 火車資訊
 	 */
-	public List<TrainDetailQueriedData> queryTrainInfo(QueryTrainCommand command) {
+	public List<TrainDetailQueriedView> queryTrainInfo(QueryTrainCommand command) {
 		return trainService.queryTrainInfo(command);
 	}
 }

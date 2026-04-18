@@ -24,8 +24,7 @@ import com.example.demo.base.shared.command.BaseIdempotentCommand;
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.domain.seat.aggregate.TrainSeat;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
-import com.example.demo.domain.share.SeatQueriedData;
-import com.example.demo.domain.share.UnbookedSeatGottenData;
+import com.example.demo.domain.share.dto.UnbookedSeatGottenView;
 import com.example.demo.infra.repository.SettingRepository;
 import com.example.demo.infra.repository.TrainSeatRepository;
 
@@ -42,19 +41,6 @@ public class SeatService extends BaseDomainService {
 	private EventIdempotenceHandlerPort eventIdempotentLogService;
 
 	/**
-	 * 查詢該乘車時段已被預訂的車位
-	 * 
-	 * @param trainUuid
-	 * @param takeDate
-	 * @return 車位資料
-	 */
-	public List<SeatQueriedData> queryBookedSeats(String trainUuid, LocalDate takeDate) {
-		List<TrainSeat> trainSeats = trainSeatRepository.findByTakeDateAndTrainUuidAndBookedAndActiveFlag(takeDate,
-				trainUuid, YesNo.Y, YesNo.Y);
-		return this.transformEntityToData(trainSeats, SeatQueriedData.class);
-	}
-
-	/**
 	 * 取得座位代號及車廂編號
 	 * 
 	 * @param trainUuid
@@ -62,8 +48,8 @@ public class SeatService extends BaseDomainService {
 	 * @return TrainSeatGottenData
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
-	public UnbookedSeatGottenData getUnbookedSeat(String trainUuid, LocalDate takeDate) {
-		UnbookedSeatGottenData trainSeatGottenData = new UnbookedSeatGottenData();
+	public UnbookedSeatGottenView getUnbookedSeat(String trainUuid, LocalDate takeDate) {
+		UnbookedSeatGottenView trainSeatGottenData = new UnbookedSeatGottenView();
 		trainSeatGottenData.setTrainUuid(trainUuid);
 
 		Map<Long, List<String>> availableSeatsMap = new HashMap<>();
@@ -150,7 +136,7 @@ public class SeatService extends BaseDomainService {
 	 * @param unbooked          未被預訂的位置清單
 	 * @param key               車廂編號
 	 */
-	private void getSeatNoAndCarNo(UnbookedSeatGottenData trainSeatGottenData, List<String> unbooked, Long key) {
+	private void getSeatNoAndCarNo(UnbookedSeatGottenView trainSeatGottenData, List<String> unbooked, Long key) {
 
 		// 若 CarNo 與 SeatNo 未取得，進入執行
 		if (Objects.isNull(trainSeatGottenData.getCarNo()) && StringUtils.isBlank(trainSeatGottenData.getSeatNo())) {

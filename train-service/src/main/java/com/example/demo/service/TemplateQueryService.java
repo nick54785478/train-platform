@@ -1,17 +1,23 @@
 package com.example.demo.service;
 
+import java.util.Objects;
+
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.service.TemplateService;
-import com.example.demo.domain.share.TemplateQueriedData;
+import com.example.demo.application.shared.dto.TemplateQueriedData;
+import com.example.demo.base.application.service.BaseApplicationService;
+import com.example.demo.base.shared.enums.YesNo;
+import com.example.demo.domain.template.aggregate.Template;
+import com.example.demo.domain.template.aggregate.vo.TemplateType;
+import com.example.demo.infra.repository.TemplateRepository;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class TemplateQueryService {
+public class TemplateQueryService extends BaseApplicationService {
 
-	private TemplateService templateService;
+	private TemplateRepository templateRepository;
 
 	/**
 	 * 根據範本種類條件查詢
@@ -20,7 +26,9 @@ public class TemplateQueryService {
 	 * @return TemplateQueriedData
 	 */
 	public TemplateQueriedData queryByType(String type) {
-		return templateService.queryByType(type);
+		Template queried = templateRepository.findByTypeAndDeleteFlag(TemplateType.valueOf(type), YesNo.N);
+		return Objects.isNull(queried) ? null : this.transformData(queried, TemplateQueriedData.class);
+
 	}
 
 }

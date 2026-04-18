@@ -1,7 +1,5 @@
 package com.example.demo.application.shared.dto;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingCheckedInData {
+public class BookingCompletedData {
 
-	private String uuid;
-	
-	private Date chekedInDate;
-	
-	private String message;
+	private String email;
+
 }

@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.application.shared.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

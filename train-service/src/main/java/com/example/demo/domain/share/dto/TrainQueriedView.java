@@ -1,4 +1,4 @@
-package com.example.demo.application.shared.dto;
+package com.example.demo.domain.share.dto;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainQueriedData {
+public class TrainQueriedView {
 
 	private String uuid;
 
@@ -17,12 +17,12 @@ public class TrainQueriedData {
 
 	private String kind; // 火車種類
 
-	private List<StopQueriedData> stops; // 停靠站
+	private List<StopQueriedView> stops; // 停靠站
 
 	@Data
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class StopQueriedData {
+	public static class StopQueriedView {
 
 		private String uuid;
 
@@ -34,5 +34,4 @@ public class TrainQueriedData {
 
 		private String deleteFlag;
 	}
-
 }

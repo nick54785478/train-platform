@@ -200,8 +200,9 @@ public class TicketBooking extends BaseAggreagteRoot {
 	 * 
 	 * @param eventTxId 該業務唯一值
 	 * @param reason    失敗原因
+	 * @param email     被通知者信箱
 	 */
-	public void fail(String eventTxId, String reason) {
+	public void fail(String eventTxId, String reason, String email) {
 		// 冪等檢查
 		if (this.status == BookingStatus.FAILED) {
 			return;
@@ -212,7 +213,7 @@ public class TicketBooking extends BaseAggreagteRoot {
 
 		// 建立一個終點事件：Saga 失敗
 		BookingExecutedFailedEvent event = BookingExecutedFailedEvent.builder().targetId(this.uuid).eventTxId(eventTxId)
-				.reason(reason).build();
+				.email(email).reason(reason).build();
 		this.raiseEvent(event); // 放入 Outbox
 	}
 }

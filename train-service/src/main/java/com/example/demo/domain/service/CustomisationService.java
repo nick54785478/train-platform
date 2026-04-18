@@ -17,12 +17,10 @@ import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.customisation.aggregate.Customisation;
 import com.example.demo.domain.customisation.aggregate.vo.CustomisationType;
-import com.example.demo.domain.customisation.command.CreateCustomisationCommand;
-import com.example.demo.domain.customisation.command.UpdateCustomisationCommand;
 import com.example.demo.domain.customisation.command.UpdateCustomizedValueCommand;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
-import com.example.demo.domain.share.CustomisationQueriedData;
-import com.example.demo.domain.share.OptionQueriedData;
+import com.example.demo.domain.share.dto.CustomisationDetailView;
+import com.example.demo.domain.share.dto.CustomisationQueriedView;
 import com.example.demo.infra.repository.CustomisationRepository;
 import com.example.demo.infra.repository.SettingRepository;
 
@@ -37,33 +35,33 @@ public class CustomisationService extends BaseDomainService {
 	private SettingRepository settingRepository;
 	private CustomisationRepository customisationRepository;
 
-	/**
-	 * 建立一筆個人化配置
-	 * 
-	 * @param command
-	 */
-	public void create(CreateCustomisationCommand command) {
-		Customisation customission = new Customisation();
-		customission.create(command);
-		customisationRepository.save(customission);
-	}
+//	/**
+//	 * 建立一筆個人化配置
+//	 * 
+//	 * @param command
+//	 */
+//	public void create(CreateCustomisationCommand command) {
+//		Customisation customission = new Customisation();
+//		customission.create(command);
+//		customisationRepository.save(customission);
+//	}
 
-	/**
-	 * 更新一筆個人化配置
-	 * 
-	 * @param command
-	 */
-	public void update(UpdateCustomisationCommand command) {
-		Customisation customission = customisationRepository.findByUsernameAndTypeAndNameAndActiveFlag(
-				command.getUsername(), CustomisationType.fromLabel(command.getType()), command.getName(),
-				YesNo.valueOf(command.getActiveFlag()));
-		if (Objects.isNull(customission)) {
-			log.error("發生錯誤，更新失敗");
-			throw new ValidationException("VALIDATION_FAILED", "發生錯誤，更新失敗");
-		}
-		customission.update(command);
-		customisationRepository.save(customission);
-	}
+//	/**
+//	 * 更新一筆個人化配置
+//	 * 
+//	 * @param command
+//	 */
+//	public void update(UpdateCustomisationCommand command) {
+//		Customisation customission = customisationRepository.findByUsernameAndTypeAndNameAndActiveFlag(
+//				command.getUsername(), CustomisationType.fromLabel(command.getType()), command.getName(),
+//				YesNo.valueOf(command.getActiveFlag()));
+//		if (Objects.isNull(customission)) {
+//			log.error("發生錯誤，更新失敗");
+//			throw new ValidationException("VALIDATION_FAILED", "發生錯誤，更新失敗");
+//		}
+//		customission.update(command);
+//		customisationRepository.save(customission);
+//	}
 
 	/**
 	 * 查詢個人的表格顯示欄位設定
@@ -72,8 +70,8 @@ public class CustomisationService extends BaseDomainService {
 	 * @param type
 	 * @return CustomissionQueriedData
 	 */
-	public CustomisationQueriedData query(String username, String dataType, String type) {
-		List<OptionQueriedData> data = new ArrayList<>();
+	public CustomisationQueriedView query(String username, String dataType, String type) {
+		List<CustomisationDetailView> data = new ArrayList<>();
 		Customisation customisation = customisationRepository.findByUsernameAndTypeAndActiveFlag(username,
 				CustomisationType.valueOf(type), YesNo.Y);
 
@@ -84,7 +82,7 @@ public class CustomisationService extends BaseDomainService {
 		// 若無個人化配置，回傳全部
 		if (Objects.isNull(customisation)) {
 			data.addAll(settingRepository.findByDataTypeAndTypeAndActiveFlag(dataType, type, YesNo.Y).stream()
-					.map(setting -> new OptionQueriedData(setting.getId(), setting.getName(), setting.getValue()))
+					.map(setting -> new CustomisationDetailView(setting.getId(), setting.getName(), setting.getValue()))
 					.collect(Collectors.toList()));
 		} else {
 //			data = Stream.of(customisation.getValue().split(",")).map(e -> {
@@ -97,13 +95,10 @@ public class CustomisationService extends BaseDomainService {
 //			}).collect(Collectors.toList());
 			data.addAll(Stream.of(customisation.getValue().split(",")).map(e -> transformMap.get(StringUtils.trim(e))) // 先找出設定值
 					.filter(Objects::nonNull) // 過濾掉 null
-					.map(setting -> new OptionQueriedData(setting.getId(), setting.getName(), setting.getValue())) // 建立物件
+					.map(setting -> new CustomisationDetailView(setting.getId(), setting.getName(), setting.getValue())) // 建立物件
 					.collect(Collectors.toList()));
 		}
-		CustomisationQueriedData customisationQueriedData = new CustomisationQueriedData();
-		customisationQueriedData.setUsername(username);
-		customisationQueriedData.setValue(data);
-		return customisationQueriedData;
+		return new CustomisationQueriedView(username, data);
 	}
 
 	/**

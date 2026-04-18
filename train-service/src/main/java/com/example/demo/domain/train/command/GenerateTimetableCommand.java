@@ -4,8 +4,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.domain.share.StopSummaryQueriedData;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,5 +29,17 @@ public class GenerateTimetableCommand {
 
 	private String kind; // 火車種類
 
-	private List<StopSummaryQueriedData> stops = new ArrayList<>(); // 停靠站
+	private List<GenerateStopInfo> stops = new ArrayList<>(); // 停靠站
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GenerateStopInfo {
+		
+		private Integer seq; // 停站順序
+
+		private String name; // 站名
+
+		private String time; // 停站時間
+	}
 }

@@ -4,16 +4,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.service.SettingService;
-import com.example.demo.domain.share.SettingQueriedData;
+import com.example.demo.application.shared.dto.SettingQueriedData;
+import com.example.demo.base.application.service.BaseApplicationService;
+import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
+import com.example.demo.infra.repository.SettingRepository;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class SettingQueryService {
+public class SettingQueryService extends BaseApplicationService {
 
-	private SettingService service;
+	private SettingRepository settingRepository;
 
 	/**
 	 * 根據條件查詢 Setting
@@ -22,10 +24,12 @@ public class SettingQueryService {
 	 * @param type
 	 * @param name
 	 * @param activeFlag
-	 * @return
+	 * @return List<SettingQueriedData>
 	 */
 	public List<SettingQueriedData> query(String dataType, String type, String name, String activeFlag) {
-		return service.query(dataType, type, name, activeFlag);
+		List<ConfigurableSetting> settingList = settingRepository.findAllWithSpecification(dataType, type, name,
+				activeFlag);
+		return this.transformData(settingList, SettingQueriedData.class);
 	}
 
 }

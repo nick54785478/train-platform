@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.share.SeatQueriedData;
-import com.example.demo.domain.share.UnbookedSeatGottenData;
+import com.example.demo.application.shared.dto.SeatQueriedData;
+import com.example.demo.domain.share.dto.UnbookedSeatGottenView;
 import com.example.demo.iface.dto.res.SeatQueriedResource;
 import com.example.demo.iface.dto.res.UnbookedSeatGottenResource;
 import com.example.demo.service.SeatQueryService;
@@ -59,7 +59,7 @@ public class SeatController {
 	public ResponseEntity<UnbookedSeatGottenResource> getUnbookedTrainSeat(
 			@Parameter(description = "火車代號 uuid") @RequestParam String trainUuid,
 			@Parameter(description = "乘車日期 (yyyy-mm-dd)") @RequestParam String takeDate) {
-		UnbookedSeatGottenData unbookedSeat = seatQueryService.getUnbookedSeat(trainUuid,
+		UnbookedSeatGottenView unbookedSeat = seatQueryService.getUnbookedSeat(trainUuid,
 				DateTransformUtil.transformStringToLocalDate(takeDate));
 		return new ResponseEntity<>(BaseDataTransformer.transformData(unbookedSeat, UnbookedSeatGottenResource.class),
 				HttpStatus.OK);

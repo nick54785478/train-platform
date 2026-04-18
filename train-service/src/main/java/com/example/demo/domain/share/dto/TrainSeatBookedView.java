@@ -1,4 +1,4 @@
-package com.example.demo.application.shared.dto;
+package com.example.demo.domain.share.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainSeatBookedData {
+public class TrainSeatBookedView {
 
 	private Integer number; // 車次
 
@@ -29,11 +29,10 @@ public class TrainSeatBookedData {
 	private LocalDate takeDate; // 乘車日期
 
 	private String seatNo; // 座號
-	
+
 	private Long carNo; // 車廂編號
 
 	private YesNo booked; // 是否已預定
 
 	private YesNo activeFlag; // 是否已失效
-
 }

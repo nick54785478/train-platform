@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 public class AccountRegistrationFailedEvent extends BaseEvent {
 
 	private String reason; // 失敗原因 (例如：儲值超時、系統異常)
-	
-	private String email; // 用於通知使用者
+
+	private String email; // 用於通知管理員處理
 
 }

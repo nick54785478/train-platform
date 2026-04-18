@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.application.shared.dto.OptionQueriedData;
 import com.example.demo.base.application.service.BaseApplicationService;
 import com.example.demo.domain.service.OptionService;
-import com.example.demo.domain.share.OptionQueriedData;
 
 import lombok.AllArgsConstructor;
 

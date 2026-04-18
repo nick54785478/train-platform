@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.base.shared.command.GetJwtTokenCommand;
 import com.example.demo.base.shared.dto.JwtTokenValidatedAndParsedResource;
 import com.example.demo.config.AuthFeignConfiguration;
 import com.example.demo.domain.account.command.RegisterUserCommand;
-import com.example.demo.domain.share.UserLoginCommand;
 import com.example.demo.iface.dto.res.JwtTokenGettenResource;
 import com.example.demo.iface.dto.res.UserInfoGottenResource;
 import com.example.demo.iface.dto.res.UserRegisteredResource;
@@ -33,7 +33,7 @@ public interface AuthFeignClient {
 	 * @return JwToken
 	 */
 	@PostMapping(value = "/api/v1/login")
-	public JwtTokenGettenResource login(@RequestBody UserLoginCommand command);
+	public JwtTokenGettenResource login(@RequestBody GetJwtTokenCommand command);
 
 	/**
 	 * 透過 email 取得 User 資料

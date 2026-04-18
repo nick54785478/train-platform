@@ -1,8 +1,8 @@
 package com.example.demo.base.application.port;
 
+import com.example.demo.base.shared.command.GetJwtTokenCommand;
 import com.example.demo.base.shared.dto.JwtTokenValidatedAndParsedResource;
 import com.example.demo.domain.account.command.RegisterUserCommand;
-import com.example.demo.domain.share.UserLoginCommand;
 import com.example.demo.iface.dto.res.JwtTokenGettenResource;
 import com.example.demo.iface.dto.res.UserInfoGottenResource;
 import com.example.demo.iface.dto.res.UserRegisteredResource;
@@ -23,7 +23,7 @@ public interface AuthServiceClientPort {
 	 * @param resource
 	 * @return JwToken
 	 */
-	public JwtTokenGettenResource login(UserLoginCommand command);
+	public JwtTokenGettenResource login(GetJwtTokenCommand command);
 
 	/**
 	 * 透過 email 取得 User 資料

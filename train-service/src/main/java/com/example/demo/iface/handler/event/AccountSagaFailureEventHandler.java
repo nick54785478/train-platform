@@ -6,28 +6,28 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.base.iface.handler.BaseEventHandler;
 import com.example.demo.domain.account.outbound.AccountRegistrationFailedEvent;
+import com.example.demo.service.NotificationService;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@AllArgsConstructor
 @RabbitListener(queues = "${rabbitmq.account.saga.failure}")
 public class AccountSagaFailureEventHandler extends BaseEventHandler {
 
-//	@Autowired
-//	private NotificationService notificationService;
+	private NotificationService notificationService;
 
 	@RabbitHandler
 	public void handle(AccountRegistrationFailedEvent event) {
 
 		log.error("SAGA 流程結束 [失敗] - 帳戶 ID: {}, 原因: {}", event.getTargetId(), event.getReason());
 
-		System.out.println("AccountSagaFailureEventHandler: eventTxId:" + event.getEventTxId());
 
 		// 1. 寄送通知給使用者 (使用 event 帶過來的 email，免去二次查詢)
 		log.info("準備寄送失敗通知至：{}", event.getEmail());
-		// notificationService.sendDepositFailureAlert(event.getEmail(),
-		// event.getReason());
+		notificationService.sendAccountRegistrationFailureAlert(event.getEmail(), event.getReason());
 
 		// 2. 記錄審計日誌或監控指標 (Metrics)
 		// metrics.increment("saga.account.registration.failure");

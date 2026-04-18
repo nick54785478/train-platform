@@ -6,6 +6,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -14,10 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.base.application.service.BaseApplicationService;
-import com.example.demo.domain.service.TemplateService;
-import com.example.demo.domain.share.TemplateQueriedData;
+import com.example.demo.base.shared.enums.YesNo;
+import com.example.demo.domain.template.aggregate.Template;
+import com.example.demo.domain.template.aggregate.vo.FileType;
+import com.example.demo.domain.template.aggregate.vo.TemplateType;
 import com.example.demo.domain.template.command.UploadTemplateCommand;
 import com.example.demo.infra.blob.MinioService;
+import com.example.demo.infra.repository.TemplateRepository;
 
 import io.minio.errors.ErrorResponseException;
 import io.minio.errors.InsufficientDataException;
@@ -33,7 +37,7 @@ import lombok.AllArgsConstructor;
 public class TemplateCommandService extends BaseApplicationService {
 
 	private MinioService minioService;
-	private TemplateService templateService;
+	private TemplateRepository templateRepository;
 
 	/**
 	 * 上傳範本資料
@@ -43,7 +47,20 @@ public class TemplateCommandService extends BaseApplicationService {
 	 * @throws Exception
 	 */
 	public void upload(UploadTemplateCommand command, MultipartFile file) throws Exception {
-		templateService.upload(command, file);
+		// 取出最新版本
+		Template template = templateRepository.findByTypeAndFileTypeAndDeleteFlag(
+				TemplateType.valueOf(command.getType()), FileType.fromLabel(command.getFileType()), YesNo.N);
+		if (Objects.isNull(template)) {
+			// 新增 Template 資料
+			Template entity = new Template();
+			entity.create(command);
+			templateRepository.save(entity);
+		} else {
+			// TODO 可改為版本控制，但會變得很複雜
+		}
+
+		// 上傳 範本資料
+		minioService.uploadFile(file, command.getFileName(), command.getFilePath());
 	}
 
 	/**
@@ -56,7 +73,7 @@ public class TemplateCommandService extends BaseApplicationService {
 			InsufficientDataException, InternalException, InvalidResponseException, NoSuchAlgorithmException,
 			ServerException, XmlParserException, IllegalArgumentException, IOException {
 		Map<String, InputStream> downloadFileMap = new HashMap<>();
-		TemplateQueriedData template = templateService.queryByType(type);
+		Template template = templateRepository.findByTypeAndDeleteFlag(TemplateType.valueOf(type), YesNo.N);
 		InputStream inputStream = minioService.downloadFile(template.getFilePath() + "/" + template.getFileName());
 		downloadFileMap.put(template.getFileName(), inputStream);
 		return downloadFileMap;

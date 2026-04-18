@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.share.dto;
 
 import java.math.BigDecimal;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StopDetailQueriedData {
+public class StopDetailQueriedView {
 
 	private Integer seq; // 迄站停靠順序
 

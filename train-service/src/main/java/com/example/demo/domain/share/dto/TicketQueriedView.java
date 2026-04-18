@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.share.dto;
 
 import java.math.BigDecimal;
 
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketQueriedData {
+public class TicketQueriedView {
 
 	private String ticketNo;
-	
+
 	private String fromStop;
-	
+
 	private String toStop;
 
 	private BigDecimal price;

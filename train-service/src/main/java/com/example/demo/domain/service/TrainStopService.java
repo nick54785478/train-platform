@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.base.shared.exception.exception.ValidationException;
-import com.example.demo.domain.share.StopDetailQueriedData;
+import com.example.demo.domain.share.dto.StopDetailQueriedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.train.aggregate.Train;
 import com.example.demo.domain.train.aggregate.entity.TrainStop;
@@ -37,7 +37,7 @@ public class TrainStopService {
 	 * @param fromStop 起站
 	 */
 	@Transactional
-	public List<StopDetailQueriedData> getStopDetails(String uuid, String fromStop) {
+	public List<StopDetailQueriedView> getStopDetails(String uuid, String fromStop) {
 		Optional<Train> opt = trainRepository.findById(uuid);
 		if (opt.isEmpty()) {
 			throw new ValidationException("VALIDATE_FAILED", "查無該車次資料");
@@ -50,7 +50,7 @@ public class TrainStopService {
 			// 查詢起站通往各迄站車票資訊
 			List<Ticket> tickets = ticketRepository.findByTrainUuidAndFromStop(train.getUuid(), fromStop);
 			return tickets.stream().map(ticket -> {
-				StopDetailQueriedData stopDetailQueriedData = new StopDetailQueriedData();
+				StopDetailQueriedView stopDetailQueriedData = new StopDetailQueriedView();
 				stopDetailQueriedData.setFromStop(fromStop);
 				stopDetailQueriedData.setToStop(ticket.getToStop());
 
@@ -69,7 +69,7 @@ public class TrainStopService {
 					stopDetailQueriedData.setPrice(ticket.getPrice()); // 票價
 				}
 				return stopDetailQueriedData;
-			}).sorted(Comparator.comparingInt(StopDetailQueriedData::getSeq)).collect(Collectors.toList());
+			}).sorted(Comparator.comparingInt(StopDetailQueriedView::getSeq)).collect(Collectors.toList());
 		}
 	}
 

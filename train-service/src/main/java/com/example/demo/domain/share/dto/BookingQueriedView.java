@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomisationQueriedView {
+public class BookingQueriedView {
 
-	private String username;
+	private String username; // 使用者帳號
 
-	private List<CustomisationDetailView> value;
+	private List<TrainSeatBookedView> bookedDatas;
+
 }

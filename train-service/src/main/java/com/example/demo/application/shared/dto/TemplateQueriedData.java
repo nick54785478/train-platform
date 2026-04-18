@@ -1,4 +1,4 @@
-package com.example.demo.domain.share.dto;
+package com.example.demo.application.shared.dto;
 
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.domain.template.aggregate.vo.FileType;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TemplateQueriedView {
+public class TemplateQueriedData {
 
 	private Long id;
 

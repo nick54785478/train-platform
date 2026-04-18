@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.share.dto;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainSummaryQueriedData {
+public class TrainSummaryQueriedView {
 
 	private String uuid; // 火車 UUID
 
@@ -29,5 +29,6 @@ public class TrainSummaryQueriedData {
 
 	private String kind; // 火車種類
 
-	private List<StopSummaryQueriedData> stops = new ArrayList<>(); // 停靠站
+	private List<StopSummaryQueriedView> stops = new ArrayList<>(); // 停靠站
+
 }

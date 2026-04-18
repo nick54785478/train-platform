@@ -22,4 +22,6 @@ import lombok.experimental.SuperBuilder;
 public class AccountRegisteredEvent extends BaseEvent {
 
 	private BigDecimal money; // 金額
+	
+	private String email; // 用戶信箱
 }

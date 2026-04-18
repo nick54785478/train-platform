@@ -2,7 +2,6 @@ package com.example.demo.iface.handler.event;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.base.iface.handler.BaseEventHandler;
@@ -21,11 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 @RabbitListener(queues = "${rabbitmq.booking.saga.cancel}")
 public class BookingCancelSagaHandler extends BaseEventHandler {
 
-	@Autowired
-	private SeatCommandService seatCommandService;
+	private final SeatCommandService seatCommandService;
 
-	@Autowired
-	private MoneyAccountCommandService moneyAccountCommandService;
+	private final MoneyAccountCommandService moneyAccountCommandService;
+
+	public BookingCancelSagaHandler(SeatCommandService seatCommandService,
+			MoneyAccountCommandService moneyAccountCommandService) {
+		this.seatCommandService = seatCommandService;
+		this.moneyAccountCommandService = moneyAccountCommandService;
+	}
 
 	/**
 	 * 處理 BookingCancelledEvent 這裡不呼叫 BookingCommandService，因為此事件發出時，訂單狀態通常已經由

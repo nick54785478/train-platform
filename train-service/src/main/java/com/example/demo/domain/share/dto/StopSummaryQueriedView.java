@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.share.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StopSummaryQueriedData {
+public class StopSummaryQueriedView {
 
 	private Integer seq; // 停站順序
 

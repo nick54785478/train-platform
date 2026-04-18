@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.base.domain.service.BaseDomainService;
 import com.example.demo.base.shared.exception.exception.ValidationException;
-import com.example.demo.domain.share.TicketQueriedData;
+import com.example.demo.domain.share.dto.TicketQueriedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.ticket.command.CreateOrUpdateTicketCommand;
 import com.example.demo.domain.ticket.command.CreateTicketCommand;
@@ -130,7 +130,7 @@ public class TicketService extends BaseDomainService {
 	 * @param trainNo
 	 * @return List<TicketQueriedData>
 	 */
-	public List<TicketQueriedData> queryTicketsByTrainNo(Integer trainNo) {
+	public List<TicketQueriedView> queryTicketsByTrainNo(Integer trainNo) {
 		// 查出車次資料 => trainUuid
 		Train train = trainRepository.findByNumber(trainNo);
 		// 領域檢核 檢查車次是否存在(車次存在才可以新增)
@@ -138,7 +138,7 @@ public class TicketService extends BaseDomainService {
 			throw new ValidationException("VALIDATE_FAILED", "該車次不存在");
 		}
 		List<Ticket> tickets = ticketRepository.findByTrainUuid(train.getUuid());
-		return this.transformEntityToData(tickets, TicketQueriedData.class);
+		return this.transformAggregate(tickets, TicketQueriedView.class);
 	}
 
 }

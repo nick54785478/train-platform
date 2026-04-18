@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.shared.dto.TicketBookedData;
 import com.example.demo.domain.booking.command.BookTicketCommand;
 import com.example.demo.domain.booking.command.CancelTicketBookingCommand;
 import com.example.demo.domain.booking.command.CheckInTicketBookingCommand;
-import com.example.demo.domain.share.BookingQueriedData;
-import com.example.demo.domain.share.TicketBookedData;
+import com.example.demo.domain.share.dto.BookingQueriedView;
 import com.example.demo.iface.dto.req.BookTicketResource;
 import com.example.demo.iface.dto.req.CancelTicketBookingResource;
 import com.example.demo.iface.dto.req.CheckInTicketResource;
@@ -52,7 +52,7 @@ public class BookingController {
 	@Operation(summary = "API - 查詢該使用者的訂票資訊", description = "查詢該使用者的訂票資訊。")
 	public ResponseEntity<BookingQueriedResource> queryBooking(
 			@Parameter(description = "使用者帳號") @PathVariable String username) {
-		BookingQueriedData bookQueriedData = bookQueryService.queryBooking(username);
+		BookingQueriedView bookQueriedData = bookQueryService.queryBooking(username);
 		return new ResponseEntity<>(BaseDataTransformer.transformData(bookQueriedData, BookingQueriedResource.class),
 				HttpStatus.OK);
 	}

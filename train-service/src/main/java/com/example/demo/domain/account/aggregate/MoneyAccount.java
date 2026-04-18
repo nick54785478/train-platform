@@ -76,7 +76,7 @@ public class MoneyAccount extends BaseAggreagteRoot {
 
 		// 3. 建立事件時，必須明確傳入這個 sagaTxId
 		AccountRegisteredEvent event = AccountRegisteredEvent.builder().targetId(moneyAccount.uuid).eventTxId(sagaTxId)
-				.money(command.getMoney()).build();
+				.money(command.getMoney()).email(moneyAccount.email).build();
 
 		moneyAccount.raiseEvent(event);
 		return moneyAccount;

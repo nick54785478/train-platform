@@ -29,16 +29,16 @@ import com.example.demo.domain.service.TicketService;
 import com.example.demo.domain.service.TimetableService;
 import com.example.demo.domain.service.TrainService;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
-import com.example.demo.domain.share.TemplateQueriedData;
-import com.example.demo.domain.share.TimetableGeneratedData;
-import com.example.demo.domain.share.TrainSummaryQueriedData;
+import com.example.demo.domain.share.dto.TemplateQueriedView;
+import com.example.demo.domain.share.dto.TimetableGeneratedView;
+import com.example.demo.domain.share.dto.TrainSummaryQueriedView;
 import com.example.demo.domain.share.enums.TrainSheetMapping;
 import com.example.demo.domain.ticket.command.CreateTicketCommand;
 import com.example.demo.domain.train.command.CreateStopCommand;
 import com.example.demo.domain.train.command.CreateTrainCommand;
 import com.example.demo.domain.train.command.GenerateTimetableCommand;
-import com.example.demo.domain.train.command.QueryTrainSummaryCommand;
 import com.example.demo.domain.train.command.UpdateTrainCommand;
+import com.example.demo.domain.train.query.SummaryTrainQuery;
 import com.example.demo.infra.blob.MinioService;
 import com.example.demo.infra.repository.SettingRepository;
 import com.example.demo.util.ExcelUtil;
@@ -254,18 +254,18 @@ public class TrainCommandService extends BaseApplicationService {
 	 * @param command
 	 * @return ByteArrayResource
 	 */
-	public ByteArrayResource downloadTimetable(QueryTrainSummaryCommand command) {
+	public ByteArrayResource downloadTimetable(SummaryTrainQuery query) {
 		try {
-			List<TrainSummaryQueriedData> summaryData = trainService.queryTrainSummary(command);
+			List<TrainSummaryQueriedView> summaryData = trainService.summary(query);
 
 			// 轉換 command 用以建立 Timetable
 			List<GenerateTimetableCommand> commands = transformData(summaryData, GenerateTimetableCommand.class);
-			TimetableGeneratedData generateData = timetableService.generateTimetableByFromStopAndToStop(commands);
+			TimetableGeneratedView generateData = timetableService.generateTimetableByFromStopAndToStop(commands);
 
 			// 透過 Template 配置取得資料流
-			TemplateQueriedData templateData = generateData.getTemplateQueriedData();
-			InputStream inputStream = minioService
-					.downloadFile(templateData.getFilePath() + "/" + generateData.getTemplateQueriedData().getFileName());
+			TemplateQueriedView templateData = generateData.getTemplateQueriedData();
+			InputStream inputStream = minioService.downloadFile(
+					templateData.getFilePath() + "/" + generateData.getTemplateQueriedData().getFileName());
 
 			// TODO JasperReport 已無法開源使用，尚待新的 Solution
 			ByteArrayResource resource = JasperUtil.generateReportToPDF(inputStream, generateData.getDetails(),

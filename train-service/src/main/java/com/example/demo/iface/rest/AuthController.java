@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.share.UserLoginCommand;
+import com.example.demo.base.shared.command.GetJwtTokenCommand;
+import com.example.demo.iface.dto.res.GetJwtTokenResource;
 import com.example.demo.iface.dto.res.JwtTokenGettenResource;
-import com.example.demo.iface.dto.res.UserLoginResource;
 import com.example.demo.service.AuthCommandService;
 import com.example.demo.util.BaseDataTransformer;
 
@@ -37,8 +37,8 @@ public class AuthController {
 	@PostMapping("")
 	@Operation(summary = "API - 進行會員登入", description = "進行會員登入。")
 	public ResponseEntity<JwtTokenGettenResource> login(
-			@Parameter(description = "登入資訊(帳號、密碼)", required = true) @RequestBody UserLoginResource resource) {
-		UserLoginCommand command = BaseDataTransformer.transformData(resource, UserLoginCommand.class);
+			@Parameter(description = "登入資訊(帳號、密碼)", required = true) @RequestBody GetJwtTokenResource resource) {
+		GetJwtTokenCommand command = BaseDataTransformer.transformData(resource, GetJwtTokenCommand.class);
 		return new ResponseEntity<>(
 				BaseDataTransformer.transformData(authCommandService.getToken(command), JwtTokenGettenResource.class),
 				HttpStatus.OK);

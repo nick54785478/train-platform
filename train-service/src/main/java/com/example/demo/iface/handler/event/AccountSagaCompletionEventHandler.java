@@ -6,16 +6,18 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.base.iface.handler.BaseEventHandler;
 import com.example.demo.domain.account.outbound.AccountRegistrationCompletedEvent;
+import com.example.demo.service.NotificationService;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@AllArgsConstructor
 @RabbitListener(queues = "${rabbitmq.account.saga.completion}")
 public class AccountSagaCompletionEventHandler extends BaseEventHandler {
 
-	// @Autowired
-	// private NotificationService notificationService;
+	 private NotificationService notificationService;
 
 	@RabbitHandler
 	public void handle(AccountRegistrationCompletedEvent event) {
@@ -29,7 +31,7 @@ public class AccountSagaCompletionEventHandler extends BaseEventHandler {
 		log.info("恭喜使用者 {} 註冊成功！準備寄送歡迎信至 {}", event.getUsername(), event.getEmail());
 
 		// 2. 寄送開戶成功歡迎信
-		// notificationService.sendWelcomeEmail(event.getEmail(), event.getUsername());
+        notificationService.sendWelcomeEmail(event.getEmail(), event.getUsername());
 
 		// 3. 記錄成功指標 (Metrics)
 		// metrics.recordRegistrationSuccess();

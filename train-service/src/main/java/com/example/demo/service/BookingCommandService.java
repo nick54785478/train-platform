@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.application.shared.dto.BookingCheckedInData;
+import com.example.demo.application.shared.dto.BookingCompletedData;
+import com.example.demo.application.shared.dto.TicketBookedData;
 import com.example.demo.base.application.service.BaseApplicationService;
 import com.example.demo.base.infra.context.ContextHolder;
 import com.example.demo.base.shared.enums.YesNo;
@@ -21,8 +24,6 @@ import com.example.demo.domain.booking.command.CheckInTicketBookingCommand;
 import com.example.demo.domain.booking.command.CompleteBookingCommand;
 import com.example.demo.domain.seat.aggregate.TrainSeat;
 import com.example.demo.domain.service.TicketBookingService;
-import com.example.demo.domain.share.BookingCheckedInData;
-import com.example.demo.domain.share.TicketBookedData;
 import com.example.demo.infra.repository.MoneyAccountRepository;
 import com.example.demo.infra.repository.TicketBookingRepository;
 import com.example.demo.infra.repository.TrainSeatRepository;
@@ -107,15 +108,15 @@ public class BookingCommandService extends BaseApplicationService {
 	 */
 	@Transactional
 	public void cancelBooking(CancelTicketBookingCommand command, String eventTxId) {
-	    TicketBooking booking = ticketBookingRepository.findById(command.getUuid())
-	            .orElseThrow(() -> new EntityNotFoundException("找不到訂單"));
+		TicketBooking booking = ticketBookingRepository.findById(command.getUuid())
+				.orElseThrow(() -> new EntityNotFoundException("找不到訂單"));
 
-	    // 1. 領域邏輯檢查 (例如：已搭乘的票不能取消)
-	    booking.cancel(eventTxId); // 內部狀態改為 CANCELING
+		// 1. 領域邏輯檢查 (例如：已搭乘的票不能取消)
+		booking.cancel(eventTxId); // 內部狀態改為 CANCELING
 
-	    // 2. 持久化並寫入 Outbox
-	    ticketBookingRepository.save(booking);
-	    this.saveDomainEventsToOutbox(booking.getDomainEvents());
+		// 2. 持久化並寫入 Outbox
+		ticketBookingRepository.save(booking);
+		this.saveDomainEventsToOutbox(booking.getDomainEvents());
 	}
 
 	/**
@@ -123,16 +124,21 @@ public class BookingCommandService extends BaseApplicationService {
 	 * 
 	 * @param command {@link CompleteBookingCommand}
 	 */
-	public void completeBooking(CompleteBookingCommand command) {
-		ticketBookingRepository.findById(command.getBookingUuid()).ifPresent(booking -> {
-			booking.complete();
-			ticketBookingRepository.save(booking);
-			// 處理 Domain Events
-			List<BaseEvent> domainEvents = booking.getDomainEvents();
-			// 註冊 Event 到 Outbox
-			this.saveDomainEventsToOutbox(domainEvents);
+	public BookingCompletedData completeBooking(CompleteBookingCommand command) {
 
-		});
+		TicketBooking booking = ticketBookingRepository.findById(command.getBookingUuid()).orElse(null);
+
+		if (booking == null) {
+			return null;
+		}
+
+		booking.complete();
+		ticketBookingRepository.save(booking);
+		// 處理 Domain Events
+		List<BaseEvent> domainEvents = booking.getDomainEvents();
+		// 註冊 Event 到 Outbox
+		this.saveDomainEventsToOutbox(domainEvents);
+		return new BookingCompletedData(booking.getEmail());
 	}
 
 	/**
@@ -144,12 +150,16 @@ public class BookingCommandService extends BaseApplicationService {
 	 */
 	public void fail(String bookingUuid, String eventTxId, String reason) {
 		ticketBookingRepository.findById(bookingUuid).ifPresent(booking -> {
-			booking.fail(eventTxId, reason);
-			ticketBookingRepository.save(booking);
-			// 處理 Domain Events
-			List<BaseEvent> domainEvents = booking.getDomainEvents();
-			// 註冊 Event 到 Outbox
-			this.saveDomainEventsToOutbox(domainEvents);
+
+			// 取得使用者資訊(信箱)，用於後續通知
+			moneyAccountRepository.findById(booking.getAccountUuid()).ifPresent(e -> {
+				booking.fail(eventTxId, reason, e.getEmail());
+				ticketBookingRepository.save(booking);
+				// 處理 Domain Events
+				List<BaseEvent> domainEvents = booking.getDomainEvents();
+				// 註冊 Event 到 Outbox
+				this.saveDomainEventsToOutbox(domainEvents);
+			});
 
 		});
 	}

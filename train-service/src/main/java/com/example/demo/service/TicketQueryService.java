@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.base.application.service.BaseApplicationService;
 import com.example.demo.domain.service.TicketService;
-import com.example.demo.domain.share.TicketQueriedData;
+import com.example.demo.domain.share.dto.TicketQueriedView;
 
 import lombok.AllArgsConstructor;
 
@@ -20,9 +20,9 @@ public class TicketQueryService extends BaseApplicationService {
 	 * 根據車次查詢車票資料
 	 * 
 	 * @param trainNo
-	 * @return List<TicketQueriedData>
+	 * @return List<TicketQueriedView>
 	 */
-	public List<TicketQueriedData> queryTicketsByTrainNo(Integer trainNo) {
+	public List<TicketQueriedView> queryTicketsByTrainNo(Integer trainNo) {
 		return ticketService.queryTicketsByTrainNo(trainNo);
 	}
 }

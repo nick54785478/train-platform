@@ -25,8 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.train.command.CreateTrainCommand;
 import com.example.demo.domain.train.command.QueryTrainCommand;
-import com.example.demo.domain.train.command.QueryTrainSummaryCommand;
 import com.example.demo.domain.train.command.UpdateTrainCommand;
+import com.example.demo.domain.train.query.SummaryTrainQuery;
 import com.example.demo.iface.dto.req.CreateTrainResource;
 import com.example.demo.iface.dto.req.UpdateTrainResource;
 import com.example.demo.iface.dto.res.TrainCreatedResource;
@@ -155,9 +155,9 @@ public class TrainController {
 			@Parameter(description = "迄站") @RequestParam String toStop,
 			@Parameter(description = "搭乘日期 (yyyy-mm-dd)") @Valid @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}") String takeDate,
 			@Parameter(description = "搭乘時間 (hh:mm)") @RequestParam String time) {
-		QueryTrainSummaryCommand command = new QueryTrainSummaryCommand(trainNo, trainKind, fromStop, toStop, takeDate,
+		SummaryTrainQuery query = new SummaryTrainQuery(trainNo, trainKind, fromStop, toStop, takeDate,
 				time);
-		return new ResponseEntity<>(BaseDataTransformer.transformData(trainQueryService.queryTrainSummary(command),
+		return new ResponseEntity<>(BaseDataTransformer.transformData(trainQueryService.summary(query),
 				TrainSummaryQueriedResource.class), HttpStatus.OK);
 	}
 
@@ -196,7 +196,7 @@ public class TrainController {
 	public ResponseEntity<Resource> downloadTimetable(@Parameter(description = "起站") @RequestParam String fromStop,
 			@Parameter(description = "迄站") @RequestParam String toStop) {
 		// DTO 轉換
-		QueryTrainSummaryCommand command = new QueryTrainSummaryCommand();
+		SummaryTrainQuery command = new SummaryTrainQuery();
 		command.setFromStop(fromStop);
 		command.setToStop(toStop);
 		ByteArrayResource resource = trainCommandService.downloadTimetable(command);

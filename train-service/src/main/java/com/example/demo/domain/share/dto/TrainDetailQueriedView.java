@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.share.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainDetailQueriedData {
+public class TrainDetailQueriedView {
 
 	private String uuid; // 火車 UUID
 	

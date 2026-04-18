@@ -17,19 +17,18 @@ import com.example.demo.base.domain.service.BaseDomainService;
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
-import com.example.demo.domain.share.StopQueriedData;
-import com.example.demo.domain.share.StopSummaryQueriedData;
-import com.example.demo.domain.share.TrainDetailQueriedData;
-import com.example.demo.domain.share.TrainQueriedData;
-import com.example.demo.domain.share.TrainSummaryQueriedData;
+import com.example.demo.domain.share.dto.StopSummaryQueriedView;
+import com.example.demo.domain.share.dto.TrainDetailQueriedView;
+import com.example.demo.domain.share.dto.TrainQueriedView;
+import com.example.demo.domain.share.dto.TrainSummaryQueriedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.train.aggregate.Train;
 import com.example.demo.domain.train.aggregate.entity.TrainStop;
 import com.example.demo.domain.train.aggregate.vo.TrainKind;
 import com.example.demo.domain.train.command.CreateTrainCommand;
 import com.example.demo.domain.train.command.QueryTrainCommand;
-import com.example.demo.domain.train.command.QueryTrainSummaryCommand;
 import com.example.demo.domain.train.command.UpdateTrainCommand;
+import com.example.demo.domain.train.query.SummaryTrainQuery;
 import com.example.demo.infra.repository.SettingRepository;
 import com.example.demo.infra.repository.TicketRepository;
 import com.example.demo.infra.repository.TrainRepository;
@@ -73,23 +72,23 @@ public class TrainService extends BaseDomainService {
 		trainRepository.save(train);
 	}
 
-	/**
-	 * 透過號次查詢該火車資訊
-	 * 
-	 * @param trainNo
-	 * @return 火車資訊
-	 */
-	@Transactional // 確保在整個方法執行期間 Session 是打開的，保持懶加載(否則會報錯)
-	public TrainQueriedData query(Integer trainNo) {
-		Train train = trainRepository.findByNumber(trainNo);
-		if (Objects.isNull(train)) {
-			throw new ValidationException("VALIDATE_FAILED", "查無此車次 " + trainNo);
-		}
-		TrainQueriedData queriedData = this.transformEntityToData(train, TrainQueriedData.class);
-		queriedData.getStops().sort(Comparator.comparingInt(StopQueriedData::getSeq));
-		return queriedData;
-
-	}
+//	/**
+//	 * 透過號次查詢該火車資訊
+//	 * 
+//	 * @param trainNo
+//	 * @return 火車資訊
+//	 */
+//	@Transactional // 確保在整個方法執行期間 Session 是打開的，保持懶加載(否則會報錯)
+//	public TrainQueriedData query(Integer trainNo) {
+//		Train train = trainRepository.findByNumber(trainNo);
+//		if (Objects.isNull(train)) {
+//			throw new ValidationException("VALIDATE_FAILED", "查無此車次 " + trainNo);
+//		}
+//		TrainQueriedData queriedData = this.transformAggregate(train, TrainQueriedData.class);
+//		queriedData.getStops().sort(Comparator.comparingInt(StopQueriedData::getSeq));
+//		return queriedData;
+//
+//	}
 
 	/**
 	 * 透過條件過濾並查詢火車資訊(供訂票查詢用)
@@ -98,8 +97,8 @@ public class TrainService extends BaseDomainService {
 	 * @return List<TrainDetailQueriedData>
 	 */
 	@Transactional
-	public List<TrainDetailQueriedData> queryTrainInfo(QueryTrainCommand command) {
-		List<TrainDetailQueriedData> resList = new ArrayList<>();
+	public List<TrainDetailQueriedView> queryTrainInfo(QueryTrainCommand command) {
+		List<TrainDetailQueriedView> resList = new ArrayList<>();
 		List<Train> trainList = trainRepository.findByCondition(command.getTrainNo(),
 				StringUtils.isNotBlank(command.getTrainKind()) ? TrainKind.fromLabel(command.getTrainKind()).toString()
 						: null,
@@ -127,7 +126,7 @@ public class TrainService extends BaseDomainService {
 
 		// 遍歷火車資料進行資料更新
 		trainList.stream().forEach(e -> {
-			TrainDetailQueriedData trainData = new TrainDetailQueriedData();
+			TrainDetailQueriedView trainData = new TrainDetailQueriedView();
 			trainData.setUuid(e.getUuid());
 			trainData.setTrainNo(e.getNumber());
 			trainData.setKind(e.getKind().getLabel());
@@ -172,15 +171,15 @@ public class TrainService extends BaseDomainService {
 	 * @return 火車資訊
 	 */
 	@Transactional // 確保在整個方法執行期間 Session 是打開的，保持懶加載(否則會報錯)
-	public List<TrainSummaryQueriedData> queryTrainSummary(QueryTrainSummaryCommand command) {
-		List<TrainSummaryQueriedData> resList = new ArrayList<>();
-		List<Train> trainList = trainRepository.findByCondition(command.getTrainNo(),
-				StringUtils.isNotBlank(command.getTrainKind()) ? TrainKind.fromLabel(command.getTrainKind()).toString()
+	public List<TrainSummaryQueriedView> summary(SummaryTrainQuery query) {
+		List<TrainSummaryQueriedView> resList = new ArrayList<>();
+		List<Train> trainList = trainRepository.findByCondition(query.getTrainNo(),
+				StringUtils.isNotBlank(query.getTrainKind()) ? TrainKind.fromLabel(query.getTrainKind()).toString()
 						: null,
-				StringUtils.isNotBlank(command.getTime()) ? command.getTime() : "00:00:00", command.getFromStop(),
-				command.getToStop());
+				StringUtils.isNotBlank(query.getTime()) ? query.getTime() : "00:00:00", query.getFromStop(),
+				query.getToStop());
 		trainList.stream().forEach(e -> {
-			TrainSummaryQueriedData trainData = new TrainSummaryQueriedData();
+			TrainSummaryQueriedView trainData = new TrainSummaryQueriedView();
 			trainData.setUuid(e.getUuid());
 			trainData.setTrainNo(e.getNumber());
 			trainData.setKind(e.getKind().getLabel());
@@ -189,11 +188,11 @@ public class TrainService extends BaseDomainService {
 			TrainStop[] station = getFirstAndTerminatedStation(e.getStops());
 			this.setStopData(station, trainData);
 
-			List<StopSummaryQueriedData> stopResource = this.transformEntityToData(e.getStops(),
-					StopSummaryQueriedData.class);
+			List<StopSummaryQueriedView> stopResource = this.transformAggregate(e.getStops(),
+					StopSummaryQueriedView.class);
 
 			// 依 SEQ 升序排序
-			stopResource.sort(Comparator.comparingInt(StopSummaryQueriedData::getSeq));
+			stopResource.sort(Comparator.comparingInt(StopSummaryQueriedView::getSeq));
 			trainData.setStops(stopResource);
 			resList.add(trainData);
 		});
@@ -206,7 +205,7 @@ public class TrainService extends BaseDomainService {
 	 * @param stationData 起始站與終點站資料
 	 * @param trainData   火車查詢資料
 	 */
-	private void setStopData(TrainStop[] stationData, TrainSummaryQueriedData trainData) {
+	private void setStopData(TrainStop[] stationData, TrainSummaryQueriedView trainData) {
 		TrainStop firstStop = stationData[0]; // 起點站
 		TrainStop terminatedStop = stationData[1]; // 終點站
 		trainData.setFromStop(firstStop.getName());
@@ -224,10 +223,10 @@ public class TrainService extends BaseDomainService {
 	 * @return 火車資訊
 	 */
 	@Transactional // 確保在整個方法執行期間 Session 是打開的，保持懶加載(否則會報錯)
-	public List<TrainQueriedData> getTrainListBetweenStopSection(String fromStop, String toStop) {
+	public List<TrainQueriedView> getTrainListBetweenStopSection(String fromStop, String toStop) {
 		List<Train> trainList = trainRepository.findAll();
 
-		List<TrainQueriedData> dataList = trainList.stream().filter(e -> {
+		return trainList.stream().filter(e -> {
 			List<String> stopList = e.getStops().stream().sorted(Comparator.comparingInt(TrainStop::getSeq)) // 根據 SEQ
 					.map(TrainStop::getName).collect(Collectors.toList());
 			// 起站 index
@@ -237,8 +236,7 @@ public class TrainService extends BaseDomainService {
 
 			// 確保起站存在，迄站存在，且 起站不能在迄站後面
 			return fromIndex >= 0 && toIndex >= 0 && fromIndex < toIndex;
-		}).map(e -> this.transformEntityToData(e, TrainQueriedData.class)).collect(Collectors.toList());
-		return this.transformEntityToData(dataList, TrainQueriedData.class);
+		}).map(e -> this.transformAggregate(e, TrainQueriedView.class)).collect(Collectors.toList());
 	}
 
 	/**
@@ -257,7 +255,7 @@ public class TrainService extends BaseDomainService {
 		}
 
 		// 檢核車種是否合法
-		if (!TrainKind.checkTrainKind(command.getTrainKind())) {
+		if (Boolean.FALSE.equals(TrainKind.checkTrainKind(command.getTrainKind()))) {
 			log.error("火車車種:{} 不合法，新增失敗", command.getTrainKind());
 			throw new ValidationException("VALIDATE_FAILED", "車種不合法，新增失敗");
 		}

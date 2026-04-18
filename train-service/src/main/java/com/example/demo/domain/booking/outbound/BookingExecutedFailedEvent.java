@@ -17,5 +17,7 @@ import lombok.experimental.SuperBuilder;
 @EventTopic("${rabbitmq.booking.saga.failure}")
 public class BookingExecutedFailedEvent extends BaseEvent {
 
+	private String email; // 訂票者信箱
+	
 	private String reason; // 失敗原因
 }

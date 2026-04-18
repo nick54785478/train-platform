@@ -18,8 +18,8 @@ import com.example.demo.domain.booking.aggregate.TicketBooking;
 import com.example.demo.domain.booking.command.BookTicketCommand;
 import com.example.demo.domain.booking.command.CheckInTicketBookingCommand;
 import com.example.demo.domain.seat.aggregate.TrainSeat;
-import com.example.demo.domain.share.BookingQueriedData;
-import com.example.demo.domain.share.TrainSeatBookedData;
+import com.example.demo.domain.share.dto.BookingQueriedView;
+import com.example.demo.domain.share.dto.TrainSeatBookedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.train.aggregate.Train;
 import com.example.demo.domain.train.aggregate.entity.TrainStop;
@@ -109,7 +109,7 @@ public class TicketBookingService extends BaseDomainService {
 	 * @return BookingQueriedData
 	 */
 	@Transactional
-	public BookingQueriedData queryBooking(String username) {
+	public BookingQueriedView queryBooking(String username) {
 		List<TicketBooking> bookingList = ticketBookingRepository.findByUsername(username);
 		List<String> bookingUuidList = bookingList.stream().map(TicketBooking::getUuid).collect(Collectors.toList());
 
@@ -132,13 +132,13 @@ public class TicketBookingService extends BaseDomainService {
 		Map<String, Ticket> ticketMap = ticketReposiotry.findByTicketNoIn(ticketUuidList).stream()
 				.collect(Collectors.toMap(Ticket::getTicketNo, Function.identity()));
 
-		BookingQueriedData bookingQueriedData = new BookingQueriedData();
+		BookingQueriedView bookingQueriedData = new BookingQueriedView();
 		bookingQueriedData.setUsername(username);
 
-		List<TrainSeatBookedData> bookedDatas = new ArrayList<>();
+		List<TrainSeatBookedView> bookedDatas = new ArrayList<>();
 
 		bookingList.stream().forEach(book -> {
-			TrainSeatBookedData bookedData = new TrainSeatBookedData();
+			TrainSeatBookedView bookedData = new TrainSeatBookedView();
 			this.setTrainSeatBookedData(bookedData, book, ticketMap, trainMap, seatMap);
 			bookedDatas.add(bookedData);
 		});
@@ -156,7 +156,7 @@ public class TicketBookingService extends BaseDomainService {
 	 * @param trainMap   火車 Map<火車Uuid, Train> 資料
 	 * @param seatMap    座位 Map<bookUuid, Entity> 資料
 	 */
-	private void setTrainSeatBookedData(TrainSeatBookedData bookedData, TicketBooking book,
+	private void setTrainSeatBookedData(TrainSeatBookedView bookedData, TicketBooking book,
 			Map<String, Ticket> ticketMap, Map<String, Train> trainMap, Map<String, List<TrainSeat>> seatMap) {
 		if (!Objects.isNull(ticketMap.get(book.getTicketUuid()))) {
 			var ticketData = ticketMap.get(book.getTicketUuid());

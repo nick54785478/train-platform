@@ -1,14 +1,13 @@
-package com.example.demo.application.shared.dto;
+package com.example.demo.domain.share.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class OptionQueriedData {
-
+@AllArgsConstructor
+public class CustomisationDetailView {
 	private Long id;
 
 	private String label;
@@ -22,10 +21,9 @@ public class OptionQueriedData {
 	private String labelUs;
 	
 
-	public OptionQueriedData(Long id, String label, String value) {
+	public CustomisationDetailView(Long id, String label, String value) {
 		this.id = id;
 		this.label = label;
 		this.value = value;
 	}
-
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.service.TrainStopService;
-import com.example.demo.domain.share.StopDetailQueriedData;
+import com.example.demo.domain.share.dto.StopDetailQueriedView;
 
 import lombok.AllArgsConstructor;
 
@@ -21,7 +21,7 @@ public class TrainStopQueryService {
 	 * @param uuid     火車唯一代碼
 	 * @param fromStop 起站
 	 */
-	public List<StopDetailQueriedData> getStopDetails(String uuid, String fromStop) {
+	public List<StopDetailQueriedView> getStopDetails(String uuid, String fromStop) {
 		return trainStopService.getStopDetails(uuid, fromStop);
 	}
 }

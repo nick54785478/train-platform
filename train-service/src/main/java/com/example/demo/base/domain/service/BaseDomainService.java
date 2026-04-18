@@ -43,7 +43,7 @@ public abstract class BaseDomainService {
 	 * @param clazz  欲轉換的型別
 	 * @return 轉換後的物件
 	 */
-	public <T> T transformEntityToData(Object target, Class<T> clazz) {
+	public <T> T transformAggregate(Object target, Class<T> clazz) {
 		return BaseDataTransformer.transformData(target, clazz);
 	}
 
@@ -56,7 +56,7 @@ public abstract class BaseDomainService {
 	 * @param clazz  欲轉換的型別
 	 * @return 轉換後的物件列表
 	 */
-	public <S, T> List<T> transformEntityToData(List<S> target, Class<T> clazz) {
+	public <S, T> List<T> transformAggregate(List<S> target, Class<T> clazz) {
 		return BaseDataTransformer.transformData(target, clazz);
 	}
 

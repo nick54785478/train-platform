@@ -3,9 +3,9 @@ package com.example.demo.infra.adapter;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.base.application.port.AuthServiceClientPort;
+import com.example.demo.base.shared.command.GetJwtTokenCommand;
 import com.example.demo.base.shared.dto.JwtTokenValidatedAndParsedResource;
 import com.example.demo.domain.account.command.RegisterUserCommand;
-import com.example.demo.domain.share.UserLoginCommand;
 import com.example.demo.iface.dto.res.JwtTokenGettenResource;
 import com.example.demo.iface.dto.res.UserInfoGottenResource;
 import com.example.demo.iface.dto.res.UserRegisteredResource;
@@ -25,7 +25,7 @@ class AuthServiceClientAdatper implements AuthServiceClientPort {
 	}
 
 	@Override
-	public JwtTokenGettenResource login(UserLoginCommand command) {
+	public JwtTokenGettenResource login(GetJwtTokenCommand command) {
 		return authFeignClient.login(command);
 	}
 
