@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.application.service.TrainCommandService;
+import com.example.demo.application.service.TrainQueryService;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.train.command.CreateTrainCommand;
 import com.example.demo.domain.train.command.UpdateTrainCommand;
@@ -35,8 +37,6 @@ import com.example.demo.iface.dto.res.TrainQueriedResource;
 import com.example.demo.iface.dto.res.TrainSummaryQueriedResource;
 import com.example.demo.iface.dto.res.TrainUpdatedResource;
 import com.example.demo.iface.dto.res.TrainUploadedResource;
-import com.example.demo.service.TrainCommandService;
-import com.example.demo.service.TrainQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import io.swagger.v3.oas.annotations.Operation;

@@ -21,7 +21,7 @@ import com.example.demo.base.shared.command.BaseIdempotentCommand;
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.domain.seat.aggregate.TrainSeat;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
-import com.example.demo.domain.share.dto.UnbookedSeatGottenView;
+import com.example.demo.domain.shared.dto.UnbookedSeatGottenView;
 import com.example.demo.infra.repository.SettingRepository;
 import com.example.demo.infra.repository.TrainSeatRepository;
 

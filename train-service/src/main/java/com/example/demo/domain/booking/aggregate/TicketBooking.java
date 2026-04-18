@@ -15,7 +15,7 @@ import com.example.demo.domain.booking.outbound.BookingCancelledEvent;
 import com.example.demo.domain.booking.outbound.BookingCheckedInEvent;
 import com.example.demo.domain.booking.outbound.BookingCreatedEvent;
 import com.example.demo.domain.booking.outbound.BookingExecutedFailedEvent;
-import com.example.demo.domain.share.enums.TicketAction;
+import com.example.demo.domain.shared.enums.TicketAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

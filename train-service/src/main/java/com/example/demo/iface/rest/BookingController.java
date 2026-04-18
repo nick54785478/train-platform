@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.BookQueryService;
+import com.example.demo.application.service.BookingCommandService;
 import com.example.demo.application.shared.dto.TicketBookedData;
 import com.example.demo.domain.booking.command.BookTicketCommand;
 import com.example.demo.domain.booking.command.CancelTicketBookingCommand;
 import com.example.demo.domain.booking.command.CheckInTicketBookingCommand;
-import com.example.demo.domain.share.dto.BookingQueriedView;
+import com.example.demo.domain.shared.dto.BookingQueriedView;
 import com.example.demo.iface.dto.req.BookTicketResource;
 import com.example.demo.iface.dto.req.CancelTicketBookingResource;
 import com.example.demo.iface.dto.req.CheckInTicketResource;
@@ -23,8 +25,6 @@ import com.example.demo.iface.dto.res.BookingCancelledResource;
 import com.example.demo.iface.dto.res.BookingCheckedInResource;
 import com.example.demo.iface.dto.res.BookingQueriedResource;
 import com.example.demo.iface.dto.res.TicketBookedResource;
-import com.example.demo.service.BookQueryService;
-import com.example.demo.service.BookingCommandService;
 import com.example.demo.util.BaseDataTransformer;
 
 import io.swagger.v3.oas.annotations.Operation;

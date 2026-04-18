@@ -6,10 +6,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.application.service.MoneyAccountCommandService;
 import com.example.demo.base.iface.handler.BaseEventHandler;
 import com.example.demo.domain.account.command.ChargeFareCommand;
 import com.example.demo.domain.seat.outbound.SeatBookedEvent;
-import com.example.demo.service.MoneyAccountCommandService;
 
 import lombok.extern.slf4j.Slf4j;
 

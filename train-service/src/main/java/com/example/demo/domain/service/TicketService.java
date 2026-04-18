@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.base.domain.service.BaseDomainService;
 import com.example.demo.base.shared.exception.exception.ValidationException;
-import com.example.demo.domain.share.dto.TicketQueriedView;
+import com.example.demo.domain.shared.dto.TicketQueriedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.ticket.command.CreateOrUpdateTicketCommand;
 import com.example.demo.domain.ticket.command.CreateTicketCommand;

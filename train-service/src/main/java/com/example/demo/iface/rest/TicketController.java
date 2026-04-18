@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.TicketCommandService;
+import com.example.demo.application.service.TicketQueryService;
 import com.example.demo.domain.ticket.command.CreateOrUpdateTicketCommand;
 import com.example.demo.domain.ticket.command.CreateTicketCommand;
 import com.example.demo.iface.dto.req.CreateOrUpdateTicketResource;
 import com.example.demo.iface.dto.req.CreateTicketResource;
 import com.example.demo.iface.dto.res.TicketCreatedResource;
 import com.example.demo.iface.dto.res.TicketQueriedResource;
-import com.example.demo.service.TicketCommandService;
-import com.example.demo.service.TicketQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import io.swagger.v3.oas.annotations.Operation;

@@ -19,8 +19,8 @@ import com.example.demo.domain.customisation.aggregate.Customisation;
 import com.example.demo.domain.customisation.aggregate.vo.CustomisationType;
 import com.example.demo.domain.customisation.command.UpdateCustomizedValueCommand;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
-import com.example.demo.domain.share.dto.CustomisationDetailView;
-import com.example.demo.domain.share.dto.CustomisationQueriedView;
+import com.example.demo.domain.shared.dto.CustomisationDetailView;
+import com.example.demo.domain.shared.dto.CustomisationQueriedView;
 import com.example.demo.infra.repository.CustomisationRepository;
 import com.example.demo.infra.repository.SettingRepository;
 

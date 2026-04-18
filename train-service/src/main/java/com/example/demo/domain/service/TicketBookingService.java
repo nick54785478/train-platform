@@ -18,13 +18,11 @@ import com.example.demo.domain.booking.aggregate.TicketBooking;
 import com.example.demo.domain.booking.command.BookTicketCommand;
 import com.example.demo.domain.booking.command.CheckInTicketBookingCommand;
 import com.example.demo.domain.seat.aggregate.TrainSeat;
-import com.example.demo.domain.share.dto.BookingQueriedView;
-import com.example.demo.domain.share.dto.BookingQueriedView.BookingDetailQueriedView;
-import com.example.demo.domain.share.dto.TrainSeatBookedView;
+import com.example.demo.domain.shared.dto.BookingQueriedView;
+import com.example.demo.domain.shared.dto.BookingQueriedView.BookingDetailQueriedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.train.aggregate.Train;
 import com.example.demo.domain.train.aggregate.entity.TrainStop;
-import com.example.demo.domain.train.aggregate.vo.TrainKind;
 import com.example.demo.infra.repository.TicketBookingRepository;
 import com.example.demo.infra.repository.TicketRepository;
 import com.example.demo.infra.repository.TrainRepository;
@@ -81,26 +79,6 @@ public class TicketBookingService extends BaseDomainService {
 		// 進行 Check in 動作
 		booking.checkIn(trainSeat.getTakeDate(), trainSeat.getSeatNo(), trainSeat.getCarNo());
 	}
-
-//	/**
-//	 * 退費取消訂票
-//	 * 
-//	 */
-//	public TicketRefundedData refund(RefundTicketCommand command) {
-//		Optional<TicketBooking> option = ticketBookingRepository.findById(command.getUuid());
-//		if (option.isPresent()) {
-//			TicketBooking booking = option.get();
-//			booking.refund(command);
-//			TicketBooking saved = ticketBookingRepository.save(booking);
-//
-//			BaseEvent event = ContextHolder.getEvent();
-//			this.generateEventLog(bookingQueueName, event.getEventLogUuid(), event.getTargetId(), event);
-//			return new TicketRefundedData(saved.getTrainUuid(), saved.getCreatedDate(), "Refunded Successfully");
-//		}
-//		log.error("發生錯誤，查無此預約");
-//		throw new ValidationException("VALIDATION_EXCEPTION", "發生錯誤，查無此預約");
-//
-//	}
 
 	/**
 	 * 查詢個人訂票資訊 (修正版)

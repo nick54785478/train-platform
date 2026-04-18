@@ -2,7 +2,7 @@ package com.example.demo.application.shared.dto;
 
 import java.util.List;
 
-import com.example.demo.domain.share.dto.CustomisationDetailView;
+import com.example.demo.domain.shared.dto.CustomisationDetailView;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.base.shared.exception.exception.ValidationException;
-import com.example.demo.domain.share.dto.StopDetailQueriedView;
+import com.example.demo.domain.shared.dto.StopDetailQueriedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.train.aggregate.Train;
 import com.example.demo.domain.train.aggregate.entity.TrainStop;

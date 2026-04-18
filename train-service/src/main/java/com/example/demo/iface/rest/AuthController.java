@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.AuthCommandService;
 import com.example.demo.base.shared.command.GetJwtTokenCommand;
 import com.example.demo.iface.dto.res.GetJwtTokenResource;
 import com.example.demo.iface.dto.res.JwtTokenGettenResource;
-import com.example.demo.service.AuthCommandService;
 import com.example.demo.util.BaseDataTransformer;
 
 import io.swagger.v3.oas.annotations.Operation;

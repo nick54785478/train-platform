@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.application.service.TemplateCommandService;
+import com.example.demo.application.service.TemplateQueryService;
 import com.example.demo.application.shared.dto.TemplateQueriedData;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.template.command.UploadTemplateCommand;
 import com.example.demo.iface.dto.req.UploadTemplateResource;
 import com.example.demo.iface.dto.res.TemplateQueriedResource;
 import com.example.demo.iface.dto.res.TemplateUploadedResource;
-import com.example.demo.service.TemplateCommandService;
-import com.example.demo.service.TemplateQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import io.minio.errors.ErrorResponseException;
