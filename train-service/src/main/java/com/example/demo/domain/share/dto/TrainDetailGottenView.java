@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainDetailQueriedView {
+public class TrainDetailGottenView {
 
 	private String uuid; // 火車 UUID
 	

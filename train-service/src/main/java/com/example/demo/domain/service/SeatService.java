@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.base.application.port.EventIdempotenceHandlerPort;
 import com.example.demo.base.domain.service.BaseDomainService;
@@ -47,7 +44,6 @@ public class SeatService extends BaseDomainService {
 	 * @param takeDate
 	 * @return TrainSeatGottenData
 	 */
-	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
 	public UnbookedSeatGottenView getUnbookedSeat(String trainUuid, LocalDate takeDate) {
 		UnbookedSeatGottenView trainSeatGottenData = new UnbookedSeatGottenView();
 		trainSeatGottenData.setTrainUuid(trainUuid);

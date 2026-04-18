@@ -29,9 +29,9 @@ import com.example.demo.domain.service.TicketService;
 import com.example.demo.domain.service.TimetableService;
 import com.example.demo.domain.service.TrainService;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
+import com.example.demo.domain.share.dto.SummariedTrainGottenView;
 import com.example.demo.domain.share.dto.TemplateQueriedView;
 import com.example.demo.domain.share.dto.TimetableGeneratedView;
-import com.example.demo.domain.share.dto.TrainSummaryQueriedView;
 import com.example.demo.domain.share.enums.TrainSheetMapping;
 import com.example.demo.domain.ticket.command.CreateTicketCommand;
 import com.example.demo.domain.train.command.CreateStopCommand;
@@ -256,7 +256,7 @@ public class TrainCommandService extends BaseApplicationService {
 	 */
 	public ByteArrayResource downloadTimetable(SummaryTrainQuery query) {
 		try {
-			List<TrainSummaryQueriedView> summaryData = trainService.summary(query);
+			List<SummariedTrainGottenView> summaryData = trainService.summary(query);
 
 			// 轉換 command 用以建立 Timetable
 			List<GenerateTimetableCommand> commands = transformData(summaryData, GenerateTimetableCommand.class);

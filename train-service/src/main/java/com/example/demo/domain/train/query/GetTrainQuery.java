@@ -1,4 +1,4 @@
-package com.example.demo.domain.train.command;
+package com.example.demo.domain.train.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class QueryTrainCommand {
+public class GetTrainQuery {
 
 	private Integer trainNo; // 未必會使用單一車次
 	

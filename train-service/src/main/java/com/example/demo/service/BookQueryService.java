@@ -17,6 +17,8 @@ public class BookQueryService {
 
 	/**
 	 * 查詢個人預定班次
+	 * 
+	 * @param username 使用者帳號
 	 */
 	public BookingQueriedView queryBooking(String username) {
 		return ticketBookingService.queryBooking(username);

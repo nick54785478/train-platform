@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.base.application.service.BaseApplicationService;
 import com.example.demo.domain.service.TicketService;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class TicketQueryService extends BaseApplicationService {
 
 	private TicketService ticketService;

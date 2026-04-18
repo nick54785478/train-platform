@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.application.shared.dto.SettingQueriedData;
 import com.example.demo.base.application.service.BaseApplicationService;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class SettingQueryService extends BaseApplicationService {
 
 	private SettingRepository settingRepository;

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.service.CustomisationService;
 import com.example.demo.domain.share.dto.CustomisationQueriedView;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class CustomisationQueryService {
 
 	private CustomisationService customisationService;

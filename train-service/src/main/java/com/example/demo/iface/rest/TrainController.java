@@ -24,8 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.train.command.CreateTrainCommand;
-import com.example.demo.domain.train.command.QueryTrainCommand;
 import com.example.demo.domain.train.command.UpdateTrainCommand;
+import com.example.demo.domain.train.query.GetTrainQuery;
 import com.example.demo.domain.train.query.SummaryTrainQuery;
 import com.example.demo.iface.dto.req.CreateTrainResource;
 import com.example.demo.iface.dto.req.UpdateTrainResource;
@@ -128,7 +128,7 @@ public class TrainController {
 			@Parameter(description = "車票種類") @RequestParam String ticketType,
 			@Parameter(description = "搭乘日期 (yyyy-mm-dd)") @Valid @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}") String takeDate,
 			@Parameter(description = "搭乘時間 (hh:mm)") @RequestParam String time) {
-		QueryTrainCommand command = new QueryTrainCommand(trainNo, trainKind, fromStop, toStop, takeDate, time,
+		GetTrainQuery command = new GetTrainQuery(trainNo, trainKind, fromStop, toStop, takeDate, time,
 				ticketType);
 		return new ResponseEntity<>(BaseDataTransformer.transformData(trainQueryService.queryTrainInfo(command),
 				TrainDetailQueriedResource.class), HttpStatus.OK);

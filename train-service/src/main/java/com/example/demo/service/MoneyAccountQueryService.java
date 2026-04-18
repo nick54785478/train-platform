@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.application.shared.dto.MoneyAccountQueriedData;
 import com.example.demo.base.application.service.BaseApplicationService;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class MoneyAccountQueryService extends BaseApplicationService {
 
 	private MoneyAccountRepository moneyAccountRepository;

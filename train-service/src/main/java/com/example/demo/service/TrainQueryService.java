@@ -12,18 +12,18 @@ import com.example.demo.application.shared.dto.TrainQueriedData.StopQueriedData;
 import com.example.demo.base.application.service.BaseApplicationService;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.service.TrainService;
-import com.example.demo.domain.share.dto.TrainDetailQueriedView;
-import com.example.demo.domain.share.dto.TrainSummaryQueriedView;
+import com.example.demo.domain.share.dto.SummariedTrainGottenView;
+import com.example.demo.domain.share.dto.TrainDetailGottenView;
 import com.example.demo.domain.train.aggregate.Train;
-import com.example.demo.domain.train.command.QueryTrainCommand;
+import com.example.demo.domain.train.query.GetTrainQuery;
 import com.example.demo.domain.train.query.SummaryTrainQuery;
 import com.example.demo.infra.repository.TrainRepository;
 
 import lombok.AllArgsConstructor;
 
 @Service
-@Transactional
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class TrainQueryService extends BaseApplicationService {
 
 	private TrainService trainService;
@@ -48,20 +48,20 @@ public class TrainQueryService extends BaseApplicationService {
 	/**
 	 * 透過條件查詢該火車資訊
 	 * 
-	 * @param command
+	 * @param query {@link SummaryTrainQuery}
 	 * @return 火車資訊
 	 */
-	public List<TrainSummaryQueriedView> summary(SummaryTrainQuery query) {
+	public List<SummariedTrainGottenView> summary(SummaryTrainQuery query) {
 		return trainService.summary(query);
 	}
-	
+
 	/**
 	 * 透過條件查詢該火車資訊(供訂票查詢用)
 	 * 
-	 * @param command
+	 * @param query {@link GetTrainQuery}
 	 * @return 火車資訊
 	 */
-	public List<TrainDetailQueriedView> queryTrainInfo(QueryTrainCommand command) {
-		return trainService.queryTrainInfo(command);
+	public List<TrainDetailGottenView> queryTrainInfo(GetTrainQuery query) {
+		return trainService.queryTrainInfo(query);
 	}
 }

@@ -17,17 +17,17 @@ import com.example.demo.base.domain.service.BaseDomainService;
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
-import com.example.demo.domain.share.dto.StopSummaryQueriedView;
-import com.example.demo.domain.share.dto.TrainDetailQueriedView;
+import com.example.demo.domain.share.dto.SummariedTrainGottenView;
+import com.example.demo.domain.share.dto.SummariedTrainGottenView.StopGottenView;
+import com.example.demo.domain.share.dto.TrainDetailGottenView;
 import com.example.demo.domain.share.dto.TrainQueriedView;
-import com.example.demo.domain.share.dto.TrainSummaryQueriedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.train.aggregate.Train;
 import com.example.demo.domain.train.aggregate.entity.TrainStop;
 import com.example.demo.domain.train.aggregate.vo.TrainKind;
 import com.example.demo.domain.train.command.CreateTrainCommand;
-import com.example.demo.domain.train.command.QueryTrainCommand;
 import com.example.demo.domain.train.command.UpdateTrainCommand;
+import com.example.demo.domain.train.query.GetTrainQuery;
 import com.example.demo.domain.train.query.SummaryTrainQuery;
 import com.example.demo.infra.repository.SettingRepository;
 import com.example.demo.infra.repository.TicketRepository;
@@ -52,7 +52,7 @@ public class TrainService extends BaseDomainService {
 	/**
 	 * 新增火車資料
 	 * 
-	 * @param command
+	 * @param command {@link CreateTrainCommand}
 	 */
 	public void create(CreateTrainCommand command) {
 		this.checkBeforeCreate(command);
@@ -64,7 +64,7 @@ public class TrainService extends BaseDomainService {
 	/**
 	 * 更新火車資料
 	 * 
-	 * @param command
+	 * @param command {@link UpdateTrainCommand}
 	 */
 	public void update(UpdateTrainCommand command) {
 		Train train = trainRepository.findByNumber(command.getTrainNo());
@@ -93,15 +93,15 @@ public class TrainService extends BaseDomainService {
 	/**
 	 * 透過條件過濾並查詢火車資訊(供訂票查詢用)
 	 * 
-	 * @param command
+	 * @param query {@link GetTrainQuery}
 	 * @return List<TrainDetailQueriedData>
 	 */
-	public List<TrainDetailQueriedView> queryTrainInfo(QueryTrainCommand command) {
-		List<TrainDetailQueriedView> resList = new ArrayList<>();
-		List<Train> trainList = trainRepository.findByCondition(command.getTrainNo(),
-				StringUtils.isNotBlank(command.getTrainKind()) ? TrainKind.fromLabel(command.getTrainKind()).toString()
+	public List<TrainDetailGottenView> queryTrainInfo(GetTrainQuery query) {
+		List<TrainDetailGottenView> resList = new ArrayList<>();
+		List<Train> trainList = trainRepository.findByCondition(query.getTrainNo(),
+				StringUtils.isNotBlank(query.getTrainKind()) ? TrainKind.fromLabel(query.getTrainKind()).toString()
 						: null,
-				command.getTime(), command.getFromStop(), command.getToStop());
+				query.getTime(), query.getFromStop(), query.getToStop());
 
 		// 各車票種類的價格折扣
 		Map<String, BigDecimal> rateMap = settingRepository.findByDataTypeAndActiveFlag("TICKET_PRICE_RATE", YesNo.Y)
@@ -125,36 +125,36 @@ public class TrainService extends BaseDomainService {
 
 		// 遍歷火車資料進行資料更新
 		trainList.stream().forEach(e -> {
-			TrainDetailQueriedView trainData = new TrainDetailQueriedView();
+			TrainDetailGottenView trainData = new TrainDetailGottenView();
 			trainData.setUuid(e.getUuid());
 			trainData.setTrainNo(e.getNumber());
 			trainData.setKind(e.getKind().getLabel());
-			trainData.setTakeDate(command.getTakeDate());
+			trainData.setTakeDate(query.getTakeDate());
 
 			// 從 stopMap 中取出對應的起訖站資料
 			// 取得起站資料
-			String fromStopkey = e.getUuid() + "-" + command.getFromStop();
+			String fromStopkey = e.getUuid() + "-" + query.getFromStop();
 			if (!Objects.isNull(stopMap.get(fromStopkey))) {
 				var fromStop = stopMap.get(fromStopkey);
 				trainData.setFromStop(fromStop.getName());
 				trainData.setFromStopTime(fromStop.getTime());
 			}
 			// 取得迄站資料
-			String toStopkey = e.getUuid() + "-" + command.getToStop();
+			String toStopkey = e.getUuid() + "-" + query.getToStop();
 			if (!Objects.isNull(stopMap.get(toStopkey))) {
 				var toStop = stopMap.get(toStopkey);
 				trainData.setToStop(toStop.getName());
 				trainData.setToStopTime(toStop.getTime());
 			}
 			// 從 ticketMap 中取出對應的 Ticket 資料
-			String ticketkey = e.getUuid() + "-" + command.getFromStop() + "-" + command.getToStop();
+			String ticketkey = e.getUuid() + "-" + query.getFromStop() + "-" + query.getToStop();
 			if (!Objects.isNull(ticketMap.get(ticketkey))) {
 				var ticket = ticketMap.get(ticketkey);
 				trainData.setTicketUuid(ticket.getTicketNo());
 
 				// 根據選擇的票別去打折
-				if (!Objects.isNull(rateMap.get(command.getTicketType()))) {
-					var rate = rateMap.get(command.getTicketType());
+				if (!Objects.isNull(rateMap.get(query.getTicketType()))) {
+					var rate = rateMap.get(query.getTicketType());
 					trainData.setPrice(ticket.getPrice().multiply(rate).setScale(0, RoundingMode.HALF_UP));
 				}
 			}
@@ -169,16 +169,15 @@ public class TrainService extends BaseDomainService {
 	 * @param command
 	 * @return 火車資訊
 	 */
-	@Transactional // 確保在整個方法執行期間 Session 是打開的，保持懶加載(否則會報錯)
-	public List<TrainSummaryQueriedView> summary(SummaryTrainQuery query) {
-		List<TrainSummaryQueriedView> resList = new ArrayList<>();
+	public List<SummariedTrainGottenView> summary(SummaryTrainQuery query) {
+		List<SummariedTrainGottenView> resList = new ArrayList<>();
 		List<Train> trainList = trainRepository.findByCondition(query.getTrainNo(),
 				StringUtils.isNotBlank(query.getTrainKind()) ? TrainKind.fromLabel(query.getTrainKind()).toString()
 						: null,
 				StringUtils.isNotBlank(query.getTime()) ? query.getTime() : "00:00:00", query.getFromStop(),
 				query.getToStop());
 		trainList.stream().forEach(e -> {
-			TrainSummaryQueriedView trainData = new TrainSummaryQueriedView();
+			SummariedTrainGottenView trainData = new SummariedTrainGottenView();
 			trainData.setUuid(e.getUuid());
 			trainData.setTrainNo(e.getNumber());
 			trainData.setKind(e.getKind().getLabel());
@@ -187,11 +186,10 @@ public class TrainService extends BaseDomainService {
 			TrainStop[] station = getFirstAndTerminatedStation(e.getStops());
 			this.setStopData(station, trainData);
 
-			List<StopSummaryQueriedView> stopResource = this.transformAggregate(e.getStops(),
-					StopSummaryQueriedView.class);
+			List<StopGottenView> stopResource = this.transformAggregate(e.getStops(), StopGottenView.class);
 
 			// 依 SEQ 升序排序
-			stopResource.sort(Comparator.comparingInt(StopSummaryQueriedView::getSeq));
+			stopResource.sort(Comparator.comparingInt(StopGottenView::getSeq));
 			trainData.setStops(stopResource);
 			resList.add(trainData);
 		});
@@ -202,9 +200,9 @@ public class TrainService extends BaseDomainService {
 	 * 設置 Stop 資料
 	 * 
 	 * @param stationData 起始站與終點站資料
-	 * @param trainData   火車查詢資料
+	 * @param trainData   火車總覽查詢資料
 	 */
-	private void setStopData(TrainStop[] stationData, TrainSummaryQueriedView trainData) {
+	private void setStopData(TrainStop[] stationData, SummariedTrainGottenView trainData) {
 		TrainStop firstStop = stationData[0]; // 起點站
 		TrainStop terminatedStop = stationData[1]; // 終點站
 		trainData.setFromStop(firstStop.getName());

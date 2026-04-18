@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainSummaryQueriedView {
+public class SummariedTrainGottenView {
 
 	private String uuid; // 火車 UUID
 
@@ -29,6 +29,19 @@ public class TrainSummaryQueriedView {
 
 	private String kind; // 火車種類
 
-	private List<StopSummaryQueriedView> stops = new ArrayList<>(); // 停靠站
+	private List<StopGottenView> stops = new ArrayList<>(); // 停靠站
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class StopGottenView {
+
+		private Integer seq; // 停站順序
+
+		private String name; // 站名
+
+		private String time; // 停站時間
+		
+	}
 
 }
