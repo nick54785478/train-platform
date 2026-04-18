@@ -41,7 +41,7 @@ export class LoginComponent
     private loadingMaskService: LoadingMaskService,
   ) {
     super();
-    console.log('🚨🚨🚨 LoginComponent 被實例化了！');
+    console.log('LoginComponent 被實例化了！');
   }
 
   ngOnInit(): void {
@@ -56,7 +56,7 @@ export class LoginComponent
    * @returns
    */
   login() {
-    // 🔥 登入前清除舊 token
+    // 登入前清除舊 token
     this.authService.clearToken();
 
     this.submitted = true;
@@ -80,42 +80,42 @@ export class LoginComponent
         next: (res) => {
           console.log(res);
 
-          if (res?.code !== '200' || '201') {
+          if (res?.code === 'VALIDATE_FAILED') {
             this.messageService.error(res.message);
             return;
           }
 
           this.messageService.success('使用者登入成功');
 
-          // ✅ 1. 存 token（順序很重要）
+          // 1. 存 token（順序很重要）
           this.setJwToken(res.token);
 
-          // ✅ 2. 存 refresh token
+          // 2. 存 refresh token
           this.storageService.setLocalStorageItem(
             SystemStorageKey.REFRESH_TOKEN,
             res?.refreshToken,
           );
 
-          // ✅ 3. 存 username
+          // 3. 存 username
           this.setUsername(formData.username);
 
-          // ✅ 4. 更新狀態流（可保留）
+          // 4. 更新狀態流（可保留）
           this.authService.tokenSubject$.next(res.token);
 
-          // 🔥 5. 取得原本要去的頁面（重點）
+          // 5. 取得原本要去的頁面（重點）
           const redirectUrl =
             this.storageService.getSessionStorageItem(
               SystemStorageKey.REDIRECT_URL,
             ) || '/home';
 
-          // 🔥 6. 清掉（避免污染）
+          // 6. 清掉（避免污染）
           this.storageService.removeSessionStorageItem(
             SystemStorageKey.REDIRECT_URL,
           );
 
           console.log('導向:', redirectUrl);
 
-          // 🔥 7. 導頁（最終修正）
+          // 7. 導頁（最終修正）
           this.router.navigate([redirectUrl]);
         },
         error: (err) => {
