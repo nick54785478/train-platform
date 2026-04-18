@@ -82,6 +82,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<BaseExceptionResponse> handleException(final Exception e) {
+		log.error("發生非預期錯誤 ", e);
 		return ResponseEntity.status(HttpStatus.OK).body(new BaseExceptionResponse("500", "發生非預期錯誤"));
 	}
 

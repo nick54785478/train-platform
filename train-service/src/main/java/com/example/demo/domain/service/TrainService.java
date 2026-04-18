@@ -96,7 +96,6 @@ public class TrainService extends BaseDomainService {
 	 * @param command
 	 * @return List<TrainDetailQueriedData>
 	 */
-	@Transactional
 	public List<TrainDetailQueriedView> queryTrainInfo(QueryTrainCommand command) {
 		List<TrainDetailQueriedView> resList = new ArrayList<>();
 		List<Train> trainList = trainRepository.findByCondition(command.getTrainNo(),

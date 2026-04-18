@@ -19,6 +19,7 @@ import com.example.demo.domain.booking.command.BookTicketCommand;
 import com.example.demo.domain.booking.command.CheckInTicketBookingCommand;
 import com.example.demo.domain.seat.aggregate.TrainSeat;
 import com.example.demo.domain.share.dto.BookingQueriedView;
+import com.example.demo.domain.share.dto.BookingQueriedView.BookingDetailQueriedView;
 import com.example.demo.domain.share.dto.TrainSeatBookedView;
 import com.example.demo.domain.ticket.aggregate.Ticket;
 import com.example.demo.domain.train.aggregate.Train;
@@ -29,7 +30,6 @@ import com.example.demo.infra.repository.TicketRepository;
 import com.example.demo.infra.repository.TrainRepository;
 import com.example.demo.infra.repository.TrainSeatRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -103,42 +103,51 @@ public class TicketBookingService extends BaseDomainService {
 //	}
 
 	/**
-	 * 查詢個人訂票資訊
-	 * 
-	 * @param username 使用者名稱
-	 * @return BookingQueriedData
+	 * 查詢個人訂票資訊 (修正版)
 	 */
-	@Transactional
 	public BookingQueriedView queryBooking(String username) {
 		List<TicketBooking> bookingList = ticketBookingRepository.findByUsername(username);
+		if (bookingList.isEmpty()) {
+			return new BookingQueriedView(username, new ArrayList<>());
+		}
+
 		List<String> bookingUuidList = bookingList.stream().map(TicketBooking::getUuid).collect(Collectors.toList());
 
-		// 座位資料
-		List<TrainSeat> trainSeatList = trainSeatRepository.findByBookUuidIn(bookingUuidList);
-		// 座位 Map <bookUuid, Entity>
-		Map<String, List<TrainSeat>> seatMap = trainSeatList.stream()
-				.collect(Collectors.groupingBy(TrainSeat::getBookUuid));
+		// 1. 直接從 bookingList 提取 Train 和 Ticket 的 ID (不再透過 Seat)
+		List<String> trainUuidList = bookingList.stream()
+				.map(TicketBooking::getTrainUuid)
+				.filter(Objects::nonNull)
+				.distinct()
+				.collect(Collectors.toList());
+		
+		List<String> ticketUuidList = bookingList.stream()
+				.map(TicketBooking::getTicketUuid)
+				.filter(Objects::nonNull)
+				.distinct()
+				.collect(Collectors.toList());
 
-		// 透過火車座位查出對應火車的 uuid 清單
-		List<String> trainUuidList = trainSeatList.stream().map(TrainSeat::getTrainUuid).collect(Collectors.toList());
-		// 透過 火車 uuid 清單查出火車資訊
-		List<Train> trainList = trainRepository.findByUuidIn(trainUuidList);
-		// 火車 Map<火車 Uuid, Train>
-		Map<String, Train> trainMap = trainList.stream().collect(Collectors.toMap(Train::getUuid, Function.identity()));
+		// 2. 獲取資料 Map
+		Map<String, Train> trainMap = trainRepository.findByUuidIn(trainUuidList).stream()
+				.collect(Collectors.toMap(Train::getUuid, Function.identity()));
 
-		// 透過火車座位查出對應車票的 uuid 清單
-		List<String> ticketUuidList = trainSeatList.stream().map(TrainSeat::getTicketUuid).collect(Collectors.toList());
-		// 車票 Map<車票 uuid, Train>
 		Map<String, Ticket> ticketMap = ticketReposiotry.findByTicketNoIn(ticketUuidList).stream()
 				.collect(Collectors.toMap(Ticket::getTicketNo, Function.identity()));
 
+		// 3. 獲取座位資料 (已取消的訂單在此 Map 中會找不到資料，這是正確的)
+		List<TrainSeat> trainSeatList = trainSeatRepository.findByBookUuidIn(bookingUuidList);
+		Map<String, List<TrainSeat>> seatMap = trainSeatList.stream()
+				.collect(Collectors.groupingBy(TrainSeat::getBookUuid));
+
+		
 		BookingQueriedView bookingQueriedData = new BookingQueriedView();
 		bookingQueriedData.setUsername(username);
 
-		List<TrainSeatBookedView> bookedDatas = new ArrayList<>();
+		List<BookingDetailQueriedView> bookedDatas = new ArrayList<>();
 
-		bookingList.stream().forEach(book -> {
-			TrainSeatBookedView bookedData = new TrainSeatBookedView();
+		// 4. 組裝資料
+		bookingList.forEach(book -> {
+			BookingDetailQueriedView bookedData = new BookingDetailQueriedView();
+			// 即使沒有座位，基本的車次與訂單狀態也要顯示出來
 			this.setTrainSeatBookedData(bookedData, book, ticketMap, trainMap, seatMap);
 			bookedDatas.add(bookedData);
 		});
@@ -148,53 +157,51 @@ public class TicketBookingService extends BaseDomainService {
 	}
 
 	/**
-	 * 設置 Train Seat Booking 資料
-	 * 
-	 * @param bookedData 被設置的 Booking 資料
-	 * @param book       Booking 領域資料
-	 * @param ticketMap  車票 Map<車票 Uuid, Train> 資料
-	 * @param trainMap   火車 Map<火車Uuid, Train> 資料
-	 * @param seatMap    座位 Map<bookUuid, Entity> 資料
+	 * 設置 Train Seat Booking 資料 (強化補空邏輯)
 	 */
-	private void setTrainSeatBookedData(TrainSeatBookedView bookedData, TicketBooking book,
+	private void setTrainSeatBookedData(BookingDetailQueriedView bookedData, TicketBooking book,
 			Map<String, Ticket> ticketMap, Map<String, Train> trainMap, Map<String, List<TrainSeat>> seatMap) {
-		if (!Objects.isNull(ticketMap.get(book.getTicketUuid()))) {
-			var ticketData = ticketMap.get(book.getTicketUuid());
-			bookedData.setFrom(ticketData.getFromStop()); // 起站
-			bookedData.setTo(ticketData.getToStop()); // 迄站
+		
+		// A. 設置基礎訂單狀態 (永遠會有值)
+		bookedData.setActiveFlag(book.getActiveFlag());
+		bookedData.setStatus(book.getStatus().name()); // 建議 DTO 加上這個，前端才知道是 CANCELLED
+
+		// B. 設置車票資訊 (直接從 book.getTicketUuid() 找)
+		Ticket ticketData = ticketMap.get(book.getTicketUuid());
+		if (ticketData != null) {
+			bookedData.setFrom(ticketData.getFromStop());
+			bookedData.setTo(ticketData.getToStop());
 		}
 
-		if (!Objects.isNull(trainMap.get(book.getTrainUuid()))) {
-			var trainData = trainMap.get(book.getTrainUuid());
-			bookedData.setNumber(trainData.getNumber()); // 火車車次
-			bookedData.setKind(TrainKind.fromLabel(trainData.getKind().getLabel()).getLabel()); // 火車名稱
+		// C. 設置火車資訊 (直接從 book.getTrainUuid() 找)
+		Train trainData = trainMap.get(book.getTrainUuid());
+		if (trainData != null) {
+			bookedData.setNumber(trainData.getNumber());
+			bookedData.setKind(trainData.getKind().getLabel());
 
-			// Map <站名, 發車時間>
 			Map<String, LocalTime> stopMap = trainData.getStops().stream()
 					.collect(Collectors.toMap(TrainStop::getName, TrainStop::getTime));
-			// 設置發車時間
-			bookedData.setStartTime(
-					!Objects.isNull(stopMap.get(bookedData.getFrom())) ? stopMap.get(bookedData.getFrom()) : null);
-			// 設置抵達時間
-			bookedData.setArriveTime(
-					!Objects.isNull(stopMap.get(bookedData.getTo())) ? stopMap.get(bookedData.getTo()) : null);
-			log.debug("起站:{}, 迄站:{}, 發車時間:{}, 抵達時間:{}", bookedData.getFrom(), bookedData.getTo(),
-					bookedData.getStartTime(), bookedData.getArriveTime());
+			
+			if (bookedData.getFrom() != null) {
+				bookedData.setStartTime(stopMap.get(bookedData.getFrom()));
+			}
+			if (bookedData.getTo() != null) {
+				bookedData.setArriveTime(stopMap.get(bookedData.getTo()));
+			}
 		}
 
-		if (!Objects.isNull(seatMap.get(book.getUuid()))) {
-			var seatList = seatMap.get(book.getUuid());
-			Map<String, TrainSeat> collectMap = seatList.stream()
-					.collect(Collectors.toMap(TrainSeat::getBookUuid, Function.identity()));
-
-			if (!Objects.isNull(collectMap.get(book.getUuid()))) {
-				var trainSeat = collectMap.get(book.getUuid());
-				bookedData.setSeatNo(trainSeat.getSeatNo());
-				bookedData.setTakeDate(trainSeat.getTakeDate());
-				bookedData.setActiveFlag(trainSeat.getActiveFlag());
-				bookedData.setBooked(trainSeat.getBooked());
-				bookedData.setCarNo(trainSeat.getCarNo());
-			}
+		// D. 處理座位資訊 (已取消的訂單會進不來這裡，所以要維持原本的 null 或給預設值)
+		List<TrainSeat> seatList = seatMap.get(book.getUuid());
+		if (seatList != null && !seatList.isEmpty()) {
+			TrainSeat trainSeat = seatList.get(0); // 假設一個訂單對一個位子
+			bookedData.setSeatNo(trainSeat.getSeatNo());
+			bookedData.setTakeDate(trainSeat.getTakeDate());
+			bookedData.setBooked(trainSeat.getBooked());
+			bookedData.setCarNo(trainSeat.getCarNo());
+		} else {
+			// 如果沒有座位資料，給予明確的提示或保持 null
+			bookedData.setSeatNo("無 (已釋放/取消)");
+			bookedData.setBooked(YesNo.N);
 		}
 	}
 

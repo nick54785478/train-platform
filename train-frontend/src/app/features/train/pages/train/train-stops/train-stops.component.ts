@@ -77,9 +77,14 @@ export class TrainStopsComponent extends BaseTableCompoent implements OnInit {
     this.trainService
       .queryStopDetails(uuid, fromStop)
       .pipe(finalize(() => {}))
-      .subscribe((res) => {
-        console.log(res);
-        this.tableData = res;
+      .subscribe({
+        next: (res) => {
+          this.tableData = res;
+          this.messageService.success('查詢成功');
+        },
+        error: (error) => {
+          this.messageService.error(error);
+        },
       });
   }
 }

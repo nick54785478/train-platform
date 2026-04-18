@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.application.shared.dto.TrainQueriedData;
 import com.example.demo.application.shared.dto.TrainQueriedData.StopQueriedData;
@@ -21,6 +22,7 @@ import com.example.demo.infra.repository.TrainRepository;
 import lombok.AllArgsConstructor;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class TrainQueryService extends BaseApplicationService {
 
