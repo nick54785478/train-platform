@@ -16,7 +16,6 @@ import com.example.demo.base.shared.command.PublishEventCommand;
 import com.example.demo.base.shared.entity.EventLog;
 import com.example.demo.base.shared.enums.EventLogSendQueueStatus;
 import com.example.demo.base.shared.event.BaseEvent;
-import com.example.demo.util.BaseDataTransformer;
 import com.example.demo.util.JsonParseUtil;
 
 /**
@@ -36,7 +35,7 @@ public class BaseEventHandler {
 	@Autowired
 	protected EventSourceRepository eventSourceRepository;
 	@Autowired
-	protected EventIdempotenceHandlerPort eventIdempotentLogService;
+	protected EventIdempotenceHandlerPort eventIdempotenceHandler;
 
 	/**
 	 * 檢查冪等
@@ -45,7 +44,7 @@ public class BaseEventHandler {
 	 * @return boolean
 	 */
 	public boolean checkEventIdempotency(BaseEvent event) {
-		return eventIdempotentLogService.handleIdempotency(event);
+		return eventIdempotenceHandler.handleIdempotency(event);
 	}
 
 	/**

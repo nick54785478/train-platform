@@ -143,3 +143,39 @@ INSERT INTO `SETTING` (`ID`, `DATA_TYPE`, `TYPE`, `NAME`, `VALUE`, `DESCRIPTION`
 (43, 'CUSTOMISATION', 'TRAIN_TABLE_COLUMN', 'TO_STOP', 'toStop', '火車查詢資料頁面表格終點站欄位顯示設置', 7, 'Y'),
 (44, 'CUSTOMISATION', 'TRAIN_TABLE_COLUMN', 'FROM_STOP_TIME', 'fromStopTime', '火車查詢資料頁面表格起始站發車時間欄位顯示設置', 7, 'Y'),
 (45, 'CUSTOMISATION', 'TRAIN_TABLE_COLUMN', 'TO_STOP_TIME', 'toStopTime', '火車查詢資料頁面表格終點站抵達時間欄位顯示設置', 7, 'Y');
+
+-- 1. 開戶成功：歡迎信 (WELCOME_EMAIL)
+INSERT INTO `EMAIL_TEMPLATE` 
+(`TEMPLATE_KEY`, `SUBJECT`, `CONTENT`, `ACTIVE_FLAG`, `CREATED_DATE`, `CREATED_BY`, `LAST_UPDATED_DATE`, `LAST_UPDATED_BY`) 
+VALUES 
+('WELCOME_EMAIL', 
+ '【歡迎】${username}，您的帳戶已成功開通！', 
+ '<html><body><h3>親愛的 ${username} 您好：</h3><p>您的帳戶申請已通過審核，現在可以開始訂票囉！</p><p>祝您搭乘愉快！</p></body></html>', 
+ 'Y', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+
+-- 2. 開戶失敗：補償通知 (ACCOUNT_REG_FAILURE)
+INSERT INTO `EMAIL_TEMPLATE` 
+(`TEMPLATE_KEY`, `SUBJECT`, `CONTENT`, `ACTIVE_FLAG`, `CREATED_DATE`, `CREATED_BY`, `LAST_UPDATED_DATE`, `LAST_UPDATED_BY`) 
+VALUES 
+('ACCOUNT_REG_FAILURE', 
+ '【重要通知】開戶申請未通過', 
+ '<html><body><h3>您好：</h3><p>很抱歉，您的帳戶開戶流程因以下原因中斷：</p><p style="color:red;"><b>${reason}</b></p><p>目前帳戶已暫時凍結，請聯繫客服或稍後重新嘗試。</p></body></html>', 
+ 'Y', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+
+-- 3. 訂票成功：確認信 (BOOKING_SUCCESS)
+INSERT INTO `EMAIL_TEMPLATE` 
+(`TEMPLATE_KEY`, `SUBJECT`, `CONTENT`, `ACTIVE_FLAG`, `CREATED_DATE`, `CREATED_BY`, `LAST_UPDATED_DATE`, `LAST_UPDATED_BY`) 
+VALUES 
+('BOOKING_SUCCESS', 
+ '【確認】訂票成功！訂單編號：${bookingUuid}', 
+ '<html><body><h3>訂位成功！</h3><p>您的訂單編號為：<b>${bookingUuid}</b></p><p>您可以至「我的訂單」查看詳細乘車資訊。祝您旅途愉快！</p></body></html>', 
+ 'Y', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+
+-- 4. 訂票最終失敗：退款/補償告知 (BOOKING_SAGA_FAILURE)
+INSERT INTO `EMAIL_TEMPLATE` 
+(`TEMPLATE_KEY`, `SUBJECT`, `CONTENT`, `ACTIVE_FLAG`, `CREATED_DATE`, `CREATED_BY`, `LAST_UPDATED_DATE`, `LAST_UPDATED_BY`) 
+VALUES 
+('BOOKING_SAGA_FAILURE', 
+ '【重要】訂票交易失敗與退款通知', 
+ '<html><body><h3>您好：</h3><p>很抱歉通知您，您的車票預訂動作（編號：${bookingUuid}）未能完成。</p><p><b>失敗原因：</b>${reason}</p><p>若此筆交易已扣款，系統將會啟動自動退款流程，預計於 1-3 個工作天內退還至您的帳戶。</p></body></html>', 
+ 'Y', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
