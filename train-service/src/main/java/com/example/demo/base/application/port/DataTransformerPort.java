@@ -7,6 +7,7 @@ import java.util.List;
  *
  * <p>
  * 應用層使用此接口進行物件與物件之間的資料轉換，不依賴具體實作細節。
+ * </p>
  */
 public interface DataTransformerPort {
 

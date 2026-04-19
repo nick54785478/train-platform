@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.base.application.port.EventIdempotenceHandlerPort;
 import com.example.demo.base.infra.persistence.EventIdempotentLogRepository;
-import com.example.demo.base.shared.command.BaseIdempotentCommand;
 import com.example.demo.base.shared.entity.EventIdempotentLog;
 import com.example.demo.base.shared.event.BaseEvent;
 
@@ -39,24 +38,6 @@ class EventIdempotentLogHandlerAdapter implements EventIdempotenceHandlerPort {
 		// 若查無資料
 		if (logList.isEmpty()) {
 			repository.insert(event.getClass().getName(), event.getEventLogUuid(), event.getTargetId());
-			result = true;
-		}
-		return result;
-	}
-
-	/**
-	 * 執行 非 Event 的冪等機制
-	 * 
-	 * @param command
-	 * @return boolean
-	 */
-	public boolean handleIdempotency(BaseIdempotentCommand command) {
-		boolean result = false;
-		List<EventIdempotentLog> logList = repository.findByEventTypeAndUniqueKey(command.getClass().getName(),
-				command.getEventLogUuid());
-		// 若查無資料
-		if (logList.isEmpty()) {
-			repository.insert(command.getClass().getName(), command.getEventLogUuid(), command.getTargetId());
 			result = true;
 		}
 		return result;

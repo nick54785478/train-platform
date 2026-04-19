@@ -7,6 +7,13 @@ import com.example.demo.iface.dto.res.JwtTokenGettenResource;
 import com.example.demo.iface.dto.res.UserInfoGottenResource;
 import com.example.demo.iface.dto.res.UserRegisteredResource;
 
+/**
+ * Port 定義： AuthService 外部服務界接介面
+ * 
+ * <p>
+ * 應用層使用此接口進行物件與物件之間的資料轉換，不依賴具體實作細節。
+ * </p>
+ */
 public interface AuthServiceClientPort {
 
 	/**

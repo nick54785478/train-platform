@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseIdempotentCommand {
+public class ExecuteIdempotenceCommand {
 
     /**
      * 消息的唯一識別符
