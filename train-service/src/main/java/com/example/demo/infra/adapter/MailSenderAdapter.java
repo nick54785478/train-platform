@@ -32,10 +32,10 @@ class MailSenderAdapter implements MailSenderPort {
 
 	private final JavaMailSender javaMailSender;
 
-	@Value("${spring.mail.username}")
+	@Value("${mail.from.address}")
 	private String defaultFromAddress;
 
-	@Value("${mail.default.from-name:火車票務系統}")
+	@Value("${mail.from.name:火車票務系統}")
 	private String defaultFromName;
 
 	@Override

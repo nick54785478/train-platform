@@ -32,6 +32,8 @@
 		<jjwt.version>0.12.6</jjwt.version>
 		<springdoc-openapi.version>2.3.0</springdoc-openapi.version>
 		<poi.version>5.4.0</poi.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	<dependencies>
 		<dependency>
