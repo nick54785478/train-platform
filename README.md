@@ -18,24 +18,66 @@
 >* Rabbit MQ
 >* MinIO
 >* Lombok & ModelMapper (簡化代碼與物件轉換)
+>* Mailhug：外部開發依賴，用於攔截並模擬 SMTP 郵件發送，方便開發者即時預覽郵件渲染效果。
+>* FreeMarker：作為範本引擎，支援 HTML 動態內容渲染。
 
-## 核心技術亮點：分散式事務 (Saga Pattern)
-為了保證「訂票 -> 劃位 -> 扣款」這一連串跨服務動作的資料一致性，本專案實作了 基於事件驅動 (Choreography-based) 的 Saga 模式：
+## 核心技術亮點：
 
-### 1. 交易流程設計
+### 1. 分散式事務 (Saga Pattern)
+為了保證跨微服務動作的資料最終一致性，本專案實作了兩段基於 事件驅動 (Choreography-based) 的 Saga 流程：
 
->* **成功路徑 (Happy Path)：** Booking Created → Seat Booked → Money Deposited & Account Activated → Saga Completed (發送歡迎通知)。
->* **補償路徑 (Compensation Path)：** 若初始儲值失敗，系統會觸發自動補償機制：Freeze Account (凍結帳戶) → Release Seat (釋放座位) → Mark Booking Failed
->* **手動退票路徑 (Manual Cancellation)：** 使用者發起退票 → Booking Cancelled → Release Seat → Refund to Account (非同步退款)。
+**A. 會員開戶與初始儲值 Saga**
+處理使用者註冊後，必須確保帳戶資金與帳戶狀態同步變更的流程。
 
-### 2. 資料一致性與可靠性 (Outbox Pattern)
+**成功路徑 (Happy Path)：**
+> 1. Account Created：建立帳戶實體（狀態為 PENDING）。
+> 2. Initial Deposit：執行初始資金存入。
+> 3. Account Activated：資金到位，將帳戶轉為啟用狀態。
+> 4. Saga Completed：觸發 NotificationService 發送 開戶成功歡迎信。
+
+**補償路徑 (Compensation Path)：**
+> 若初始儲值失敗：觸發 Freeze Account (凍結帳戶) → 標記註冊異常 → 發送 開戶失敗警告信，引導使用者聯繫客服。
+
+**B. 訂位購票與扣款 Saga**
+處理從發起訂票、鎖定座位到帳戶扣款的複雜交易鏈。
+
+**成功路徑 (Happy Path)：**
+
+> 1. Booking Created：建立訂票紀錄。
+> 2. Seat Reserved：透過 SeatService 完成劃位（含 MySQL 業務冪等鎖定）。
+> 3. Fare Charged：從會員帳戶扣除票價。
+> 4. Booking Completed：更新訂單狀態為已完成。
+> 5. Saga Completed：觸發通知中心發送 訂票成功確認信。
+
+**補償路徑 (Compensation Path)：**
+
+> 若扣款失敗：觸發 Release Seat (釋放座位) → Rollback Booking (標記訂票失敗) → 發送 訂票失敗通知信。
+
+**手動退票路徑 (Manual Cancellation)：**
+> 使用者發起退票 → Booking Cancelled → Release Seat → Refund to Account (執行非同步退款流程)。
+
+
+### 2. 動態化通知中心 (Notification Center)
+本專案實作了一套高度解耦的通知機制：
+
+>* Port-Adapter 模式：定義了 MailSenderPort 與 TemplateEnginePort，將業務邏輯與具體的發信技術、渲染技術隔離。
+>* DB-Driven Templates：郵件主旨與 HTML 內容均存於 MySQL 的 EMAIL_TEMPLATE 表中，支援不重啟程式即可動態修改郵件措辭。
+>* 個人化渲染：利用 FreeMarker 引擎，將領域物件（如 username, bookingUuid）動態注入範本。
+
+### 3. 業務冪等執行器 (Business Idempotency)
+針對高併發下的「搶號/劃位」情境，實作了 BusinessIdempotentExecutorPort：
+
+>* 決定性 Key 生成：根據「車次+日期+座位號」生成唯一業務 Key。
+>* 物理鎖定：利用 MySQL 的 UNIQUE KEY 特性確保在分散式環境下，同一資源僅會被成功領取一次，防止重複劃位衝突。
+
+### 4. 資料一致性與可靠性 (Outbox Pattern)
 為了確保「資料庫更新」與「訊息發送」的原子性，引入了 Outbox Pattern：
 
 >* EventLog 機制：所有領域事件先隨業務交易存入 EVENT_LOG 表。
 >* 定時排程 (Scheduler)：獨立執行緒掃描 Outbox 表，確保訊息 At-least-once (至少一次) 送達 RabbitMQ。
 >* 冪等性檢查 (Idempotency)：所有 Consumer 均實作 checkEventIdempotency，防止網路波動造成的重複消費。
 
-### 3. 全線追蹤 (Correlation ID)
+### 5. 全線追蹤 (Correlation ID)
 透過 eventTxId (Saga Transaction ID) 貫穿整個事件鏈，無論流程跳轉多少個服務，皆可透過單一 ID 在日誌中追蹤完整業務生命週期。
 
 
