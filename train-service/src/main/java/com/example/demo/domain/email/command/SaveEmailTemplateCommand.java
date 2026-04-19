@@ -4,8 +4,12 @@ import lombok.Data;
 
 @Data
 public class SaveEmailTemplateCommand {
-	private String templateKey;
-	private String subject;
-	private String content;
+	
+	private String templateKey; // Key 
+	
+	private String subject; // 標題
+	
+	private String content; // 內容
+	
 	private String activeFlag; // Y or N
 }

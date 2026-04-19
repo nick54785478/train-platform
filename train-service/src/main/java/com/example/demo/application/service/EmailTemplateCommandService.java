@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.base.application.service.BaseApplicationService;
 import com.example.demo.base.shared.enums.YesNo;
+import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.email.aggregate.EmailTemplate;
 import com.example.demo.domain.email.command.SaveEmailTemplateCommand;
 import com.example.demo.infra.repository.EmailTemplateRepository;
@@ -24,7 +25,7 @@ public class EmailTemplateCommandService extends BaseApplicationService {
 	public void createTemplate(SaveEmailTemplateCommand command) {
 		// 檢查 Key 是否重複
 		repository.findByTemplateKey(command.getTemplateKey()).ifPresent(t -> {
-			throw new RuntimeException("範本識別碼已存在: " + command.getTemplateKey());
+			throw new ValidationException("VALIDATE_EXCEPTION", "範本識別碼已存在: " + command.getTemplateKey());
 		});
 
 		EmailTemplate template = EmailTemplate.create(command.getTemplateKey(), command.getSubject(),
