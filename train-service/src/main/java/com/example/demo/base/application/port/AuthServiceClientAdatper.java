@@ -1,8 +1,7 @@
-package com.example.demo.infra.adapter;
+package com.example.demo.base.application.port;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.base.application.port.AuthServiceClientPort;
 import com.example.demo.base.shared.command.GetJwtTokenCommand;
 import com.example.demo.base.shared.dto.JwtTokenValidatedAndParsedResource;
 import com.example.demo.domain.account.command.RegisterUserCommand;

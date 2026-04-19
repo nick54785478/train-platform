@@ -1,4 +1,4 @@
-package com.example.demo.base.application.port;
+package com.example.demo.application.port;
 
 /**
  * Port 定義：事件 -> Topic Resolver。

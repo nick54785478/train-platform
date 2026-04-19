@@ -1,4 +1,4 @@
-package com.example.demo.base.infra.adapter;
+package com.example.demo.infra.adapter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.reflections.Reflections;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.base.application.port.EventTopicResolverPort;
+import com.example.demo.application.port.EventTopicResolverPort;
 import com.example.demo.base.infra.annotation.EventTopic;
 
 import lombok.extern.slf4j.Slf4j;

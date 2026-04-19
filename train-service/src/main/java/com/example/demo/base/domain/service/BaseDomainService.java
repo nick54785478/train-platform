@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.base.application.port.DataTransformerPort;
 import com.example.demo.base.infra.context.ContextHolder;
 import com.example.demo.base.infra.persistence.EventLogRepository;
 import com.example.demo.base.infra.persistence.EventSourceRepository;
@@ -17,7 +18,6 @@ import com.example.demo.base.shared.entity.EventLog;
 import com.example.demo.base.shared.entity.EventSource;
 import com.example.demo.base.shared.enums.StatusCode;
 import com.example.demo.base.shared.event.BaseEvent;
-import com.example.demo.util.BaseDataTransformer;
 import com.example.demo.util.JsonParseUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +33,8 @@ public abstract class BaseDomainService {
 	protected EventLogRepository eventLogRepository;
 	@Autowired
 	protected EventSourceRepository eventSourceRepository;
+	@Autowired
+	protected DataTransformerPort dataTransformer;
 
 	/**
 	 * 呼叫 BaseDataTransformer 進行資料轉換
@@ -44,7 +46,7 @@ public abstract class BaseDomainService {
 	 * @return 轉換後的物件
 	 */
 	public <T> T transformAggregate(Object target, Class<T> clazz) {
-		return BaseDataTransformer.transformData(target, clazz);
+		return dataTransformer.transform(target, clazz);
 	}
 
 	/**
@@ -57,7 +59,7 @@ public abstract class BaseDomainService {
 	 * @return 轉換後的物件列表
 	 */
 	public <S, T> List<T> transformAggregate(List<S> target, Class<T> clazz) {
-		return BaseDataTransformer.transformData(target, clazz);
+		return dataTransformer.transformList(target, clazz);
 	}
 
 	/**

@@ -6,9 +6,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.application.port.EventTopicResolverPort;
+import com.example.demo.base.application.port.DataTransformerPort;
 import com.example.demo.base.application.port.EventIdempotenceHandlerPort;
 import com.example.demo.base.application.port.EventPublisherPort;
-import com.example.demo.base.application.port.EventTopicResolverPort;
 import com.example.demo.base.infra.persistence.EventLogRepository;
 import com.example.demo.base.infra.persistence.EventSourceRepository;
 import com.example.demo.base.shared.command.PublishEventCommand;
@@ -26,6 +27,8 @@ public class BaseEventHandler {
 
 	@Autowired
 	protected EventPublisherPort eventPublisher;
+	@Autowired
+	protected DataTransformerPort dataTransformer;
 	@Autowired
 	protected EventLogRepository eventLogRepository;
 	@Autowired
@@ -54,7 +57,7 @@ public class BaseEventHandler {
 	 * @return 轉換後的物件
 	 */
 	public <T> T transformData(Object target, Class<T> clazz) {
-		return BaseDataTransformer.transformData(target, clazz);
+		return dataTransformer.transform(target, clazz);
 	}
 
 	/**
@@ -66,7 +69,7 @@ public class BaseEventHandler {
 	 * @return 轉換後的物件列表
 	 */
 	public <S, T> List<T> transformData(List<S> target, Class<T> clazz) {
-		return BaseDataTransformer.transformData(target, clazz);
+		return dataTransformer.transformList(target, clazz);
 	}
 
 	/**

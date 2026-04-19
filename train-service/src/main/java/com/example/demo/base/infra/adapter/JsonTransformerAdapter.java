@@ -1,4 +1,4 @@
-package com.example.demo.infra.adapter;
+package com.example.demo.base.infra.adapter;
 
 import org.springframework.stereotype.Component;
 

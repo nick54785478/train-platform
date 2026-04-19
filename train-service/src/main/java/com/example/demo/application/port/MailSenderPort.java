@@ -1,4 +1,4 @@
-package com.example.demo.base.application.port;
+package com.example.demo.application.port;
 
 import java.io.IOException;
 import java.io.InputStream;

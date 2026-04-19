@@ -1,4 +1,4 @@
-package com.example.demo.base.infra.adapter;
+package com.example.demo.infra.adapter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import com.example.demo.base.application.port.MailSenderPort;
+import com.example.demo.application.port.MailSenderPort;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

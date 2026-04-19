@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.application.port.EventTopicResolverPort;
 import com.example.demo.base.application.port.DataTransformerPort;
 import com.example.demo.base.application.port.EventPublisherPort;
-import com.example.demo.base.application.port.EventTopicResolverPort;
 import com.example.demo.base.infra.persistence.EventLogRepository;
 import com.example.demo.base.shared.entity.EventLog;
 import com.example.demo.base.shared.enums.EventLogSendQueueStatus;
@@ -99,7 +99,7 @@ public abstract class BaseApplicationService {
 	 * @return 已填充資料的 EventLog 實體
 	 */
 	public EventLog generateEventLog(String topic, BaseEvent event) {
-		System.out.println("type: " + event.getClass().getSimpleName() + ", eventTxId:" + event.getEventTxId());
+		log.debug("type: {}, , eventTxId:{}", event.getClass().getSimpleName(), event.getEventTxId());
 
 		// 構建 EventLog 實體並初始化狀態
 		return EventLog.builder().uuid(UUID.randomUUID().toString()) // 產生唯一識別碼

@@ -2,7 +2,7 @@ package com.example.demo.application.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.base.application.port.MailSenderPort;
+import com.example.demo.application.port.MailSenderPort;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
