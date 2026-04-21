@@ -31,7 +31,7 @@ public class OptionService {
 	 */
 	public List<OptionQueriedData> getSettingsByDataType(String dataType) {
 		return settingRepository.findByDataTypeAndActiveFlag(dataType, YesNo.Y).stream().map(setting -> {
-			return new OptionQueriedData(setting.getId(), setting.getType(), setting.getType());
+			return new OptionQueriedData(setting.getId(), setting.getName(), setting.getType());
 		}).collect(Collectors.toList());
 	}
 

@@ -3,7 +3,7 @@ package com.example.demo.domain.email.command;
 import lombok.Data;
 
 @Data
-public class SaveEmailTemplateCommand {
+public class CreateEmailTemplateCommand {
 	
 	private String templateKey; // Key 
 	

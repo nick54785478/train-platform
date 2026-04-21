@@ -84,7 +84,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 		// 從 Request Header 中獲取授權資訊
 		String authorization = request.getHeader(JwtConstants.JWT_HEADER.getValue());
-		log.info("request header authorization: {}", authorization);
+//		log.info("request header authorization: {}", authorization);
 
 		// 如果授權資訊不為空且以 Bearer 開頭
 		if (authorization != null && authorization.startsWith(JwtConstants.JWT_PREFIX.getValue())) {
@@ -113,7 +113,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		String requestPath = request.getRequestURI();
 		// 檢查 Request 的 URL 是否在公開路徑列表中，如果是則不需要進行 JWT 驗證
 		for (String publicPath : PUBLIC_PATHS) {
-			log.info("publicPath:{}, requestPath:{}", publicPath, requestPath);
+//			log.info("publicPath:{}, requestPath:{}", publicPath, requestPath);
 			if (pathMatcher.match(publicPath, requestPath)) {
 				return false;
 			}

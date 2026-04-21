@@ -16,7 +16,6 @@ import com.example.demo.base.infra.context.ContextHolder;
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.customisation.aggregate.Customisation;
-import com.example.demo.domain.customisation.aggregate.vo.CustomisationType;
 import com.example.demo.domain.customisation.command.UpdateCustomizedValueCommand;
 import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
 import com.example.demo.domain.shared.dto.CustomisationDetailView;
@@ -66,33 +65,31 @@ public class CustomisationService extends BaseDomainService {
 	/**
 	 * 查詢個人的表格顯示欄位設定
 	 * 
-	 * @param username
-	 * @param type
-	 * @return CustomissionQueriedData
+	 * @param username 使用者名稱
+	 * @param type     個人化配置種類
+	 * @return 個人的表格顯示欄位設定
 	 */
 	public CustomisationQueriedView query(String username, String dataType, String type) {
 		List<CustomisationDetailView> data = new ArrayList<>();
-		Customisation customisation = customisationRepository.findByUsernameAndTypeAndActiveFlag(username,
-				CustomisationType.valueOf(type), YesNo.Y);
 
-		Map<String, ConfigurableSetting> transformMap = settingRepository
-				.findByDataTypeAndTypeAndActiveFlag(dataType, type, YesNo.Y).stream()
-				.collect(Collectors.toMap(ConfigurableSetting::getName, Function.identity()));
+		// 透過使用者名稱以及個人化配置種類查詢相關配置
+		Customisation customisation = customisationRepository.findByUsernameAndTypeAndActiveFlag(username, type,
+				YesNo.Y);
 
-		// 若無個人化配置，回傳全部
+		// 透過 DataType = CUSTOMISATION 以及 TYPE 查出相關 Setting 資料清單
+		List<ConfigurableSetting> settings = settingRepository.findByDataTypeAndTypeAndActiveFlag(dataType, type,
+				YesNo.Y);
+
+		// 轉換成 Map<Value, Setting>，通常應該是 Key 值
+		Map<String, ConfigurableSetting> transformMap = settings.stream()
+				.collect(Collectors.toMap(ConfigurableSetting::getValue, Function.identity()));
+
+		// 若查無個人化配置，回傳全部
 		if (Objects.isNull(customisation)) {
-			data.addAll(settingRepository.findByDataTypeAndTypeAndActiveFlag(dataType, type, YesNo.Y).stream()
+			data.addAll(settings.stream()
 					.map(setting -> new CustomisationDetailView(setting.getId(), setting.getName(), setting.getValue()))
 					.collect(Collectors.toList()));
 		} else {
-//			data = Stream.of(customisation.getValue().split(",")).map(e -> {
-//				if (transformMap.containsKey(StringUtils.trim(e))) {
-//					ConfigurableSetting setting = transformMap.get(StringUtils.trim(e));
-//					return new OptionQueriedData(setting.getId(), setting.getName(), setting.getValue());
-//				} else {
-//					return null;
-//				}
-//			}).collect(Collectors.toList());
 			data.addAll(Stream.of(customisation.getValue().split(",")).map(e -> transformMap.get(StringUtils.trim(e))) // 先找出設定值
 					.filter(Objects::nonNull) // 過濾掉 null
 					.map(setting -> new CustomisationDetailView(setting.getId(), setting.getName(), setting.getValue())) // 建立物件
@@ -110,7 +107,7 @@ public class CustomisationService extends BaseDomainService {
 		List<ConfigurableSetting> settings = settingRepository.findByDataTypeAndTypeAndActiveFlag(command.getDataType(),
 				command.getType(), YesNo.Y);
 		Customisation customisation = customisationRepository.findByUsernameAndTypeAndActiveFlag(command.getUsername(),
-				CustomisationType.valueOf(command.getType()), YesNo.Y);
+				command.getType(), YesNo.Y);
 		// 檢查是否為合法的設定
 		this.checkValidCustomizedValue(settings, command);
 
@@ -137,10 +134,10 @@ public class CustomisationService extends BaseDomainService {
 	 */
 	private void checkValidCustomizedValue(List<ConfigurableSetting> settings, UpdateCustomizedValueCommand command) {
 		// 取出所有設定中的 Name
-		List<String> names = settings.stream().map(ConfigurableSetting::getName).collect(Collectors.toList());
+		List<String> values = settings.stream().map(ConfigurableSetting::getValue).collect(Collectors.toList());
 
 		// 若該個人化設定中的值有不存在於 Setting 中的值，代表傳入的個人化設定的值有誤
-		boolean hasInvalidValue = command.getValueList().stream().anyMatch(e -> !names.contains(e));
+		boolean hasInvalidValue = command.getValueList().stream().anyMatch(e -> !values.contains(e));
 
 		if (hasInvalidValue) {
 			throw new ValidationException("VALIDATE_FAILED", "該個人化設定有不合法的設定");

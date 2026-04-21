@@ -48,4 +48,9 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./upload/upload.module').then((m) => m.UploadModule),
   },
+  {
+    path: 'email-template',
+    loadChildren: () =>
+      import('./email/email.module').then((m) => m.EmailModule),
+  },
 ];

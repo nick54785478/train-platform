@@ -7,6 +7,7 @@ import com.example.demo.base.application.service.BaseApplicationService;
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.email.aggregate.EmailTemplate;
+import com.example.demo.domain.email.command.CreateEmailTemplateCommand;
 import com.example.demo.domain.email.command.SaveEmailTemplateCommand;
 import com.example.demo.infra.repository.EmailTemplateRepository;
 
@@ -21,14 +22,16 @@ public class EmailTemplateCommandService extends BaseApplicationService {
 
 	/**
 	 * 新增範本
+	 * 
+	 * @param command {@link CreateEmailTemplateCommand}
 	 */
-	public void createTemplate(SaveEmailTemplateCommand command) {
+	public void createTemplate(CreateEmailTemplateCommand command) {
 		// 檢查 Key 是否重複
 		repository.findByTemplateKey(command.getTemplateKey()).ifPresent(t -> {
 			throw new ValidationException("VALIDATE_EXCEPTION", "範本識別碼已存在: " + command.getTemplateKey());
 		});
 
-		EmailTemplate template = EmailTemplate.create(command.getTemplateKey(), command.getSubject(),
+		EmailTemplate template = EmailTemplate.create(command.getTemplateKey(), command.getName(), command.getSubject(),
 				command.getContent());
 		repository.save(template);
 	}

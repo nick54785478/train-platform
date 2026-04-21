@@ -40,10 +40,10 @@ public class ConfigurableSetting {
 	private String type; // 種類
 
 	@Column(name = "NAME")
-	private String name; // 名稱
+	private String name; // 名稱(用於前端 label 顯示)
 	
 	@Column(name = "VALUE")
-	private String value; // 名稱
+	private String value; // 值
 	
 	@Column(name = "PRIORITY_NO")
 	private Integer priorityNo; // 排序

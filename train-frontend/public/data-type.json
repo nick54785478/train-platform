@@ -141,6 +141,14 @@
     "value": "CUSTOMISATION",
     "labelTw": "個人化配置",
     "labelCn": "个人化配置",
-    "labelUs": "CUSTOMISATION"
+    "labelUs": "Customisation"
+  },
+    {
+    "id": "",
+    "label": "信件範本",
+    "value": "EMAIL_TEMPLATE",
+    "labelTw": "信件範本",
+    "labelCn": "信件范本",
+    "labelUs": "Email Template"
   }
 ]

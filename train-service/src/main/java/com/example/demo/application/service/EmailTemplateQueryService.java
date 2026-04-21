@@ -24,4 +24,5 @@ public class EmailTemplateQueryService {
 	public EmailTemplate findById(Long id) {
 		return repository.findById(id).orElse(null);
 	}
+	
 }

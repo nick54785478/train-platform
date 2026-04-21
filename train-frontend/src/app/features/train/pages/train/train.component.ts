@@ -76,31 +76,37 @@ export class TrainComponent
       {
         field: 'trainNo',
         header: '車次',
+        key: 'TRAIN_NO',
         type: '',
       },
       {
         field: 'kind',
         header: '車種',
+        key: 'KIND',
         type: '',
       },
       {
         field: 'fromStop',
         header: '起始站',
+        key: 'FROM_STOP',
         type: '',
       },
       {
         field: 'fromStopTime',
         header: '起始站發車時間',
+        key: 'FROM_STOP_TIME',
         type: '',
       },
       {
         field: 'toStop',
         header: '終點站',
+        key: 'TO_STOP',
         type: '',
       },
       {
         field: 'toStopTime',
         header: '終點站到站時間',
+        key: 'TO_STOP_TIME',
         type: '',
       },
     ];
@@ -344,7 +350,7 @@ export class TrainComponent
 
     // 只保留在 viewCols 中的欄位
     this.filteredCols = this.headerCols.filter((col) =>
-      this.viewCols.includes(col.field),
+      this.viewCols.includes(col.key),
     );
   }
 
@@ -352,7 +358,7 @@ export class TrainComponent
    * 提交個人化設定(該使用者可看到的 Table Columns)
    */
   submitCustomisation() {
-    let selectValues = this.selectedFields.map((e) => e.label);
+    let selectValues = this.selectedFields.map((e) => e.value);
     let request: UpdateCustomizedValueResource = {
       dataType: DataType.CUSTOMISATION,
       type: 'TRAIN_TABLE_COLUMN',
@@ -371,8 +377,8 @@ export class TrainComponent
             this.messageService.success(res.message);
             this.viewCols = this.selectedFields.map((e) => e.value);
             // 只保留在 viewCols 中的欄位
-            this.filteredCols = this.headerCols.filter((col) =>
-              this.viewCols.includes(col.field),
+            this.filteredCols = this.headerCols.filter(
+              (col) => this.viewCols.includes(col.key), // 保留符合 key 值的 col
             );
             this.query();
           } else {

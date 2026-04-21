@@ -175,7 +175,7 @@ VALUES
 INSERT INTO `EMAIL_TEMPLATE` 
 (`TEMPLATE_KEY`, `SUBJECT`, `CONTENT`, `ACTIVE_FLAG`, `CREATED_DATE`, `CREATED_BY`, `LAST_UPDATED_DATE`, `LAST_UPDATED_BY`) 
 VALUES 
-('BOOKING_SAGA_FAILURE', 
+('BOOKING_FAILURE', 
  '【重要】訂票交易失敗與退款通知', 
  '<html><body><h3>您好：</h3><p>很抱歉通知您，您的車票預訂動作（編號：${bookingUuid}）未能完成。</p><p><b>失敗原因：</b>${reason}</p><p>若此筆交易已扣款，系統將會啟動自動退款流程，預計於 1-3 個工作天內退還至您的帳戶。</p></body></html>', 
  'Y', NOW(), 'SYSTEM', NOW(), 'SYSTEM');

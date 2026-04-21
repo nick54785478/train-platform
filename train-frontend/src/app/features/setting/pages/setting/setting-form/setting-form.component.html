@@ -58,9 +58,14 @@
           </small>
         </div>
       </div>
-      <div class="col-12 md:col-3 lg:col-3">
-        <label>敘述</label>
-        <input type="text" pInputText formControlName="description" />
+      <div class="col-12 md:col-4 lg:col-4">
+        <label>說明</label>
+        <textarea
+          formControlName="description"
+          class="p-inputtextarea w-full remark-text"
+          rows="5"
+        ></textarea>
+        <!-- <input type="text" pInputText formControlName="description" /> -->
       </div>
       <div class="col-12 md:col-3 lg:col-3">
         <label>排序</label>

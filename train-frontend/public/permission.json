@@ -72,6 +72,14 @@
   },
   {
     "id": "",
+    "label": "Email 範本維護",
+    "icon": "",
+    "url": "/email-template",
+    "routerLink": "/email-template",
+    "visible": true
+  },
+  {
+    "id": "",
     "label": "自定義設定",
     "icon": "",
     "url": "/setting",

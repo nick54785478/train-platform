@@ -1,9 +1,9 @@
-package com.example.demo.domain.email.command;
+package com.example.demo.iface.dto.req;
 
 import lombok.Data;
 
 @Data
-public class SaveEmailTemplateCommand {
+public class CreateEmailTemplateResource {
 	
 	private String templateKey; // Key 
 	

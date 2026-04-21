@@ -4,10 +4,6 @@ import { Option } from '../models/option.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/internal/operators/map';
 import { environment } from '../../../environments/environment';
-import { userInfo } from 'os';
-import { UserInfoOption } from '../models/userinfo-option.model';
-import { RoleInfoOption } from '../models/role-info-option.model';
-import { GroupInfoOption } from '../models/group-info-option.model';
 import { DataType } from '../../core/enums/data-type.enum';
 
 @Injectable({
@@ -26,7 +22,7 @@ export class OptionService {
     return this.http.get<Option[]>('/data-type.json').pipe(
       map((response) => {
         return response;
-      })
+      }),
     );
   }
 
@@ -41,7 +37,7 @@ export class OptionService {
     return this.http.get<Option[]>(url, { params }).pipe(
       map((response) => {
         return response;
-      })
+      }),
     );
   }
 
@@ -56,7 +52,7 @@ export class OptionService {
     return this.http.get<Option[]>(url, { params }).pipe(
       map((response) => {
         return response;
-      })
+      }),
     );
   }
 
@@ -70,7 +66,7 @@ export class OptionService {
     return this.http.get<Option[]>(url).pipe(
       map((response) => {
         return response;
-      })
+      }),
     );
   }
 
@@ -84,7 +80,7 @@ export class OptionService {
     return this.http.get<Option[]>(url).pipe(
       map((response) => {
         return response;
-      })
+      }),
     );
   }
 
@@ -98,7 +94,7 @@ export class OptionService {
     return this.http.get<Option[]>(url).pipe(
       map((response) => {
         return response;
-      })
+      }),
     );
   }
 }

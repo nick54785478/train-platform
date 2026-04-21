@@ -10,8 +10,9 @@ import lombok.Getter;
 public enum CustomisationType {
 
 	SETTING_TABLE_COLUMN("SETTING_TABLE_COLUMN", "Setting 表格欄位查看設定"),
-	TRAIN_TABLE_COLUMN("TRAIN_TABLE_COLUMN", "Train 表格欄位查看設定");
-
+	TRAIN_TABLE_COLUMN("TRAIN_TABLE_COLUMN", "Train 表格欄位查看設定"),
+	EMAIL_TEMPLATE_TABLE_COLUMN("EMAIL_TEMPLATE_TABLE_COLUMN", "Email 表格欄位查看設定");
+	
 	@Getter
 	private final String code;
 	@Getter

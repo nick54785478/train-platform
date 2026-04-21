@@ -32,6 +32,9 @@ public class EmailTemplate extends BaseAggreagteRoot {
 	@Column(name = "TEMPLATE_KEY", unique = true, nullable = false)
 	private String templateKey;
 
+	@Column(name = "TEMPLATE_Name", nullable = false)
+	private String templateName;
+
 	@Column(name = "SUBJECT", nullable = false)
 	private String subject;
 
@@ -48,8 +51,9 @@ public class EmailTemplate extends BaseAggreagteRoot {
 	/**
 	 * 工廠方法：建立新範本
 	 */
-	public static EmailTemplate create(String key, String subject, String content) {
-		return EmailTemplate.builder().templateKey(key).subject(subject).content(content).activeFlag(YesNo.Y).build();
+	public static EmailTemplate create(String key, String name, String subject, String content) {
+		return EmailTemplate.builder().templateKey(key)
+				.templateName(name).subject(subject).content(content).activeFlag(YesNo.Y).build();
 	}
 
 	/**

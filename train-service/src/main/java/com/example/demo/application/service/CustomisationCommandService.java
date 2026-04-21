@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.customisation.aggregate.Customisation;
-import com.example.demo.domain.customisation.aggregate.vo.CustomisationType;
 import com.example.demo.domain.customisation.command.CreateCustomisationCommand;
 import com.example.demo.domain.customisation.command.UpdateCustomisationCommand;
 import com.example.demo.domain.customisation.command.UpdateCustomizedValueCommand;
@@ -39,7 +38,7 @@ public class CustomisationCommandService {
 		customission.create(command);
 		customisationRepository.save(customission);
 	}
-	
+
 	/**
 	 * 更新一筆個人化配置
 	 * 
@@ -47,8 +46,7 @@ public class CustomisationCommandService {
 	 */
 	public void update(UpdateCustomisationCommand command) {
 		Customisation customission = customisationRepository.findByUsernameAndTypeAndNameAndActiveFlag(
-				command.getUsername(), CustomisationType.fromLabel(command.getType()), command.getName(),
-				YesNo.valueOf(command.getActiveFlag()));
+				command.getUsername(), command.getType(), command.getName(), YesNo.valueOf(command.getActiveFlag()));
 		if (Objects.isNull(customission)) {
 			log.error("發生錯誤，更新失敗");
 			throw new ValidationException("VALIDATION_FAILED", "發生錯誤，更新失敗");

@@ -41,9 +41,9 @@ public class Customisation extends BaseAggreagteRoot {
 	@Column(name = "USERNAME")
 	private String username; // 帳號
 
-	@Enumerated(EnumType.STRING)
+//	@Enumerated(EnumType.STRING)
 	@Column(name = "TYPE")
-	private CustomisationType type; // 配置種類
+	private String type; // 配置種類
 
 	@Column(name = "NAME")
 	private String name;
@@ -66,7 +66,7 @@ public class Customisation extends BaseAggreagteRoot {
 	public void create(CreateCustomisationCommand command) {
 		this.username = Objects.isNull(ContextHolder.getUsername()) ? ContextHolder.getUsername()
 				: command.getUsername();
-		this.type = CustomisationType.valueOf(command.getType());
+		this.type = command.getType();
 		this.name = command.getName();
 		this.value = command.getValue();
 		this.description = command.getDescription();
@@ -104,7 +104,7 @@ public class Customisation extends BaseAggreagteRoot {
 	 */
 	public void create(String username, String type, String name, String value) {
 		this.username = username;
-		this.type = CustomisationType.valueOf(type);
+		this.type = type;
 		this.name = name;
 		this.value = value;
 		this.activeFlag = YesNo.Y;

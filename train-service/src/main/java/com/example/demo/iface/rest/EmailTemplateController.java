@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.application.service.EmailTemplateCommandService;
 import com.example.demo.application.service.EmailTemplateQueryService;
 import com.example.demo.domain.email.aggregate.EmailTemplate;
+import com.example.demo.domain.email.command.CreateEmailTemplateCommand;
 import com.example.demo.domain.email.command.SaveEmailTemplateCommand;
+import com.example.demo.iface.dto.req.CreateEmailTemplateResource;
+import com.example.demo.util.BaseDataTransformer;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,7 +51,9 @@ public class EmailTemplateController {
 	 * 新增範本
 	 */
 	@PostMapping
-	public ResponseEntity<Void> create(@RequestBody SaveEmailTemplateCommand command) {
+	public ResponseEntity<Void> create(@RequestBody CreateEmailTemplateResource resource) {
+		CreateEmailTemplateCommand command = BaseDataTransformer.transformData(resource,
+				CreateEmailTemplateCommand.class);
 		commandService.createTemplate(command);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
