@@ -31,7 +31,7 @@ public class CustomisationCommandService {
 	/**
 	 * 建立一筆個人化配置
 	 * 
-	 * @param command
+	 * @param command {@link CreateCustomisationCommand}
 	 */
 	public void create(CreateCustomisationCommand command) {
 		Customisation customission = new Customisation();
@@ -42,7 +42,7 @@ public class CustomisationCommandService {
 	/**
 	 * 更新一筆個人化配置
 	 * 
-	 * @param command
+	 * @param command {@link UpdateCustomisationCommand}
 	 */
 	public void update(UpdateCustomisationCommand command) {
 		Customisation customission = customisationRepository.findByUsernameAndTypeAndNameAndActiveFlag(
@@ -58,7 +58,7 @@ public class CustomisationCommandService {
 	/**
 	 * 更新該帳號對應的個人化設定
 	 * 
-	 * @param command
+	 * @param command {@link UpdateCustomizedValueCommand}
 	 */
 	public void updateCustomizedValue(UpdateCustomizedValueCommand command) {
 		customissionService.updateCustomizedValue(command);

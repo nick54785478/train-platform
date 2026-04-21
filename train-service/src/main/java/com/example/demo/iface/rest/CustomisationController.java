@@ -16,6 +16,7 @@ import com.example.demo.application.service.CustomisationQueryService;
 import com.example.demo.domain.customisation.command.CreateCustomisationCommand;
 import com.example.demo.domain.customisation.command.UpdateCustomisationCommand;
 import com.example.demo.domain.customisation.command.UpdateCustomizedValueCommand;
+import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
 import com.example.demo.iface.dto.req.CreateCustomisationResource;
 import com.example.demo.iface.dto.req.UpdateCustomisationResource;
 import com.example.demo.iface.dto.req.UpdateCustomizedValueResource;
@@ -44,7 +45,7 @@ public class CustomisationController {
 	/**
 	 * 新增個人化配置
 	 * 
-	 * @param resource
+	 * @param resource {@link CreateCustomisationResource}
 	 * @return 成功訊息
 	 */
 	@PostMapping("")
@@ -61,7 +62,7 @@ public class CustomisationController {
 	/**
 	 * 更新個人化配置
 	 * 
-	 * @param resource
+	 * @param resource {@link UpdateCustomisationResource}
 	 * @return 成功訊息
 	 */
 	@PutMapping("")
@@ -78,10 +79,10 @@ public class CustomisationController {
 	/**
 	 * 透過使用者帳號查詢個人化表格參數配置
 	 * 
-	 * @param username
-	 * @param dataType
-	 * @param type
-	 * @return ResponseEntity<CustomisationQueriedResource>
+	 * @param username 使用者名稱
+	 * @param dataType {@link ConfigurableSetting} 的配置種類
+	 * @param type     設定類別
+	 * @return 個人客製化設定
 	 */
 	@GetMapping("/{username}")
 	@Operation(summary = "API - 透過使用者帳號查詢個人化表格參數配置", description = "透過使用者帳號查詢個人化表格參數配置。")
@@ -97,10 +98,9 @@ public class CustomisationController {
 	/**
 	 * 更新該使用者帳號個人化設定的值配置
 	 * 
-	 * @param username
-	 * @param dataType
-	 * @param type
-	 * @return ResponseEntity<CustomizedValueUpdatedResource>
+	 * @param username 使用者名稱
+	 * @param resource {@link UpdateCustomizedValueResource}
+	 * @return 成功訊息
 	 */
 	@PutMapping("/{username}")
 	@Operation(summary = "API - 更新該使用者帳號個人化設定的值配置", description = "更新該使用者帳號個人化設定的值配置 。")

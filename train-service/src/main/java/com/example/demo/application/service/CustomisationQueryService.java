@@ -19,9 +19,9 @@ public class CustomisationQueryService {
 	 * 查詢個人客製化設定
 	 * 
 	 * @param username 使用者名稱
-	 * @param dataType
+	 * @param dataType {@link ConfigurableSetting} 的配置種類
 	 * @param type     設定類別
-	 * @return CustomissionQueriedData
+	 * @return 個人客製化設定
 	 */
 	public CustomisationQueriedView query(String username, String dataType, String type) {
 		return customisationService.query(username, dataType, type);

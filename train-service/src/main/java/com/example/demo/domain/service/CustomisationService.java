@@ -34,38 +34,11 @@ public class CustomisationService extends BaseDomainService {
 	private SettingRepository settingRepository;
 	private CustomisationRepository customisationRepository;
 
-//	/**
-//	 * 建立一筆個人化配置
-//	 * 
-//	 * @param command
-//	 */
-//	public void create(CreateCustomisationCommand command) {
-//		Customisation customission = new Customisation();
-//		customission.create(command);
-//		customisationRepository.save(customission);
-//	}
-
-//	/**
-//	 * 更新一筆個人化配置
-//	 * 
-//	 * @param command
-//	 */
-//	public void update(UpdateCustomisationCommand command) {
-//		Customisation customission = customisationRepository.findByUsernameAndTypeAndNameAndActiveFlag(
-//				command.getUsername(), CustomisationType.fromLabel(command.getType()), command.getName(),
-//				YesNo.valueOf(command.getActiveFlag()));
-//		if (Objects.isNull(customission)) {
-//			log.error("發生錯誤，更新失敗");
-//			throw new ValidationException("VALIDATION_FAILED", "發生錯誤，更新失敗");
-//		}
-//		customission.update(command);
-//		customisationRepository.save(customission);
-//	}
-
 	/**
 	 * 查詢個人的表格顯示欄位設定
 	 * 
 	 * @param username 使用者名稱
+	 * @param dataType {@link ConfigurableSetting} 的配置種類
 	 * @param type     個人化配置種類
 	 * @return 個人的表格顯示欄位設定
 	 */
@@ -90,6 +63,7 @@ public class CustomisationService extends BaseDomainService {
 					.map(setting -> new CustomisationDetailView(setting.getId(), setting.getName(), setting.getValue()))
 					.collect(Collectors.toList()));
 		} else {
+			// 有個人化配置，加入回傳清單
 			data.addAll(Stream.of(customisation.getValue().split(",")).map(e -> transformMap.get(StringUtils.trim(e))) // 先找出設定值
 					.filter(Objects::nonNull) // 過濾掉 null
 					.map(setting -> new CustomisationDetailView(setting.getId(), setting.getName(), setting.getValue())) // 建立物件
@@ -101,7 +75,7 @@ public class CustomisationService extends BaseDomainService {
 	/**
 	 * 更新該使用者的個人設定
 	 * 
-	 * @param command
+	 * @param command {@link UpdateCustomizedValueCommand}
 	 */
 	public void updateCustomizedValue(UpdateCustomizedValueCommand command) {
 		List<ConfigurableSetting> settings = settingRepository.findByDataTypeAndTypeAndActiveFlag(command.getDataType(),
@@ -129,8 +103,8 @@ public class CustomisationService extends BaseDomainService {
 	/***
 	 * 檢查是否為合法的設定
 	 * 
-	 * @param settings
-	 * @param command
+	 * @param settings Setting 清單
+	 * @param command  {@link UpdateCustomizedValueCommand}
 	 */
 	private void checkValidCustomizedValue(List<ConfigurableSetting> settings, UpdateCustomizedValueCommand command) {
 		// 取出所有設定中的 Name
