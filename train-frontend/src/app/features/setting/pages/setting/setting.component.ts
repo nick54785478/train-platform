@@ -107,12 +107,12 @@ export class SettingComponent implements OnInit, OnDestroy {
     });
 
     this.cols = [
-      { field: 'dataType', header: '配置種類' },
-      { field: 'type', header: '類別' },
-      { field: 'name', header: '名稱' },
-      { field: 'value', header: '值' },
-      { field: 'description', header: '說明' },
-      { field: 'priorityNo', header: '排序' },
+      { field: 'dataType', header: '配置種類', key: 'DATA_TYPE' },
+      { field: 'type', header: '類別', key: 'TYPE' },
+      { field: 'name', header: '名稱', key: 'NAME' },
+      { field: 'value', header: '值', key: 'VALUE' },
+      { field: 'description', header: '說明', key: 'DESCRIPTION' },
+      { field: 'priorityNo', header: '排序', key: 'PRIORITY_NO' },
     ];
     this.loadTableViewOptions();
 
@@ -156,7 +156,7 @@ export class SettingComponent implements OnInit, OnDestroy {
 
     // 只保留在 viewCols 中的欄位
     this.filteredCols = this.cols.filter((col) =>
-      this.viewCols.includes(col.field),
+      this.viewCols.includes(col.key),
     );
   }
 
@@ -317,7 +317,7 @@ export class SettingComponent implements OnInit, OnDestroy {
    * 提交個人化設定(該使用者可看到的 Table Columns)
    */
   submitCustomisation() {
-    let selectValues = this.selectedFields.map((e) => e.label);
+    let selectValues = this.selectedFields.map((e) => e.value);
     let request: UpdateCustomizedValueResource = {
       dataType: DataType.CUSTOMISATION,
       type: 'SETTING_TABLE_COLUMN',
@@ -329,7 +329,7 @@ export class SettingComponent implements OnInit, OnDestroy {
         next: (res) => {
           if (res.code === '200' || res.code === '201') {
             this.messageService.success(res.message);
-            location.reload();
+            this.loadTableViewOptions();
           } else {
             this.messageService.error(res.message);
           }
