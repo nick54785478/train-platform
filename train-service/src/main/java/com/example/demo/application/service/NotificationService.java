@@ -2,6 +2,7 @@ package com.example.demo.application.service;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.application.port.MailSenderPort;
@@ -9,13 +10,16 @@ import com.example.demo.application.port.TemplateEnginePort;
 import com.example.demo.base.shared.enums.YesNo;
 import com.example.demo.infra.repository.EmailTemplateRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class NotificationService {
+
+	@Value("${train.service.endpoint}")
+	private String url;
 
 	private final MailSenderPort mailSender;
 	private final TemplateEnginePort templateEngine;
@@ -39,7 +43,8 @@ public class NotificationService {
 	 * 訂票成功：確認信
 	 */
 	public void sendBookingSuccessEmail(String to, String bookingUuid) {
-		this.processAndSend(to, "BOOKING_SUCCESS", Map.of("bookingUuid", bookingUuid));
+		this.processAndSend(to, "BOOKING_SUCCESS",
+				Map.of("bookingUuid", bookingUuid, "orderUrl", String.format("%s/%s", url, "account")));
 	}
 
 	/**

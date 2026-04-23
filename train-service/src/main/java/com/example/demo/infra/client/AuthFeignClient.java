@@ -14,7 +14,7 @@ import com.example.demo.iface.dto.res.JwtTokenGettenResource;
 import com.example.demo.iface.dto.res.UserInfoGottenResource;
 import com.example.demo.iface.dto.res.UserRegisteredResource;
 
-@FeignClient(value = "AuthFeignClient", url = "${auth.endpoint.service}", configuration = AuthFeignConfiguration.class)
+@FeignClient(value = "AuthFeignClient", url = "${auth.service.endpoint}", configuration = AuthFeignConfiguration.class)
 public interface AuthFeignClient {
 
 	/**
