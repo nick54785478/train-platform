@@ -1,4 +1,4 @@
-export class UpdateSetting {
+export class UpdateSettingResource {
   id!: number;
   dataType!: string; // 資料種類
   type!: string; // 種類

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SharedModule } from '../../../../../shared/shared.module';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Option } from '../../../../../shared/models/option.model';
-import { CreateSetting } from '../../../models/create-setting-request.model';
+import { CreateSettingResource } from '../../../models/create-setting-resource.model';
 import { environment } from '../../../../../../environments/environment';
 import { SettingService } from '../../../service/setting.service';
 import { CoreModule } from '../../../../../core/core.module';
@@ -11,7 +11,7 @@ import { OptionService } from '../../../../../shared/services/option.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { BaseFormCompoent } from '../../../../../shared/component/base/base-form.component';
 import { finalize } from 'rxjs';
-import { UpdateSetting } from '../../../models/update-setting-request.model';
+import { UpdateSettingResource } from '../../../models/update-setting-resource.model';
 import { Location } from '@angular/common';
 import { DataType } from '../../../../../core/enums/data-type.enum';
 import { SettingQueriedResource } from '../../../models/setting-queried-resource.model';
@@ -37,7 +37,7 @@ export class SettingFormComponent
     public ref: DynamicDialogRef,
     private settingService: SettingService,
     private optionService: OptionService,
-    private systemMessageService: SystemMessageService
+    private systemMessageService: SystemMessageService,
   ) {
     super();
   }
@@ -109,7 +109,7 @@ export class SettingFormComponent
    */
   onAddSetting() {
     // 將表單資料設置進 CreateSetting
-    const request: CreateSetting = { ...this.formGroup.value };
+    const request: CreateSettingResource = { ...this.formGroup.value };
     console.log(request);
     this.settingService
       .create(request)
@@ -121,7 +121,7 @@ export class SettingFormComponent
           setTimeout(() => {
             location.reload();
           }, 500);
-        })
+        }),
       )
       .subscribe({
         next: (res) => {
@@ -139,7 +139,7 @@ export class SettingFormComponent
    * 修改設定資料
    */
   onUpdateSetting() {
-    const request: UpdateSetting = { ...this.formGroup.value };
+    const request: UpdateSettingResource = { ...this.formGroup.value };
     console.log(request);
     let id = this.dialogConfig.data['data'].id;
     this.settingService
@@ -152,7 +152,7 @@ export class SettingFormComponent
           setTimeout(() => {
             location.reload();
           }, 500);
-        })
+        }),
       )
       .subscribe({
         next: (res) => {

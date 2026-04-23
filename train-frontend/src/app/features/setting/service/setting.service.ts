@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { CreateSetting } from '../models/create-setting-request.model';
+import { CreateSettingResource } from '../models/create-setting-resource.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { BaseResponse } from '../../../shared/models/base-response.model';
-import { UpdateSetting } from '../models/update-setting-request.model';
+import { UpdateSettingResource } from '../models/update-setting-resource.model';
 import { CustomisationQueriedResource } from '../../../shared/models/customisation-queried.model';
 import { SettingQueriedResource } from '../models/setting-queried-resource.model';
 import { UpdateCustomizedValueResource } from '../../../shared/models/update-customized-value-resource.model';
@@ -22,7 +22,7 @@ export class SettingService {
    * @param request
    * @return Observable<any>
    */
-  create(request: CreateSetting): Observable<any> {
+  create(request: CreateSettingResource): Observable<any> {
     const url = this.baseApiUrl + '/settings';
     return this.http.post(url, request);
   }
@@ -32,7 +32,7 @@ export class SettingService {
    * @param request
    * @return Observable<any>
    */
-  update(id: number, request: UpdateSetting): Observable<any> {
+  update(id: number, request: UpdateSettingResource): Observable<any> {
     const url = this.baseApiUrl + '/settings/' + id;
     return this.http.put(url, request);
   }
@@ -47,7 +47,7 @@ export class SettingService {
     dataType: string,
     type: string,
     name: string,
-    activeFlag: string
+    activeFlag: string,
   ): Observable<SettingQueriedResource[]> {
     const url = this.baseApiUrl + '/settings/query';
     let params = new HttpParams()
