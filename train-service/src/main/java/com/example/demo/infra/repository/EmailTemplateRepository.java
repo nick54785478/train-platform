@@ -1,7 +1,9 @@
 package com.example.demo.infra.repository;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.base.shared.enums.YesNo;
@@ -15,4 +17,6 @@ public interface EmailTemplateRepository extends JpaRepository<EmailTemplate, Lo
 	Optional<EmailTemplate> findByTemplateKeyAndActiveFlag(String templateKey, YesNo activeFlag);
 
 	Optional<EmailTemplate> findByTemplateKey(String templateKey);
+
+	List<EmailTemplate> findAll(Specification<EmailTemplate> specification);
 }

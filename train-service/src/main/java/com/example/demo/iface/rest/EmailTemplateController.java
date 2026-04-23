@@ -2,23 +2,21 @@ package com.example.demo.iface.rest;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.application.service.EmailTemplateCommandService;
 import com.example.demo.application.service.EmailTemplateQueryService;
+import com.example.demo.application.shared.dto.EmailTemplateGottenData;
 import com.example.demo.domain.email.aggregate.EmailTemplate;
-import com.example.demo.domain.email.command.CreateEmailTemplateCommand;
 import com.example.demo.domain.email.command.SaveEmailTemplateCommand;
-import com.example.demo.iface.dto.req.CreateEmailTemplateResource;
+import com.example.demo.iface.dto.req.SaveEmailTemplateResource;
+import com.example.demo.iface.dto.res.EmailTemplateSavedResource;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +30,15 @@ public class EmailTemplateController {
 	private final EmailTemplateQueryService queryService;
 
 	/**
+	 * 取得單一範本配置 (By Template Key)
+	 */
+	@GetMapping("/{key}")
+	public ResponseEntity<EmailTemplateGottenData> getEmailTemplateByKey(@PathVariable String key) {
+		EmailTemplateGottenData template = queryService.getEmailTemplateByKey(key);
+		return ResponseEntity.ok(template);
+	}
+
+	/**
 	 * 取得所有範本清單
 	 */
 	@GetMapping
@@ -40,39 +47,13 @@ public class EmailTemplateController {
 	}
 
 	/**
-	 * 取得單一範本詳情
-	 */
-	@GetMapping("/{id}")
-	public ResponseEntity<EmailTemplate> get(@PathVariable Long id) {
-		return ResponseEntity.ok(queryService.findById(id));
-	}
-
-	/**
-	 * 新增範本
+	 * 新增/修改範本
 	 */
 	@PostMapping
-	public ResponseEntity<Void> create(@RequestBody CreateEmailTemplateResource resource) {
-		CreateEmailTemplateCommand command = BaseDataTransformer.transformData(resource,
-				CreateEmailTemplateCommand.class);
-		commandService.createTemplate(command);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<EmailTemplateSavedResource> create(@RequestBody SaveEmailTemplateResource resource) {
+		SaveEmailTemplateCommand command = BaseDataTransformer.transformData(resource, SaveEmailTemplateCommand.class);
+		commandService.saveTemplate(command);
+		return ResponseEntity.ok(new EmailTemplateSavedResource("200", "新增/修改範本成功"));
 	}
 
-	/**
-	 * 更新範本
-	 */
-	@PutMapping("/{id}")
-	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody SaveEmailTemplateCommand command) {
-		commandService.updateTemplate(id, command);
-		return ResponseEntity.ok().build();
-	}
-
-	/**
-	 * 刪除範本
-	 */
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		commandService.deleteTemplate(id);
-		return ResponseEntity.noContent().build();
-	}
 }

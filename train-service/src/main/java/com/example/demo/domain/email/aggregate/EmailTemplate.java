@@ -52,17 +52,19 @@ public class EmailTemplate extends BaseAggreagteRoot {
 	 * 工廠方法：建立新範本
 	 */
 	public static EmailTemplate create(String key, String name, String subject, String content) {
-		return EmailTemplate.builder().templateKey(key)
-				.templateName(name).subject(subject).content(content).activeFlag(YesNo.Y).build();
+		return EmailTemplate.builder().templateKey(key).templateName(name).subject(subject).content(content)
+				.activeFlag(YesNo.Y).build();
 	}
 
 	/**
-	 * 更新內容
+	 * 更新信件範本資料
+	 * 
+	 * @param subject 標題
+	 * @param content 內容
 	 */
-	public void update(String subject, String content, YesNo activeFlag) {
+	public void update(String subject, String content) {
 		this.subject = subject;
 		this.content = content;
-		this.activeFlag = activeFlag;
 	}
 
 	/**

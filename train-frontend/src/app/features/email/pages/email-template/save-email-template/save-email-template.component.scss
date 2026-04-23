@@ -1,0 +1,51 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.email-template-container {
+  height: 100%;
+
+  .card {
+    background: #ffffff;
+    height: 100%; // 讓卡片填滿 Dialog 容器
+  }
+
+  // 必填欄位的星號
+  label.required::after {
+    content: " *";
+    color: var(--red-500);
+  }
+
+  .email-body {
+    background: #ffffff;
+
+    input[pInputText],
+    textarea[pInputTextarea] {
+      border: none !important;
+      &:focus {
+        box-shadow: none !important;
+      }
+      // 錯誤時的底線顏色提示
+      &.ng-invalid.ng-dirty {
+        border-bottom: 1px solid var(--red-500) !important;
+      }
+    }
+
+    textarea[pInputTextarea] {
+      min-height: 300px;
+    }
+  }
+
+  // 調整錯誤訊息的小字位置
+  .p-error {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+}
+
+// 修正 Dropdown 的驗證顏色
+::ng-deep .p-dropdown.ng-invalid.ng-dirty {
+  border-color: var(--red-500) !important;
+}

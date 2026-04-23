@@ -192,18 +192,6 @@ export class SettingComponent implements OnInit, OnDestroy {
     return ref;
   }
 
-  // async loadOptions() {
-  //   this.fields = await firstValueFrom(
-  //     this.optionService.getSettingsByDataTypeAndType('SETTING_TABLE_COLUMN')
-  //   );
-
-  //   this.selectedFields = this.fields.filter((e) =>
-  //     this.viewCols.includes(e.value)
-  //   );
-
-  //   this.cdr.detectChanges(); // 強制刷新 UI
-  // }
-
   /**
    * 取得 Table 所有 columns，後續用於個人化配置
    */

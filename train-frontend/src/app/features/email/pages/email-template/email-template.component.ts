@@ -13,7 +13,7 @@ import { OptionService } from '../../../../shared/services/option.service';
 import { Option } from '../../../../shared/models/option.model';
 import { SettingService } from '../../../setting/service/setting.service';
 import { DataType } from '../../../../core/enums/data-type.enum';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs/internal/Subject';
 import { FormAction } from '../../../../core/enums/form-action.enum';
@@ -25,6 +25,12 @@ import { StorageService } from '../../../../core/services/storage.service';
 import { map } from 'rxjs/internal/operators/map';
 import { SystemStorageKey } from '../../../../core/enums/system-storage.enum';
 import { of } from 'rxjs/internal/observable/of';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+import { SaveEmailTemplateComponent } from './save-email-template/save-email-template.component';
+import { DialogFormComponent } from '../../../../shared/component/dialog-form/dialog-form.component';
+import { EmailTemplateService } from '../../services/email-template.service';
+import { finalize } from 'rxjs/internal/operators/finalize';
+import { EmailTemplateGottenData } from '../../models/email-template-queried-resource.model';
 
 @Component({
   selector: 'app-email-template',
@@ -37,6 +43,7 @@ import { of } from 'rxjs/internal/observable/of';
     SystemMessageService,
     OptionService,
     DynamicDialogRef,
+    EmailTemplateService,
   ],
   templateUrl: './email-template.component.html',
   styleUrl: './email-template.component.scss',
@@ -51,9 +58,6 @@ export class EmailTemplateComponent
   // Table Row Actions 選單。
   rowActionMenu: MenuItem[] = [];
   username!: string;
-  fields: Option[] = []; // Table 可視選項
-  selectedFields: Option[] = []; // 被選擇的 Table Column 名
-  viewCols: string[] = []; // 可視清單
 
   /**
    * 用來取消訂閱
@@ -71,10 +75,8 @@ export class EmailTemplateComponent
     private dialogConfirmService: DialogConfirmService,
     private dynamicDialogRef: DynamicDialogRef,
     public dialogService: DialogService,
-    private storageService: StorageService,
     private optionService: OptionService,
-    private settingService: SettingService,
-    private customisationService: CustomisationService,
+    private emailTemplateService: EmailTemplateService,
     public override messageService: SystemMessageService,
   ) {
     super();
@@ -82,8 +84,7 @@ export class EmailTemplateComponent
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({
-      templateName: new FormControl(''),
-      activeFlag: new FormControl(''),
+      templateKey: new FormControl('', Validators.required),
     });
 
     // 取得範本下拉式選單
@@ -96,147 +97,108 @@ export class EmailTemplateComponent
     this.optionService.getSettingTypes(DataType.YES_NO).subscribe((res) => {
       this.activeFlags = res;
     });
-
-    this.cols = [
-      { field: 'templateKey', header: '範本唯一值', key: 'TEMPLATE_KRY' },
-      { field: 'templateName', header: '範本名稱', key: 'TEMPLATE_NAME' },
-      { field: 'subject', header: '標題', key: 'SUBJECT' },
-      { field: 'content', header: '內容', key: 'CONTENT' },
-      { field: 'activeFlag', header: '是否生效', key: 'ACTIVE_FLAG' },
-    ];
-
-    this.loadTableViewOptions();
   }
 
   ngOnDestroy(): void {}
 
-  query() {}
-
-  onAdd() {}
-
   /**
-   * 取得個人化設定(可以看到 Table 的欄位設定)
+   * 查詢信件範本總覽
    */
-  async loadTableViewOptions() {
-    // 取得使用者名稱
-    this.username = await firstValueFrom(
-      of(
-        this.storageService.getLocalStorageItem(SystemStorageKey.USERNAME) ||
-          this.storageService.getSessionStorageItem(SystemStorageKey.USERNAME),
-      ),
-    );
+  query() {
+    this.submitted = true;
 
-    // 可以看到的欄位
-    this.selectedFields = await firstValueFrom(
-      this.customisationService
-        .queryTableColumnCustomisation(
-          this.username,
-          DataType.CUSTOMISATION,
-          'EMAIL_TEMPLATE_TABLE_COLUMN',
-        )
-        .pipe(
-          map((res) => {
-            console.log(res);
-            return res.value;
-          }),
-        ),
-    );
+    if (this.formGroup.invalid || !this.submitted) {
+      return;
+    }
 
-    // 取得 Table Column 可視設定資料
-    this.fields = await firstValueFrom(
-      this.optionService.getSettingsByDataTypeAndType(
-        'EMAIL_TEMPLATE_TABLE_COLUMN',
-      ),
-    );
-
-    console.log(this.selectedFields);
-    // 可視清單，控制該 table column 是否可視
-    this.viewCols = this.selectedFields.map((e) => e.value);
-
-    // 只保留在 viewCols 中的欄位
-    this.filteredCols = this.cols.filter((col) =>
-      this.viewCols.includes(col.key),
-    );
-  }
-
-  /**
-   * 刪除特定資料
-   * @param id
-   */
-  delete(id: number) {
-    console.log(id);
-    this.dialogConfirmService.confirmDelete(() => {
-      // 確認後的動作
-      this.settingService.delete(id).subscribe({
-        next: (res) => {
-          this.messageService.success(res.message);
-          // 再查一次
-          this.query();
-        },
-        error: (error) => {
-          this.messageService.error(error.message);
-        },
-      });
-    });
-  }
-
-  /**
-   * 提交個人化設定(該使用者可看到的 Table Columns)
-   */
-  submitCustomisation() {
-    let selectValues = this.selectedFields.map((e) => e.value);
-    console.log(selectValues);
-    let request: UpdateCustomizedValueResource = {
-      dataType: DataType.CUSTOMISATION,
-      type: 'EMAIL_TEMPLATE_TABLE_COLUMN',
-      valueList: selectValues,
-    };
-    this.customisationService
-      .updateCustomizedValue(this.username, request)
-      .subscribe({
-        next: (res) => {
-          if (res.code === '200' || res.code === '201') {
-            this.messageService.success(res.message);
-            this.loadTableViewOptions();
-          } else {
-            this.messageService.error(res.message);
-          }
-        },
-        error: (error) => {
-          this.messageService.error(error);
-        },
-      });
-  }
-
-  /**
-   * reset 個人化設定(該使用者可看到的 Table Columns)
-   */
-  resetFields() {
-    this.selectedFields = this.fields.filter((e) =>
-      this.viewCols.includes(e.value),
-    );
-  }
-
-  // /**
-  //  * 取得 Enum 對應的 Column 中文名稱
-  //  * @param label
-  //  * */
-  // getColNameByField(label: string): string {
-  //   return (
-  //     EmailTemplateTableColumnCustomisation[
-  //       label as keyof typeof EmailTemplateTableColumnCustomisation
-  //     ] || label
-  //   );
-  // }
-
-  /**
-   * 取得 Table 所有 columns，後續用於個人化配置
-   */
-  getFields() {
-    this.optionService
-      .getSettingsByDataTypeAndType('EMAIL_TEMPLATE_TABLE_COLUMN')
+    let formData = this.formGroup.value;
+    console.log(formData);
+    this.emailTemplateService
+      .getEmailTemplateByKey(formData.templateKey)
+      .pipe(
+        finalize(() => {
+          this.loadingMaskService.hide();
+          this.submitted = false;
+        }),
+      )
       .subscribe((res) => {
-        this.fields = res;
+        console.log(res);
+        this.openFormDialog(FormAction.EDIT, res);
       });
+  }
+
+  /**
+   * 檢查是否編輯過
+   * @param data
+   * @returns
+   */
+  checkIsEdited(data: EmailTemplateGottenData): boolean {
+    if (data.subject || data.content) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * 新增一筆 Email 範本資料表單
+   */
+  onAdd() {
+    this.openFormDialog(FormAction.ADD);
+  }
+
+  /**
+   * 編輯一筆 Email 範本資料
+   */
+  onEdit() {
+    this.openFormDialog(FormAction.EDIT, this.rowCurrentData);
+  }
+
+  /**
+   * 開啟 Dialog 表單
+   * @returns DynamicDialogRef
+   */
+  openFormDialog(formAction?: FormAction, data?: any): DynamicDialogRef {
+    this.dialogOpened = true;
+
+    const ref = this.dialogService.open(DialogFormComponent, {
+      header: formAction === FormAction.ADD ? '新增一筆資料' : '更新一筆資料',
+      width: '80%', // 寬度建議不要 100%，留點邊框比較像視窗
+      height: '90vh', // 直接設為視窗高度的 85%，這樣上下就會非常寬敞
+      contentStyle: {
+        overflow: 'auto',
+        padding: '0', // 移除預設 padding，由元件內部控制
+      },
+      baseZIndex: 10000,
+      maximizable: true,
+      data: {
+        action: formAction,
+        data: data,
+      },
+      templates: {
+        content: SaveEmailTemplateComponent,
+      },
+    });
+    // Dialog 關閉後要做的事情
+    ref?.onClose
+      .pipe(takeUntil(this._destroying$))
+      .subscribe((returnData: any) => {
+        console.log('關閉 Dialog');
+        this.dialogOpened = false;
+        this.query();
+      });
+    return ref;
+  }
+
+  /**
+   * Table Action 按鈕按下去的時候要把該筆資料記錄下來。
+   * @param rowData 點選的資料
+   */
+  override clickRowActionMenu(rowData: any): void {
+    // console.log('clickRowActionMenu rowData = ' + JSON.stringify(rowData));
+    this.rowCurrentData = rowData;
+    console.log(this.rowCurrentData);
+
+    // 開啟 Dialog
+    this.openFormDialog(FormAction.EDIT, this.rowCurrentData);
   }
 }

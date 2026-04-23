@@ -80,7 +80,7 @@ export class LoginComponent
         next: (res) => {
           console.log(res);
 
-          if (res?.code === 'VALIDATE_FAILED') {
+          if (res?.code === '500') {
             this.messageService.error(res.message);
             return;
           }

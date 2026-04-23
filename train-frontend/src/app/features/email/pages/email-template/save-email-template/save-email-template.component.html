@@ -1,0 +1,123 @@
+<form
+  [formGroup]="formGroup"
+  (ngSubmit)="onSubmit()"
+  class="email-template-container"
+>
+  <div
+    class="card shadow-2 border-round-xl overflow-hidden flex flex-column h-full"
+  >
+    <div class="p-4 bg-gray-50 border-bottom-1 surface-border">
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-5">
+          <label class="required font-bold">範本名稱</label>
+          <input
+            type="text"
+            pInputText
+            formControlName="templateName"
+            readonly
+            [ngClass]="{
+              'ng-invalid ng-dirty': formControlInvalid('templateName'),
+            }"
+          />
+          <div *ngIf="formControlInvalid('templateName')">
+            <small
+              class="p-error"
+              *ngIf="formControl('templateName').errors?.['required']"
+            >
+              資料不能為空
+            </small>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-4">
+          <label class="required font-bold">範本唯一值 (Key)</label>
+          <input
+            type="text"
+            pInputText
+            readonly
+            formControlName="templateKey"
+            [ngClass]="{
+              'ng-invalid ng-dirty': formControlInvalid('templateKey'),
+            }"
+          />
+          <div *ngIf="formControlInvalid('templateKey')">
+            <small
+              class="p-error"
+              *ngIf="formControl('templateKey').errors?.['required']"
+            >
+              資料不能為空
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="email-body flex flex-column flex-grow-1">
+      <div class="flex flex-column border-bottom-1 surface-border px-4 py-3">
+        <div class="flex align-items-center">
+          <span class="text-600 font-bold mr-3" style="min-width: 60px"
+            >主旨：</span
+          >
+          <input
+            type="text"
+            pInputText
+            formControlName="subject"
+            class="flex-grow-1 border-none shadow-none text-xl font-medium"
+            placeholder="請輸入郵件主旨..."
+            style="background: transparent"
+            [ngClass]="{ 'ng-invalid ng-dirty': formControlInvalid('subject') }"
+          />
+        </div>
+        <div *ngIf="formControlInvalid('subject')" class="ml-8">
+          <small
+            class="p-error"
+            *ngIf="formControl('subject').errors?.['required']"
+          >
+            主旨不能為空
+          </small>
+        </div>
+      </div>
+
+      <div class="flex-grow-1 p-0 flex flex-column">
+        <textarea
+          pInputTextarea
+          formControlName="content"
+          class="w-full flex-grow-1 border-none shadow-none p-4 text-lg"
+          style="resize: none; outline: none; line-height: 1.6"
+          placeholder="開始撰寫您的範本內容..."
+          [ngClass]="{ 'ng-invalid ng-dirty': formControlInvalid('content') }"
+        >
+        </textarea>
+        <div *ngIf="formControlInvalid('content')" class="px-4 pb-2">
+          <small
+            class="p-error"
+            *ngIf="formControl('content').errors?.['required']"
+          >
+            信件內容不能為空
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="p-3 flex justify-content-end align-items-center surface-100 border-top-1 surface-border gap-2"
+    >
+      <button
+        pButton
+        type="button"
+        label="取消"
+        icon="pi pi-times"
+        class="p-button-text p-button-secondary"
+        (click)="onCloseForm()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="儲存範本"
+        icon="pi pi-send"
+        class="p-button-primary px-4"
+        [disabled]="formGroup.invalid"
+      ></button>
+    </div>
+  </div>
+</form>
