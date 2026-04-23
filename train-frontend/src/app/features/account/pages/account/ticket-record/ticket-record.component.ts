@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { BaseFormCompoent } from '../../../../../shared/component/base/base-form.component';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../../../shared/shared.module';
-import { TicketDetailResource } from '../../../models/ticket-detail-data-resource.model copy';
+import { TicketDetailQueriedResource } from '../../../models/ticket-detail-data-resource.model copy';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Location } from '@angular/common';
 
@@ -15,11 +15,11 @@ import { Location } from '@angular/common';
   styleUrl: './ticket-record.component.scss',
 })
 export class TicketRecordComponent extends BaseFormCompoent implements OnInit {
-  ticketData!: TicketDetailResource;
+  ticketData!: TicketDetailQueriedResource;
   constructor(
     public ref: DynamicDialogRef,
     private location: Location,
-    private dialogConfig: DynamicDialogConfig
+    private dialogConfig: DynamicDialogConfig,
   ) {
     super();
   }

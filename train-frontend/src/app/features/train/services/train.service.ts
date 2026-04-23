@@ -4,7 +4,6 @@ import { CreateTrainResource } from '../models/create-train-resource.model';
 import { BaseResponse } from '../../../shared/models/base-response.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { TrainCreatedResource } from '../models/train-created-resource.model ';
 import { TrainSummaryQueriedResource } from '../models/train-summary-queried-resource.model';
 import { StopDetailQueriedResource } from '../models/stop-detail-queried-resource.model';
 import { TrainQueriedResource } from '../models/train-queried-resource.model';
@@ -54,7 +53,7 @@ export class TrainService {
     fromStop?: string,
     toStop?: string,
     takeDate?: string,
-    time?: string
+    time?: string,
   ): Observable<TrainSummaryQueriedResource[]> {
     const url = this.baseApiUrl + '/train/summary';
 
@@ -77,7 +76,7 @@ export class TrainService {
    */
   queryStopDetails(
     uuid: string,
-    fromStop: string
+    fromStop: string,
   ): Observable<StopDetailQueriedResource[]> {
     const url = this.baseApiUrl + '/train/stops/details';
     let params = new HttpParams().set('uuid', uuid).set('fromStop', fromStop);
@@ -117,7 +116,7 @@ export class TrainService {
         map((res) => ({
           filename: this.getFileName(res.headers.get('Content-Disposition')),
           body: res.body,
-        }))
+        })),
       );
   }
 

@@ -1,4 +1,4 @@
-export class TicketDetailResource {
+export class TicketDetailQueriedResource {
   number?: number;
 
   kind?: string;
