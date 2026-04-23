@@ -4,7 +4,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.application.service.NotificationService;
+import com.example.demo.application.service.NotificationApplicationService;
 import com.example.demo.base.iface.handler.BaseEventHandler;
 import com.example.demo.domain.booking.outbound.BookingExecutedFailedEvent;
 
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @RabbitListener(queues = "${rabbitmq.booking.saga.failure}")
 public class BookingSagaFailureEventHandler extends BaseEventHandler {
 
-	private NotificationService notificationService;
+	private NotificationApplicationService notificationService;
 	
 	@RabbitHandler
 	public void fail(BookingExecutedFailedEvent event) {

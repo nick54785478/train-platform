@@ -16,9 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NotificationService {
+public class NotificationApplicationService {
 
-	@Value("${train.service.endpoint}")
+	@Value("${train.frontend.url}")
 	private String url;
 
 	private final MailSenderPort mailSender;

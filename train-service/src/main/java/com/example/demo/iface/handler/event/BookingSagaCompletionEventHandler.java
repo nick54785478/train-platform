@@ -5,7 +5,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.application.service.BookingCommandService;
-import com.example.demo.application.service.NotificationService;
+import com.example.demo.application.service.NotificationApplicationService;
 import com.example.demo.application.shared.dto.BookingCompletedData;
 import com.example.demo.base.iface.handler.BaseEventHandler;
 import com.example.demo.domain.account.outbound.FareChargedEvent;
@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @RabbitListener(queues = "${rabbitmq.booking.saga.completion}")
 public class BookingSagaCompletionEventHandler extends BaseEventHandler {
 
-	private final NotificationService notificationService; // 注入通知服務
+	private final NotificationApplicationService notificationService; // 注入通知服務
 	private final BookingCommandService bookingCommandService;
 
-	public BookingSagaCompletionEventHandler(NotificationService notificationService,
+	public BookingSagaCompletionEventHandler(NotificationApplicationService notificationService,
 			BookingCommandService bookingCommandService) {
 		this.notificationService = notificationService;
 		this.bookingCommandService = bookingCommandService;

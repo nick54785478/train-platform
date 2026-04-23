@@ -4,7 +4,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.application.service.NotificationService;
+import com.example.demo.application.service.NotificationApplicationService;
 import com.example.demo.base.iface.handler.BaseEventHandler;
 import com.example.demo.domain.account.outbound.AccountRegistrationCompletedEvent;
 
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @RabbitListener(queues = "${rabbitmq.account.saga.completion}")
 public class AccountSagaCompletionEventHandler extends BaseEventHandler {
 
-	 private NotificationService notificationService;
+	 private NotificationApplicationService notificationService;
 
 	@RabbitHandler
 	public void handle(AccountRegistrationCompletedEvent event) {
