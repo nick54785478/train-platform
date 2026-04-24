@@ -62,6 +62,7 @@
 
 >* Port-Adapter 模式：定義了 MailSenderPort 與 TemplateEnginePort，將業務邏輯與具體的發信技術、渲染技術隔離。
 >* DB-Driven Templates：郵件主旨與 HTML 內容均存於 MySQL 的 EMAIL_TEMPLATE 表中，支援不重啟程式即可動態修改郵件措辭。
+>* 範本後台維護 (CRUD)：提供 API 支援前端頁面維護 EMAIL_TEMPLATE 表。支援動態調整郵件主旨與 HTML 內容，無需重新發布程式即可生效。
 >* 個人化渲染：利用 FreeMarker 引擎，將領域物件（如 username, bookingUuid）動態注入範本。
 
 ### 3. 業務冪等執行器 (Business Idempotency)
