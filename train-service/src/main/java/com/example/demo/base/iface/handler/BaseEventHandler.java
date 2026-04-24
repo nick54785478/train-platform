@@ -10,6 +10,7 @@ import com.example.demo.application.port.EventTopicResolverPort;
 import com.example.demo.base.application.port.DataTransformerPort;
 import com.example.demo.base.application.port.EventIdempotenceHandlerPort;
 import com.example.demo.base.application.port.EventPublisherPort;
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.persistence.EventLogRepository;
 import com.example.demo.base.infra.persistence.EventSourceRepository;
 import com.example.demo.base.shared.command.PublishEventCommand;
@@ -95,7 +96,7 @@ public class BaseEventHandler {
 	 * @param event 業務事件主體 (繼承自 BaseEvent)
 	 * @return 已填充資料的 EventLog 實體
 	 */
-	public EventLog generateEventLog(String topic, BaseEvent event) {
+	public EventLog generateEventLog(String topic, DomainEvent event) {
 
 		// 構建 EventLog 實體並初始化狀態
 		return EventLog.builder().uuid(UUID.randomUUID().toString()) // 產生唯一識別碼

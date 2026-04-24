@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.base.application.service.BaseApplicationService;
-import com.example.demo.base.shared.event.BaseEvent;
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.domain.booking.aggregate.TicketBooking;
 import com.example.demo.domain.seat.aggregate.TrainSeat;
 import com.example.demo.domain.seat.command.BookSeatCommand;
@@ -135,7 +135,7 @@ public class SeatCommandService extends BaseApplicationService {
 				trainSeatRepository.save(trainSeat);
 
 				// 處理 Domain Event
-				List<BaseEvent> domainEvents = account.getDomainEvents();
+				List<DomainEvent> domainEvents = account.getDomainEvents();
 
 				// 註冊 Domain Event 到 Outbox
 				this.saveDomainEventsToOutbox(domainEvents);

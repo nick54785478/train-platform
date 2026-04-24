@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.demo.base.shared.event.BaseEvent;
 
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * 上下文工具類
  */
 @Slf4j
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ContextHolder {
 
 	/**

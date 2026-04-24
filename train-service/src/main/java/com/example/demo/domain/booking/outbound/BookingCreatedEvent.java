@@ -3,8 +3,8 @@ package com.example.demo.domain.booking.outbound;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.annotation.EventTopic;
-import com.example.demo.base.shared.event.BaseEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @EventTopic("${rabbitmq.booking.saga.start}")
-public class BookingCreatedEvent extends BaseEvent {
+public class BookingCreatedEvent extends DomainEvent {
 
 	private String method; // 付款方式
 

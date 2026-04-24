@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.base.application.port.AuthServiceClientPort;
 import com.example.demo.base.application.service.BaseApplicationService;
-import com.example.demo.base.shared.event.BaseEvent;
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.shared.exception.exception.ResourceNotFoundException;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.account.aggregate.MoneyAccount;
@@ -73,7 +73,7 @@ public class MoneyAccountCommandService extends BaseApplicationService {
 		moneyAccountRepository.save(moneyAccount);
 
 		// 取出 Domain Event 清單
-		List<BaseEvent> domainEvents = moneyAccount.getDomainEvents();
+		List<DomainEvent> domainEvents = moneyAccount.getDomainEvents();
 
 		// 註冊 Event 到 Outbox
 		this.saveDomainEventsToOutbox(domainEvents);
@@ -138,8 +138,6 @@ public class MoneyAccountCommandService extends BaseApplicationService {
 			log.info("帳戶 {} 初始儲值與激活成功，成功路徑終點事件已寫入 Outbox", command.getUuid());
 		} catch (Exception e) {
 			log.error("初始儲值失敗，準備發送凍結補償事件: {}", e.getMessage());
-
-			System.out.println("發生錯誤: sagaEventTxId:" + eventTxId);
 
 			// 建立補償事件
 			AccountDepositFailedEvent failEvent = AccountDepositFailedEvent.builder().targetId(command.getUuid())

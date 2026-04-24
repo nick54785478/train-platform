@@ -48,7 +48,7 @@ public abstract class BaseAggreagteRoot {
 	 * 聚合根內部事件清單
 	 */
 	@Transient
-	private final List<BaseEvent> domainEvents = new ArrayList<>();
+	private final List<DomainEvent> domainEvents = new ArrayList<>();
 
 	/**
 	 * 本次業務行為的統一代號
@@ -66,7 +66,7 @@ public abstract class BaseAggreagteRoot {
 	/**
 	 * 產生新事件並加入清單
 	 */
-	protected void raiseEvent(BaseEvent event) {
+	protected void raiseEvent(DomainEvent event) {
 		// 1. 如果事件本身已經有 ID (從 Builder 傳進來的)
 		if (event.getEventTxId() != null) {
 			// 同步給實體，確保實體與事件一致
@@ -85,7 +85,7 @@ public abstract class BaseAggreagteRoot {
 	/**
 	 * 取得事件清單
 	 */
-	public List<BaseEvent> getDomainEvents() {
+	public List<DomainEvent> getDomainEvents() {
 		return Collections.unmodifiableList(domainEvents);
 	}
 

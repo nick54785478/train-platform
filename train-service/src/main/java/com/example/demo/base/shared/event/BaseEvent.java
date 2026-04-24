@@ -30,9 +30,5 @@ public class BaseEvent {
 	 */
 	protected String targetId;
 
-	/**
-	 * 事件的唯一代號
-	 */
-	protected String eventTxId;
 
 }

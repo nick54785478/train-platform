@@ -12,9 +12,9 @@ import com.example.demo.application.shared.dto.BookingCheckedInData;
 import com.example.demo.application.shared.dto.BookingCompletedData;
 import com.example.demo.application.shared.dto.TicketBookedData;
 import com.example.demo.base.application.service.BaseApplicationService;
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.context.ContextHolder;
 import com.example.demo.base.shared.enums.YesNo;
-import com.example.demo.base.shared.event.BaseEvent;
 import com.example.demo.base.shared.exception.exception.ValidationException;
 import com.example.demo.domain.account.aggregate.MoneyAccount;
 import com.example.demo.domain.booking.aggregate.TicketBooking;
@@ -89,7 +89,7 @@ public class BookingCommandService extends BaseApplicationService {
 		TicketBooking saved = ticketBookingRepository.save(booking);
 
 		// 取出 Domain Events
-		List<BaseEvent> domainEvents = booking.getDomainEvents();
+		List<DomainEvent> domainEvents = booking.getDomainEvents();
 
 		// 註冊 Event 到 Outbox
 		this.saveDomainEventsToOutbox(domainEvents);
@@ -135,7 +135,7 @@ public class BookingCommandService extends BaseApplicationService {
 		booking.complete();
 		ticketBookingRepository.save(booking);
 		// 處理 Domain Events
-		List<BaseEvent> domainEvents = booking.getDomainEvents();
+		List<DomainEvent> domainEvents = booking.getDomainEvents();
 		// 註冊 Event 到 Outbox
 		this.saveDomainEventsToOutbox(domainEvents);
 		return new BookingCompletedData(booking.getEmail());
@@ -156,7 +156,7 @@ public class BookingCommandService extends BaseApplicationService {
 				booking.fail(eventTxId, reason, e.getEmail());
 				ticketBookingRepository.save(booking);
 				// 處理 Domain Events
-				List<BaseEvent> domainEvents = booking.getDomainEvents();
+				List<DomainEvent> domainEvents = booking.getDomainEvents();
 				// 註冊 Event 到 Outbox
 				this.saveDomainEventsToOutbox(domainEvents);
 			});

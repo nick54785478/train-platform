@@ -2,8 +2,8 @@ package com.example.demo.domain.booking.outbound;
 
 import java.time.LocalDate;
 
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.annotation.EventTopic;
-import com.example.demo.base.shared.event.BaseEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @EventTopic("${rabbitmq.checkin-seat-topic-queue.name}")
-public class BookingCheckedInEvent extends BaseEvent {
+public class BookingCheckedInEvent extends DomainEvent {
 
 	private String action; // 動作
 

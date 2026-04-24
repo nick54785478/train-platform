@@ -1,7 +1,7 @@
 package com.example.demo.domain.account.outbound;
 
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.annotation.EventTopic;
-import com.example.demo.base.shared.event.BaseEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @EventTopic("${rabbitmq.account.saga.failure}")
-public class AccountRegistrationFailedEvent extends BaseEvent {
+public class AccountRegistrationFailedEvent extends DomainEvent {
 
 	private String reason; // 失敗原因 (例如：儲值超時、系統異常)
 

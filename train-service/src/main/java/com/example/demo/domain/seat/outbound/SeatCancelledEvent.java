@@ -1,7 +1,7 @@
 package com.example.demo.domain.seat.outbound;
 
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.annotation.EventTopic;
-import com.example.demo.base.shared.event.BaseEvent;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,9 +13,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @EventTopic("${rabbitmq.booking.saga.compensation}")
-public class SeatCancelledEvent extends BaseEvent {
+public class SeatCancelledEvent extends DomainEvent {
 
 	private String bookingUuid;
-	
+
 	private String reason;
 }

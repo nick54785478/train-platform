@@ -2,8 +2,8 @@ package com.example.demo.domain.account.outbound;
 
 import java.math.BigDecimal;
 
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.annotation.EventTopic;
-import com.example.demo.base.shared.event.BaseEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @EventTopic("${rabbitmq.topic.account.transaction}")
-public class MoneyDepositedEvent extends BaseEvent {
+public class MoneyDepositedEvent extends DomainEvent {
 
 	private BigDecimal amount; // 金額
 

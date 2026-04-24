@@ -2,8 +2,8 @@ package com.example.demo.domain.account.outbound;
 
 import java.math.BigDecimal;
 
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.annotation.EventTopic;
-import com.example.demo.base.shared.event.BaseEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @EventTopic("${rabbitmq.account.saga.compensation}")
-public class AccountDepositFailedEvent extends BaseEvent {
+public class AccountDepositFailedEvent extends DomainEvent {
 
 	private BigDecimal money; // 金額
 

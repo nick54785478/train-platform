@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.application.port.EventTopicResolverPort;
 import com.example.demo.base.application.port.DataTransformerPort;
 import com.example.demo.base.application.port.EventPublisherPort;
+import com.example.demo.base.domain.aggregate.DomainEvent;
 import com.example.demo.base.infra.persistence.EventLogRepository;
 import com.example.demo.base.shared.entity.EventLog;
 import com.example.demo.base.shared.enums.EventLogSendQueueStatus;
@@ -98,7 +99,7 @@ public abstract class BaseApplicationService {
 	 * @param event 業務事件主體 (繼承自 BaseEvent)
 	 * @return 已填充資料的 EventLog 實體
 	 */
-	public EventLog generateEventLog(String topic, BaseEvent event) {
+	public EventLog generateEventLog(String topic, DomainEvent event) {
 		log.debug("type: {}, , eventTxId:{}", event.getClass().getSimpleName(), event.getEventTxId());
 
 		// 構建 EventLog 實體並初始化狀態
@@ -124,7 +125,7 @@ public abstract class BaseApplicationService {
 	 * 
 	 * @param domainEvents 待處理的領域事件 (Domain Events) 列表
 	 */
-	public void saveDomainEventsToOutbox(List<BaseEvent> domainEvents) {
+	public void saveDomainEventsToOutbox(List<DomainEvent> domainEvents) {
 
 		domainEvents.forEach(event -> {
 
@@ -143,7 +144,7 @@ public abstract class BaseApplicationService {
 	 * 強制寫入 Outbox (獨立交易)
 	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void forceSaveDomainEvent(BaseEvent event) {
+	public void forceSaveDomainEvent(DomainEvent event) {
 		log.info("獨立交易：寫入失敗事件至 Outbox，eventTxId:{}", event.getEventTxId());
 		this.saveDomainEventsToOutbox(List.of(event));
 	}
